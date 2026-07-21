@@ -1,0 +1,55 @@
+{
+	"abstract" : true,
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/generator_cnProc/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 59,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 61,
+				"parent" : 0
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"id" : "cnProc_gen_avx2_HEADERS::@b3c6cf1fbaa28b7bc01a",
+	"name" : "cnProc_gen_avx2_HEADERS",
+	"orderDependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "cnProc_gen_avx2_files::@b3c6cf1fbaa28b7bc01a"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/ldpc/generator_cnProc",
+		"source" : "openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/generator_cnProc"
+	},
+	"sources" : [],
+	"type" : "INTERFACE_LIBRARY"
+}

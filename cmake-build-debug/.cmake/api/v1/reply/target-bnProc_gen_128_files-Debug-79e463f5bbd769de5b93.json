@@ -1,0 +1,99 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"add_custom_command"
+		],
+		"files" : 
+		[
+			"openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/generator_bnProc/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 82,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 73,
+				"parent" : 0
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_128::@d9f74fabacde8013dd38"
+		}
+	],
+	"id" : "bnProc_gen_128_files::@d9f74fabacde8013dd38",
+	"name" : "bnProc_gen_128_files",
+	"orderDependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_128::@d9f74fabacde8013dd38"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/ldpc/generator_bnProc",
+		"source" : "openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/generator_bnProc"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/ldpc/generator_bnProc/CMakeFiles/bnProc_gen_128_files",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/ldpc/generator_bnProc/CMakeFiles/bnProc_gen_128_files.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/ldpc/generator_bnProc/bnProc/nrLDPC_bnProc_BG1_R13_128.h.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

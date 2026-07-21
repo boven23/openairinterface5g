@@ -1,0 +1,55 @@
+{
+	"abstract" : true,
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/generator_bnProc/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 88,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 90,
+				"parent" : 0
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"id" : "bnProc_gen_128_HEADERS::@d9f74fabacde8013dd38",
+	"name" : "bnProc_gen_128_HEADERS",
+	"orderDependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_128_files::@d9f74fabacde8013dd38"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/ldpc/generator_bnProc",
+		"source" : "openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/generator_bnProc"
+	},
+	"sources" : [],
+	"type" : "INTERFACE_LIBRARY"
+}

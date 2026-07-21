@@ -1,0 +1,2159 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "nr-uesoftmodem"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries",
+			"add_dependencies",
+			"add_definitions",
+			"add_boolean_option",
+			"add_list_string_option",
+			"add_integer_option",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt",
+			"openair1/PHY/nr_phy_common/CMakeLists.txt",
+			"openair3/NAS/NR_UE/CMakeLists.txt",
+			"openair2/LAYER2/nr_rlc/CMakeLists.txt",
+			"nfapi/open-nFAPI/nfapi/CMakeLists.txt",
+			"nfapi/open-nFAPI/fapi/CMakeLists.txt",
+			"common/utils/T/tracer/CMakeLists.txt",
+			"openair1/PHY/CODING/CMakeLists.txt",
+			"openair2/RRC/LTE/MESSAGES/CMakeLists.txt",
+			"openair2/RRC/NR/MESSAGES/CMakeLists.txt",
+			"cmake_targets/macros.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1875,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1887,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1895,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1896,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1897,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1901,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 717,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1029,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 6,
+				"parent" : 9
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 2,
+				"line" : 8,
+				"parent" : 11
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1339,
+				"parent" : 0
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 1,
+				"file" : 3,
+				"line" : 19,
+				"parent" : 14
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 408,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 547,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 548,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1340,
+				"parent" : 0
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 1,
+				"file" : 4,
+				"line" : 6,
+				"parent" : 20
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 5,
+				"line" : 14,
+				"parent" : 22
+			},
+			{
+				"command" : 1,
+				"file" : 4,
+				"line" : 7,
+				"parent" : 20
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 692,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 2117,
+				"parent" : 0
+			},
+			{
+				"file" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 6,
+				"line" : 102,
+				"parent" : 27
+			},
+			{
+				"file" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 7,
+				"line" : 30,
+				"parent" : 29
+			},
+			{
+				"file" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 8,
+				"line" : 34,
+				"parent" : 31
+			},
+			{
+				"file" : 9
+			},
+			{
+				"command" : 2,
+				"file" : 9,
+				"line" : 34,
+				"parent" : 33
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1898,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 157,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 15,
+				"parent" : 36
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 141,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 38,
+				"parent" : 38
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 160,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 15,
+				"parent" : 40
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 365,
+				"parent" : 0
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 606,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 26,
+				"parent" : 43
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 614,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 15,
+				"parent" : 45
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 619,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 15,
+				"parent" : 47
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 348,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 15,
+				"parent" : 49
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 413,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 434,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 511,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 623,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 627,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 628,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 629,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 630,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 631,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 632,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 633,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 634,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 635,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 636,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 637,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 638,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 639,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 640,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 642,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 643,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 644,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 645,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 646,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 647,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 648,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 649,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 650,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 651,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 652,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 653,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 655,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 658,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 659,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 660,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 661,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 662,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 663,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 664,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 665,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 666,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 675,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1350,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1351,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1352,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1631,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1632,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1634,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1636,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1637,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1639,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1670,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1671,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1672,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1673,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1674,
+				"parent" : 0
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"compileDependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "nr_rrc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SECURITY::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "UTIL::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SCHED_NR_UE_LIB::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "PHY_NR_COMMON::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "PHY_NR_UE::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "NR_L2_UE::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "MAC_NR_COMMON::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nfapi_nr_lib::@d55f3f8fba803fbea8b5"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "ITTI::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SIMU::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "radio_common::@9eb9a83ffc72aaafb022"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "time_management::@dbedb116209bc3f01f94"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "softmodem_common::@ae4c228f25544f415da9"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "CONFIG_LIB::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "nr_ue_phy_meas::@a70b2ef2a7c803dc14e2"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "T::@01038471a7b68ee808ac"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "nr_nas::@e32841fe993d908af54b"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "lib_uicc::@856602c31a67ef940232"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "usim_lib::@6ae0845c92174a706ea8"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "SECURITY::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 35,
+			"id" : "asn1_nr_rrc_hdrs::@e1dba09dfe939f03d66e"
+		},
+		{
+			"backtrace" : 35,
+			"id" : "asn1_lte_rrc_hdrs::@43a7ab49143ac9318632"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_lte_rrc::@43a7ab49143ac9318632"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_nr_rrc::@e1dba09dfe939f03d66e"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_s1ap::@dff58238d5aef743b919"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_ngap::@16ac8286a07c28265ef5"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_m2ap::@f84672664187eda82c80"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_m3ap::@44cb76f854d7aaadc6d4"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_x2ap::@690b85046050806bae02"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_f1ap::@3b68f2373a9188cdfe0f"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_lpp::@fd1dc5191466998ef71c"
+		}
+	],
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -DSIMDE_X86_AVX_NATIVE -DSIMDE_X86_AVX_NATIVE -DSIMDE_X86_F16C_NATIVE -DSIMDE_X86_FMA_NATIVE -DSIMDE_X86_MMX_NATIVE -DSIMDE_X86_PCLMUL_NATIVE -DSIMDE_X86_SSE2_NATIVE -DSIMDE_X86_SSE3_NATIVE -DSIMDE_X86_SSE_NATIVE -DSIMDE_X86_XOP_HAVE_COM_ -DSIMDE_X86_XOP_NATIVE -mno-avx512f -march=native -DSIMDE_X86_AVX2_NATIVE -DSIMDE_X86_VPCLMULQDQ_NATIVE -DSIMDE_X86_GFNI_NATIVE -mgfni -DSIMDE_X86_SSE4_1_NATIVE -DSIMDE_X86_SSE4_2_NATIVE -DSIMDE_X86_SSSE3_NATIVE -march=native -pipe -fPIC -Wall -fno-strict-aliasing -rdynamic -Wno-packed-bitfield-compat -std=gnu11 -funroll-loops  -ggdb2 -DMALLOC_CHECK_=3 -fno-delete-null-pointer-checks -O0 -fdiagnostics-color=always   -DASN_DISABLE_OER_SUPPORT -DHAVE_CONFIG_H -DHAVE_CONFIG_H_"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-DNR_RRC_VERSION=17.3.0"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-DLTE_RRC_VERSION=16.13.0"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 37,
+					"define" : "AVX2"
+				},
+				{
+					"backtrace" : 39,
+					"define" : "CMAKE_BUILD_TYPE=\"Debug\""
+				},
+				{
+					"backtrace" : 41,
+					"define" : "GFNI"
+				},
+				{
+					"backtrace" : 42,
+					"define" : "HAVE_NETINET_IN_H"
+				},
+				{
+					"backtrace" : 44,
+					"define" : "MAX_NUM_CCs=1"
+				},
+				{
+					"backtrace" : 46,
+					"define" : "NAS_BUILT_IN_UE"
+				},
+				{
+					"backtrace" : 48,
+					"define" : "RRC_DEFAULT_RAB_IS_AM"
+				},
+				{
+					"backtrace" : 50,
+					"define" : "T_TRACER"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 51,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/S1AP"
+				},
+				{
+					"backtrace" : 52,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NGAP"
+				},
+				{
+					"backtrace" : 53,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/X2AP"
+				},
+				{
+					"backtrace" : 54,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/boven23/Desktop/openairinterface5g/executables"
+				},
+				{
+					"backtrace" : 56,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/COMMON"
+				},
+				{
+					"backtrace" : 57,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/UTIL"
+				},
+				{
+					"backtrace" : 58,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/COMMON"
+				},
+				{
+					"backtrace" : 59,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/UTILS"
+				},
+				{
+					"backtrace" : 60,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair1"
+				},
+				{
+					"backtrace" : 61,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2"
+				},
+				{
+					"backtrace" : 62,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/TOOLS"
+				},
+				{
+					"backtrace" : 63,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/ENB_APP"
+				},
+				{
+					"backtrace" : 64,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/GNB_APP"
+				},
+				{
+					"backtrace" : 65,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/MCE_APP"
+				},
+				{
+					"backtrace" : 66,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/LAYER2/RLC"
+				},
+				{
+					"backtrace" : 67,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/LAYER2/PDCP_v10.1.0"
+				},
+				{
+					"backtrace" : 68,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/RRC/LTE/MESSAGES"
+				},
+				{
+					"backtrace" : 69,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/RRC/LTE"
+				},
+				{
+					"backtrace" : 70,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils"
+				},
+				{
+					"backtrace" : 71,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/collection"
+				},
+				{
+					"backtrace" : 72,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/ocp_itti"
+				},
+				{
+					"backtrace" : 73,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/COMMON"
+				},
+				{
+					"backtrace" : 74,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/COMMON/API/NETWORK"
+				},
+				{
+					"backtrace" : 75,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/COMMON/EMM/MSG"
+				},
+				{
+					"backtrace" : 76,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/COMMON/ESM/MSG"
+				},
+				{
+					"backtrace" : 77,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/UE/ESM"
+				},
+				{
+					"backtrace" : 78,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/UE/EMM"
+				},
+				{
+					"backtrace" : 79,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/UE/API/USER"
+				},
+				{
+					"backtrace" : 80,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/COMMON/IES"
+				},
+				{
+					"backtrace" : 81,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/COMMON/UTIL"
+				},
+				{
+					"backtrace" : 82,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/SECU"
+				},
+				{
+					"backtrace" : 83,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/SCTP"
+				},
+				{
+					"backtrace" : 84,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/M2AP"
+				},
+				{
+					"backtrace" : 85,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/F1AP"
+				},
+				{
+					"backtrace" : 86,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/M3AP"
+				},
+				{
+					"backtrace" : 87,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/MME_APP"
+				},
+				{
+					"backtrace" : 88,
+					"path" : "/home/boven23/Desktop/openairinterface5g/radio/COMMON"
+				},
+				{
+					"backtrace" : 89,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/UTIL/MATH"
+				},
+				{
+					"backtrace" : 90,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/UTIL/OTG"
+				},
+				{
+					"backtrace" : 91,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/UTIL/OPT"
+				},
+				{
+					"backtrace" : 92,
+					"path" : "/home/boven23/Desktop/openairinterface5g"
+				},
+				{
+					"backtrace" : 93,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/T"
+				},
+				{
+					"backtrace" : 93,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/common/utils/T"
+				},
+				{
+					"backtrace" : 94,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/NR_UE_PHY_INTERFACE"
+				},
+				{
+					"backtrace" : 95,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair2/LAYER2"
+				},
+				{
+					"backtrace" : 96,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair1/SCHED_NR_UE"
+				},
+				{
+					"backtrace" : 97,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/NR_UE"
+				},
+				{
+					"backtrace" : 98,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/UE"
+				},
+				{
+					"backtrace" : 99,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/UE/API/USIM"
+				},
+				{
+					"backtrace" : 100,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/UE/EMM/MSG"
+				},
+				{
+					"backtrace" : 101,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/UE/EMM/SAP"
+				},
+				{
+					"backtrace" : 102,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/UE/ESM/SAP"
+				},
+				{
+					"backtrace" : 103,
+					"path" : "/home/boven23/Desktop/openairinterface5g/nfapi/open-nFAPI/nfapi/public_inc"
+				},
+				{
+					"backtrace" : 104,
+					"path" : "/home/boven23/Desktop/openairinterface5g/nfapi/open-nFAPI/common/public_inc"
+				},
+				{
+					"backtrace" : 105,
+					"path" : "/home/boven23/Desktop/openairinterface5g/nfapi/open-nFAPI/nfapi/inc"
+				},
+				{
+					"backtrace" : 106,
+					"path" : "/home/boven23/Desktop/openairinterface5g/nfapi/open-nFAPI/sim_common/inc"
+				},
+				{
+					"backtrace" : 107,
+					"path" : "/home/boven23/Desktop/openairinterface5g/nfapi/open-nFAPI/pnf_sim/inc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair2/RRC/NR/MESSAGES"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair2/RRC/LTE/MESSAGES"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/LOG/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/threadPool/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/barrier/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/actor/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/actor/../threadPool"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/nfapi/open-nFAPI/fapi/inc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair1/SIMULATION/TOOLS"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair1/SIMULATION/RF"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair1/PHY/nr_phy_common/inc"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/NR_UE/."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/NR_UE/5GS"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/NR_UE/5GS/."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/NR_UE/5GS/5GMM/MSG"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/NR_UE/5GS/5GMM/IES"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/COMMON/IES/."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/NR_UE/5GS/5GSM/MSG/."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/openair3/NAS/NR_UE/5GS/5GSM/MSG/../.."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/boven23/Desktop/openairinterface5g/common/utils/ds"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair3/S1AP/MESSAGES"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair3/NGAP/MESSAGES"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair2/M2AP/MESSAGES"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair3/M3AP/MESSAGES"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair2/X2AP/MESSAGES"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair2/F1AP/MESSAGES"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/boven23/Desktop/openairinterface5g/cmake-build-debug/openair3/LPP/MESSAGES"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "ITTI::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_rrc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "ngap::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "f1ap::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "config_internals::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "CONFIG_LIB::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "shlib_loader::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SECURITY::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SCHED_NR_UE_LIB::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "PHY_COMMON::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "PHY_NR_COMMON::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "PHY_NR_UE::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "NR_L2_UE::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "MAC_NR_COMMON::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SIMU::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "ds::@4a25e2afd23686eca14f"
+		},
+		{
+			"backtrace" : 26,
+			"id" : "generate_T::@01038471a7b68ee808ac"
+		},
+		{
+			"backtrace" : 28,
+			"id" : "T_tools::@7248a0639d7d2c7206ac"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_common::@ecd6d17223174825e608"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "time_management::@dbedb116209bc3f01f94"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "time_management_core::@dbedb116209bc3f01f94"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "barrier::@76e6eceeae27cc13fc22"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "actor::@ec353740567ebcbb7d00"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "softmodem_common::@ae4c228f25544f415da9"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nfapi_common::@cc16b21cf84e70fcb2da"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_fapi_common::@6669a581e414db16c718"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_fapi_p5::@6669a581e414db16c718"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_fapi_p7::@6669a581e414db16c718"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nfapi_nr_lib::@d55f3f8fba803fbea8b5"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_phy_common::@a70b2ef2a7c803dc14e2"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "nr_ue_phy_meas::@a70b2ef2a7c803dc14e2"
+		},
+		{
+			"backtrace" : 30,
+			"id" : "ldpc_orig::@42997192128b3f0a7537"
+		},
+		{
+			"backtrace" : 30,
+			"id" : "ldpc::@42997192128b3f0a7537"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "crc_byte::@42997192128b3f0a7537"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "polar::@5c391a65e75b0165922d"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "smallblock::@2e7149cc7747b6ca057a"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "f1ap_lib::@2ec96817be40602feaf6"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "asn1_f1ap::@3b68f2373a9188cdfe0f"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_rlc_core::@f0abbb2fececaa1b0807"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_rlc::@f0abbb2fececaa1b0807"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_ue_power_procedures::@706972070d5d5acd4db5"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_ue_ra_procedures::@706972070d5d5acd4db5"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_m2ap::@f84672664187eda82c80"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_x2ap::@690b85046050806bae02"
+		},
+		{
+			"backtrace" : 32,
+			"id" : "gen_lte_rrc_hdrs::@43a7ab49143ac9318632"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "asn1_lte_rrc::@43a7ab49143ac9318632"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "rrc_cell_management::@4a0cb4e7ee3d5c6a0a9a"
+		},
+		{
+			"backtrace" : 34,
+			"id" : "gen_nr_rrc_hdrs::@e1dba09dfe939f03d66e"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "asn1_nr_rrc::@e1dba09dfe939f03d66e"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_lpp::@fd1dc5191466998ef71c"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "GTPV1U::@d9471f35f705c4a8d6a7"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_m3ap::@44cb76f854d7aaadc6d4"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_s1ap::@dff58238d5aef743b919"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nas_common_ies_lib::@c8f4fe27499dd348236b"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nas_utils::@23a7910dbce3c482abc1"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_nas::@e32841fe993d908af54b"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "fgs_lib::@9fea7f4c3a89da7cf0a0"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "fgs_5gmm_lib::@762d50d4916567dcd112"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "fgs_5gmm_ies_lib::@1e22f80e3385971cd5da"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "fgs_5gsm_lib::@02afae1e0c1ecb44430f"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "usim_lib::@6ae0845c92174a706ea8"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "asn1_ngap::@16ac8286a07c28265ef5"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "lib_uicc::@856602c31a67ef940232"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "radio_common::@9eb9a83ffc72aaafb022"
+		}
+	],
+	"id" : "nr-uesoftmodem::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-DSIMDE_X86_AVX_NATIVE -DSIMDE_X86_AVX_NATIVE -DSIMDE_X86_F16C_NATIVE -DSIMDE_X86_FMA_NATIVE -DSIMDE_X86_MMX_NATIVE -DSIMDE_X86_PCLMUL_NATIVE -DSIMDE_X86_SSE2_NATIVE -DSIMDE_X86_SSE3_NATIVE -DSIMDE_X86_SSE_NATIVE -DSIMDE_X86_XOP_HAVE_COM_ -DSIMDE_X86_XOP_NATIVE -mno-avx512f -march=native -DSIMDE_X86_AVX2_NATIVE -DSIMDE_X86_VPCLMULQDQ_NATIVE -DSIMDE_X86_GFNI_NATIVE -mgfni -DSIMDE_X86_SSE4_1_NATIVE -DSIMDE_X86_SSE4_2_NATIVE -DSIMDE_X86_SSSE3_NATIVE -march=native -pipe -fPIC -Wall -fno-strict-aliasing -rdynamic -Wno-packed-bitfield-compat  -g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/home/boven23/Desktop/openairinterface5g/cmake-build-debug",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-Wl,--start-group",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libnr_rrc.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libSECURITY.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libUTIL.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libSCHED_NR_UE_LIB.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libPHY_NR_COMMON.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libPHY_NR_UE.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libNR_L2_UE.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libMAC_NR_COMMON.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "nfapi/open-nFAPI/nfapi/libnfapi_nr_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libITTI.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libSIMU.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "radio/COMMON/libradio_common.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "common/utils/time_manager/libtime_management.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "executables/libsoftmodem_common.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-Wl,--end-group",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lpthread",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "libCONFIG_LIB.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lrt",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "openair1/PHY/nr_phy_common/libnr_ue_phy_meas.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "common/utils/T/libT.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "openair3/NAS/NR_UE/libnr_nas.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libSECURITY.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair2/RRC/LTE/MESSAGES/libasn1_lte_rrc.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair2/RRC/NR/MESSAGES/libasn1_nr_rrc.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair3/S1AP/MESSAGES/libasn1_s1ap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair3/NGAP/MESSAGES/libasn1_ngap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair2/M2AP/MESSAGES/libasn1_m2ap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair3/M3AP/MESSAGES/libasn1_m3ap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair2/X2AP/MESSAGES/libasn1_x2ap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair2/F1AP/MESSAGES/libasn1_f1ap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair3/LPP/MESSAGES/libasn1_lpp.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "-lssl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "-lcrypto",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 8,
+				"fragment" : "openair1/PHY/nr_phy_common/libnr_phy_common.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 10,
+				"fragment" : "libPHY_COMMON.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 8,
+				"fragment" : "openair1/PHY/CODING/nrPolar_tools/libpolar.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 8,
+				"fragment" : "openair1/PHY/CODING/nrSmallBlock/libsmallblock.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 12,
+				"fragment" : "openair3/NAS/NR_UE/5GS/libfgs_lib.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "openair2/LAYER2/nr_rlc/libnr_rlc.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 15,
+				"fragment" : "libf1ap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libnr_rrc.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "openair2/RRC/NR/librrc_cell_management.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair2/RRC/LTE/MESSAGES/libasn1_lte_rrc.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "openair3/ocp-gtpu/libGTPV1U.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libSIMU.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "libngap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair3/NGAP/MESSAGES/libasn1_ngap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair2/F1AP/MESSAGES/libasn1_f1ap.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 19,
+				"fragment" : "openair2/LAYER2/NR_MAC_UE/libnr_ue_power_procedures.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 19,
+				"fragment" : "openair2/LAYER2/NR_MAC_UE/libnr_ue_ra_procedures.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libMAC_NR_COMMON.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "openair2/RRC/NR/MESSAGES/libasn1_nr_rrc.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 8,
+				"fragment" : "common/utils/nr/libnr_common.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "nfapi/open-nFAPI/fapi/libnr_fapi_p5.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "nfapi/open-nFAPI/fapi/libnr_fapi_p7.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 23,
+				"fragment" : "nfapi/open-nFAPI/fapi/libnr_fapi_common.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "nfapi/open-nFAPI/common/libnfapi_common.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 24,
+				"fragment" : "-lz",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libUTIL.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "libCONFIG_LIB.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "common/utils/T/libT.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 25,
+				"fragment" : "common/utils/LOG/libLOG.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 25,
+				"fragment" : "common/utils/threadPool/libthread-pool.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 25,
+				"fragment" : "common/utils/libutils.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "libUTIL.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "libCONFIG_LIB.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "common/utils/T/libT.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 25,
+				"fragment" : "common/utils/LOG/libLOG.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 25,
+				"fragment" : "common/utils/threadPool/libthread-pool.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 25,
+				"fragment" : "common/utils/libutils.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 25,
+				"fragment" : "common/utils/barrier/libbarrier.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lpthread",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 25,
+				"fragment" : "common/utils/actor/libactor.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lrt",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"linkLibraries" : 
+	[
+		{
+			"backtrace" : 2,
+			"fragment" : "-Wl,--start-group"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nr_rrc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SECURITY::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "UTIL::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SCHED_NR_UE_LIB::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "PHY_NR_COMMON::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "PHY_NR_UE::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "NR_L2_UE::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "MAC_NR_COMMON::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "nfapi_nr_lib::@d55f3f8fba803fbea8b5"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "ITTI::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SIMU::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "radio_common::@9eb9a83ffc72aaafb022"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "time_management::@dbedb116209bc3f01f94"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "softmodem_common::@ae4c228f25544f415da9"
+		},
+		{
+			"backtrace" : 2,
+			"fragment" : "-Wl,--end-group"
+		},
+		{
+			"backtrace" : 2,
+			"fragment" : "dl"
+		},
+		{
+			"backtrace" : 3,
+			"fragment" : "pthread"
+		},
+		{
+			"backtrace" : 3,
+			"fragment" : "m"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "CONFIG_LIB::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 3,
+			"fragment" : "rt"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "nr_ue_phy_meas::@a70b2ef2a7c803dc14e2"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "T::@01038471a7b68ee808ac"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "nr_nas::@e32841fe993d908af54b"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "lib_uicc::@856602c31a67ef940232"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "usim_lib::@6ae0845c92174a706ea8"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "SECURITY::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 35,
+			"id" : "asn1_nr_rrc_hdrs::@e1dba09dfe939f03d66e"
+		},
+		{
+			"backtrace" : 35,
+			"id" : "asn1_lte_rrc_hdrs::@43a7ab49143ac9318632"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_lte_rrc::@43a7ab49143ac9318632"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_nr_rrc::@e1dba09dfe939f03d66e"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_s1ap::@dff58238d5aef743b919"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_ngap::@16ac8286a07c28265ef5"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_m2ap::@f84672664187eda82c80"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_m3ap::@44cb76f854d7aaadc6d4"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_x2ap::@690b85046050806bae02"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_f1ap::@3b68f2373a9188cdfe0f"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "asn1_lpp::@fd1dc5191466998ef71c"
+		}
+	],
+	"name" : "nr-uesoftmodem",
+	"nameOnDisk" : "nr-uesoftmodem",
+	"orderDependencies" : 
+	[
+		{
+			"backtrace" : 26,
+			"id" : "generate_T::@01038471a7b68ee808ac"
+		},
+		{
+			"backtrace" : 28,
+			"id" : "T_tools::@7248a0639d7d2c7206ac"
+		},
+		{
+			"backtrace" : 30,
+			"id" : "ldpc_orig::@42997192128b3f0a7537"
+		},
+		{
+			"backtrace" : 30,
+			"id" : "ldpc::@42997192128b3f0a7537"
+		}
+	],
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6
+			]
+		},
+		{
+			"name" : "Object Libraries",
+			"sourceIndexes" : 
+			[
+				7,
+				8,
+				9,
+				10,
+				11
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "executables/nr-uesoftmodem.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "executables/position_interface.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "executables/nr-ue.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "executables/nr-ue-ru.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "openair1/PHY/TOOLS/phy_scope_interface.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "nfapi/oai_integration/nfapi.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "openair2/PHY_INTERFACE/queue_t.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 5,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/openair3/UICC/CMakeFiles/lib_uicc.dir/usim_interface.c.o",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 5,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/openair3/UICC/CMakeFiles/lib_uicc.dir/pdu_session.c.o",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 5,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/openair3/NAS/UE/API/USIM/CMakeFiles/usim_lib.dir/__/__/__/__/__/common/utils/mem/memory.c.o",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 5,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/openair3/NAS/UE/API/USIM/CMakeFiles/usim_lib.dir/aka_functions.c.o",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 5,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/openair3/NAS/UE/API/USIM/CMakeFiles/usim_lib.dir/usim_api.c.o",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "EXECUTABLE"
+}

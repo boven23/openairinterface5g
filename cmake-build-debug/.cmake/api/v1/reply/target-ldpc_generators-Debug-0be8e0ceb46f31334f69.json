@@ -1,0 +1,101 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 9,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 20,
+				"parent" : 0
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_avx2_files::@d9f74fabacde8013dd38"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_128_files::@d9f74fabacde8013dd38"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_avx512_files::@2635d12b03847b8e4d4d"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "cnProc_gen_avx2_files::@b3c6cf1fbaa28b7bc01a"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "cnProc_gen_128_files::@b3c6cf1fbaa28b7bc01a"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "cnProc_gen_avx512_files::@dea3cf733ec3a9ade667"
+		}
+	],
+	"id" : "ldpc_generators::@55db13eecf96cf79b047",
+	"name" : "ldpc_generators",
+	"orderDependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_avx2_files::@d9f74fabacde8013dd38"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_128_files::@d9f74fabacde8013dd38"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "bnProc_gen_avx512_files::@2635d12b03847b8e4d4d"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "cnProc_gen_avx2_files::@b3c6cf1fbaa28b7bc01a"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "cnProc_gen_128_files::@b3c6cf1fbaa28b7bc01a"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "cnProc_gen_avx512_files::@dea3cf733ec3a9ade667"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools",
+		"source" : "openair1/PHY/CODING/nrLDPC_decoder/nrLDPC_tools"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}
