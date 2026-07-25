@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <pthread.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -17,6 +18,7 @@
 #include <unistd.h>
 
 #include "common/ran_context.h"
+#include "common/utils/ds/seq_arr.h"
 #include "common/utils/LOG/log.h"
 #include "common/utils/utils.h"
 #include "f1ap_messages_types.h"
@@ -27,7 +29,12 @@
 
 #define RRC_FUZZ_MSG_HEARTBEAT 0xff
 #define RRC_FUZZ_MSG_INJECT_UL_DCCH 0x01
+#define RRC_FUZZ_MSG_QUERY_UE_LIST 0x02
+#define RRC_FUZZ_MSG_QUERY_UE_STATE 0x03
+#define RRC_FUZZ_MSG_CASE_MARKER 0x10
 #define RRC_FUZZ_MAX_PAYLOAD_LEN 4096
+#define RRC_FUZZ_MAX_MARKER_LEN 256
+#define RRC_FUZZ_MAX_REPLY_LEN 8192
 
 typedef struct rrc_fuzz_header_s {
   uint8_t msg_type;
@@ -68,6 +75,45 @@ static void send_reply(int fd, const char *reply)
   send(fd, reply, strlen(reply), MSG_NOSIGNAL);
 }
 
+static void append_reply(char **pos, size_t *remaining, const char *fmt, ...)
+{
+  if (*remaining == 0)
+    return;
+
+  va_list ap;
+  va_start(ap, fmt);
+  int written = vsnprintf(*pos, *remaining, fmt, ap);
+  va_end(ap);
+
+  if (written < 0)
+    return;
+
+  if ((size_t)written >= *remaining) {
+    *pos += *remaining - 1;
+    *remaining = 1;
+    return;
+  }
+
+  *pos += written;
+  *remaining -= written;
+}
+
+static bool is_marker_char(uint8_t c)
+{
+  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_' || c == '-' || c == '.'
+         || c == ':';
+}
+
+static void sanitize_marker_payload(const uint8_t *payload, uint32_t payload_len, char *out, size_t out_len)
+{
+  DevAssert(out_len > 0);
+
+  const size_t copy_len = payload_len < out_len - 1 ? payload_len : out_len - 1;
+  for (size_t i = 0; i < copy_len; i++)
+    out[i] = is_marker_char(payload[i]) ? (char)payload[i] : '_';
+  out[copy_len] = '\0';
+}
+
 static rrc_gNB_ue_context_t *find_target_ue(uint32_t cu_ue_id, uint32_t rnti)
 {
   gNB_RRC_INST *rrc = RC.nrrrc[0];
@@ -81,6 +127,94 @@ static rrc_gNB_ue_context_t *find_target_ue(uint32_t cu_ue_id, uint32_t rnti)
     return rrc_gNB_get_ue_context_by_rnti_any_du(rrc, (rnti_t)rnti);
 
   return NULL;
+}
+
+static void append_ue_state(char **pos, size_t *remaining, const rrc_gNB_ue_context_t *ue_context)
+{
+  const gNB_RRC_UE_t *UE = &ue_context->ue_context;
+  const bool f1_data_exists = cu_exists_f1_ue_data(UE->rrc_ue_id);
+  const f1_ue_data_t ue_data = f1_data_exists ? cu_get_f1_ue_data(UE->rrc_ue_id) : (f1_ue_data_t){0};
+
+  append_reply(pos,
+               remaining,
+               " ue={cu_ue_id=%u,rnti=0x%04x,du_ue_id=%u,du_assoc_id=%d,srb1=%u,srb2=%u,security=%u,"
+               "f1_context=%u,f1_data=%u,drb_count=%zu,pdu_session_count=%zu,ongoing_reconfiguration=%u}",
+               UE->rrc_ue_id,
+               UE->rnti,
+               ue_data.secondary_ue,
+               ue_data.du_assoc_id,
+               UE->Srb[SRB1].Active ? 1 : 0,
+               UE->Srb[SRB2].Active ? 1 : 0,
+               UE->as_security_active ? 1 : 0,
+               UE->f1_ue_context_active ? 1 : 0,
+               f1_data_exists ? 1 : 0,
+               seq_arr_size(&UE->drbs),
+               seq_arr_size(&UE->pduSessions),
+               UE->ongoing_reconfiguration ? 1 : 0);
+}
+
+static void send_ue_list(int client_fd)
+{
+  char reply[RRC_FUZZ_MAX_REPLY_LEN];
+  char *pos = reply;
+  size_t remaining = sizeof(reply);
+
+  gNB_RRC_INST *rrc = RC.nrrrc[0];
+  if (rrc == NULL) {
+    send_reply(client_fd, "ERR rrc instance unavailable\n");
+    return;
+  }
+
+  size_t count = 0;
+  rrc_gNB_ue_context_t *ue_context = NULL;
+  RB_FOREACH(ue_context, rrc_nr_ue_tree_s, &rrc->rrc_ue_head)
+    count++;
+
+  append_reply(&pos, &remaining, "OK ue_list count=%zu", count);
+  RB_FOREACH(ue_context, rrc_nr_ue_tree_s, &rrc->rrc_ue_head)
+    append_ue_state(&pos, &remaining, ue_context);
+  append_reply(&pos, &remaining, "\n");
+
+  send_reply(client_fd, reply);
+  LOG_I(NR_RRC, "rrc_fuzz_injector: returned UE list count=%zu\n", count);
+}
+
+static void send_ue_state(int client_fd, uint32_t cu_ue_id, uint32_t rnti)
+{
+  rrc_gNB_ue_context_t *ue_context = find_target_ue(cu_ue_id, rnti);
+  if (ue_context == NULL) {
+    send_reply(client_fd, "ERR no UE context\n");
+    return;
+  }
+
+  char reply[RRC_FUZZ_MAX_REPLY_LEN];
+  char *pos = reply;
+  size_t remaining = sizeof(reply);
+
+  append_reply(&pos, &remaining, "OK ue_state");
+  append_ue_state(&pos, &remaining, ue_context);
+  append_reply(&pos, &remaining, "\n");
+
+  send_reply(client_fd, reply);
+  LOG_I(NR_RRC,
+        "rrc_fuzz_injector: returned UE state cu_ue_id=%u rnti=%04x\n",
+        ue_context->ue_context.rrc_ue_id,
+        ue_context->ue_context.rnti);
+}
+
+static void handle_case_marker(int client_fd, uint8_t srb_id, uint32_t cu_ue_id, uint32_t rnti, const uint8_t *payload, uint32_t payload_len)
+{
+  char marker[RRC_FUZZ_MAX_MARKER_LEN + 1];
+  sanitize_marker_payload(payload, payload_len, marker, sizeof(marker));
+
+  LOG_I(NR_RRC,
+        "rrc_fuzz_injector: CASE_MARKER marker=%s cu_ue_id=%u rnti=%04x srb=%u len=%u\n",
+        marker,
+        cu_ue_id,
+        rnti,
+        srb_id,
+        payload_len);
+  send_reply(client_fd, "OK marker\n");
 }
 
 static bool queue_ul_dcch(uint8_t srb_id, uint32_t cu_ue_id, uint32_t rnti, const uint8_t *payload, uint32_t payload_len)
@@ -150,6 +284,42 @@ static void handle_client(int client_fd)
         return;
       }
       send_reply(client_fd, "OK heartbeat\n");
+      continue;
+    }
+
+    if (msg_type == RRC_FUZZ_MSG_QUERY_UE_LIST) {
+      if (payload_len != 0) {
+        send_reply(client_fd, "ERR query_ue_list payload must be empty\n");
+        return;
+      }
+      send_ue_list(client_fd);
+      continue;
+    }
+
+    if (msg_type == RRC_FUZZ_MSG_QUERY_UE_STATE) {
+      if (payload_len != 0) {
+        send_reply(client_fd, "ERR query_ue_state payload must be empty\n");
+        return;
+      }
+      if (cu_ue_id == 0 && rnti == 0) {
+        send_reply(client_fd, "ERR query_ue_state requires cu_ue_id or rnti\n");
+        return;
+      }
+      send_ue_state(client_fd, cu_ue_id, rnti);
+      continue;
+    }
+
+    if (msg_type == RRC_FUZZ_MSG_CASE_MARKER) {
+      if (payload_len == 0 || payload_len > RRC_FUZZ_MAX_MARKER_LEN) {
+        send_reply(client_fd, "ERR invalid marker payload_len\n");
+        return;
+      }
+
+      uint8_t payload[RRC_FUZZ_MAX_MARKER_LEN];
+      if (!recv_exact(client_fd, payload, payload_len))
+        return;
+
+      handle_case_marker(client_fd, srb_id, cu_ue_id, rnti, payload, payload_len);
       continue;
     }
 
