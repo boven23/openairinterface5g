@@ -82,6 +82,48 @@ typedef enum RA_trigger_e {
   BEAM_FAILURE_RECOVERY,
 } RA_trigger_t;
 
+typedef enum nr_ue_fuzz_hook_msg_e {
+  NR_UE_HOOK_MSG_NONE = 0,
+  NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE,
+  NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
+  NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+  NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE,
+  NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION,
+  NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER,
+  NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
+  NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION,
+  NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND,
+  NR_UE_HOOK_MSG_DL_UE_CAPABILITY_ENQUIRY,
+  NR_UE_HOOK_MSG_DL_RRC_REESTABLISHMENT,
+  NR_UE_HOOK_MSG_DL_RRC_RELEASE,
+} nr_ue_fuzz_hook_msg_t;
+
+typedef enum nr_ue_fuzz_hook_action_e {
+  NR_UE_HOOK_ACTION_NONE = 0,
+  NR_UE_HOOK_ACTION_DROP,
+  NR_UE_HOOK_ACTION_DUPLICATE,
+  NR_UE_HOOK_ACTION_MUTATE_TXN,
+} nr_ue_fuzz_hook_action_t;
+
+typedef struct nr_ue_fuzz_hook_state_s {
+  bool enabled;
+  bool arm_once;
+  nr_ue_fuzz_hook_msg_t target_msg;
+  nr_ue_fuzz_hook_action_t action;
+  int txn_offset;
+  nr_ue_fuzz_hook_msg_t last_dl_msg;
+  int last_dl_txn;
+  bool seen_reconfiguration;
+  bool seen_security_mode_command;
+  nr_ue_fuzz_hook_msg_t last_ul_msg;
+  int last_ul_srb_id;
+  int last_ul_size;
+  uint8_t last_ul_pdu[NR_RRC_BUF_SIZE];
+  long control_mtime;
+  char control_path[128];
+  char state_path[128];
+} nr_ue_fuzz_hook_state_t;
+
 typedef struct UE_RRC_SI_INFO_NR_r17_s {
   bool sib15_validity;
   NR_timer_t sib15_timer;
@@ -255,6 +297,7 @@ typedef struct NR_UE_RRC_INST_s {
   notifiedFIFO_t *mac_input_nf;
   /* NAS PDU deferred until UL-DCCH exists: consumed in RRCSetupComplete/RRCResumeComplete dedicatedNAS-Message */
   as_nas_info_t pending_initial_nas;
+  nr_ue_fuzz_hook_state_t fuzz_hook;
 } NR_UE_RRC_INST_t;
 
 #endif

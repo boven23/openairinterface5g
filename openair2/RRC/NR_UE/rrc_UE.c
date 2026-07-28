@@ -9,6 +9,10 @@
 #define RRC_UE
 #define RRC_UE_C
 
+#include <ctype.h>
+#include <strings.h>
+#include <sys/stat.h>
+
 #include "LTE_MeasObjectToAddMod.h"
 #include "NR_DL-DCCH-Message.h"        //asn_DEF_NR_DL_DCCH_Message
 #include "NR_DL-CCCH-Message.h"        //asn_DEF_NR_DL_CCCH_Message
@@ -53,6 +57,277 @@
 #include "openair2/SDAP/nr_sdap/nr_sdap_entity.h"
 
 static NR_UE_RRC_INST_t *NR_UE_rrc_inst[MAX_NUM_NR_UE_INST] = {0};
+
+static const char *nr_ue_fuzz_hook_msg_name(nr_ue_fuzz_hook_msg_t msg)
+{
+  switch (msg) {
+    case NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE: return "RRCSetupComplete";
+    case NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE: return "SecurityModeComplete";
+    case NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE: return "RRCReconfigurationComplete";
+    case NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE: return "RRCReestablishmentComplete";
+    case NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION: return "UECapabilityInformation";
+    case NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER: return "ULInformationTransfer";
+    case NR_UE_HOOK_MSG_MEASUREMENT_REPORT: return "MeasurementReport";
+    case NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION: return "DL_RRCReconfiguration";
+    case NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND: return "DL_SecurityModeCommand";
+    case NR_UE_HOOK_MSG_DL_UE_CAPABILITY_ENQUIRY: return "DL_UECapabilityEnquiry";
+    case NR_UE_HOOK_MSG_DL_RRC_REESTABLISHMENT: return "DL_RRCReestablishment";
+    case NR_UE_HOOK_MSG_DL_RRC_RELEASE: return "DL_RRCRelease";
+    case NR_UE_HOOK_MSG_NONE:
+    default: return "NONE";
+  }
+}
+
+static const char *nr_ue_fuzz_hook_action_name(nr_ue_fuzz_hook_action_t action)
+{
+  switch (action) {
+    case NR_UE_HOOK_ACTION_DROP: return "drop";
+    case NR_UE_HOOK_ACTION_DUPLICATE: return "duplicate";
+    case NR_UE_HOOK_ACTION_MUTATE_TXN: return "mutate_txn";
+    case NR_UE_HOOK_ACTION_NONE:
+    default: return "none";
+  }
+}
+
+static const char *nr_ue_fuzz_hook_rrc_state_name(Rrc_State_NR_t state)
+{
+  switch (state) {
+    case RRC_STATE_IDLE_NR: return "IDLE";
+    case RRC_STATE_INACTIVE_NR: return "INACTIVE";
+    case RRC_STATE_CONNECTED_NR: return "CONNECTED";
+    case RRC_STATE_DETACH_NR: return "DETACH";
+    default: return "UNKNOWN";
+  }
+}
+
+static nr_ue_fuzz_hook_msg_t nr_ue_fuzz_hook_msg_from_name(const char *name)
+{
+  if (!name || *name == '\0')
+    return NR_UE_HOOK_MSG_NONE;
+  if (!strcasecmp(name, "RRCSetupComplete"))
+    return NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE;
+  if (!strcasecmp(name, "SecurityModeComplete"))
+    return NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE;
+  if (!strcasecmp(name, "RRCReconfigurationComplete"))
+    return NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE;
+  if (!strcasecmp(name, "RRCReestablishmentComplete"))
+    return NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE;
+  if (!strcasecmp(name, "UECapabilityInformation"))
+    return NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION;
+  if (!strcasecmp(name, "ULInformationTransfer"))
+    return NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER;
+  if (!strcasecmp(name, "MeasurementReport"))
+    return NR_UE_HOOK_MSG_MEASUREMENT_REPORT;
+  return NR_UE_HOOK_MSG_NONE;
+}
+
+static nr_ue_fuzz_hook_action_t nr_ue_fuzz_hook_action_from_name(const char *name)
+{
+  if (!name || *name == '\0')
+    return NR_UE_HOOK_ACTION_NONE;
+  if (!strcasecmp(name, "drop"))
+    return NR_UE_HOOK_ACTION_DROP;
+  if (!strcasecmp(name, "duplicate"))
+    return NR_UE_HOOK_ACTION_DUPLICATE;
+  if (!strcasecmp(name, "mutate_txn"))
+    return NR_UE_HOOK_ACTION_MUTATE_TXN;
+  return NR_UE_HOOK_ACTION_NONE;
+}
+
+static char *nr_ue_fuzz_hook_trim(char *s)
+{
+  while (*s && isspace((unsigned char)*s))
+    s++;
+  size_t len = strlen(s);
+  while (len > 0 && isspace((unsigned char)s[len - 1])) {
+    s[len - 1] = '\0';
+    len--;
+  }
+  return s;
+}
+
+static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
+{
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (hook->control_path[0] != '\0')
+    return;
+  snprintf(hook->control_path, sizeof(hook->control_path), "/tmp/oai_nr_ue_hook_%ld.ctl", rrc->ue_id);
+  snprintf(hook->state_path, sizeof(hook->state_path), "/tmp/oai_nr_ue_hook_%ld.state", rrc->ue_id);
+  hook->control_mtime = -1;
+  hook->last_dl_txn = -1;
+  hook->txn_offset = 1;
+}
+
+static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
+{
+  nr_ue_fuzz_hook_ensure_paths(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  FILE *fp = fopen(hook->state_path, "w");
+  if (!fp)
+    return;
+  fprintf(fp, "enabled=%d\n", hook->enabled ? 1 : 0);
+  fprintf(fp, "target=%s\n", nr_ue_fuzz_hook_msg_name(hook->target_msg));
+  fprintf(fp, "action=%s\n", nr_ue_fuzz_hook_action_name(hook->action));
+  fprintf(fp, "arm_once=%d\n", hook->arm_once ? 1 : 0);
+  fprintf(fp, "txn_offset=%d\n", hook->txn_offset);
+  fprintf(fp, "nr_rrc_state=%s\n", nr_ue_fuzz_hook_rrc_state_name(rrc->nrRrcState));
+  fprintf(fp, "as_security_activated=%d\n", rrc->as_security_activated ? 1 : 0);
+  fprintf(fp, "last_dl_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_dl_msg));
+  fprintf(fp, "last_dl_txn=%d\n", hook->last_dl_txn);
+  fprintf(fp, "seen_reconfiguration=%d\n", hook->seen_reconfiguration ? 1 : 0);
+  fprintf(fp, "seen_security_mode_command=%d\n", hook->seen_security_mode_command ? 1 : 0);
+  fprintf(fp, "last_ul_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_ul_msg));
+  fprintf(fp, "last_ul_srb=%d\n", hook->last_ul_srb_id);
+  fprintf(fp, "last_ul_size=%d\n", hook->last_ul_size);
+  fclose(fp);
+}
+
+static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
+{
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  hook->enabled = false;
+  hook->target_msg = NR_UE_HOOK_MSG_NONE;
+  hook->action = NR_UE_HOOK_ACTION_NONE;
+  hook->txn_offset = 1;
+}
+
+static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
+{
+  nr_ue_fuzz_hook_ensure_paths(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  struct stat st = {0};
+  if (stat(hook->control_path, &st) != 0 || hook->control_mtime == st.st_mtime)
+    return;
+
+  hook->control_mtime = st.st_mtime;
+  hook->enabled = false;
+  hook->arm_once = false;
+  hook->target_msg = NR_UE_HOOK_MSG_NONE;
+  hook->action = NR_UE_HOOK_ACTION_NONE;
+  hook->txn_offset = 1;
+
+  FILE *fp = fopen(hook->control_path, "r");
+  if (!fp)
+    return;
+
+  char line[256];
+  while (fgets(line, sizeof(line), fp) != NULL) {
+    char *trimmed = nr_ue_fuzz_hook_trim(line);
+    if (*trimmed == '\0' || *trimmed == '#')
+      continue;
+    char *eq = strchr(trimmed, '=');
+    if (!eq)
+      continue;
+    *eq = '\0';
+    char *key = nr_ue_fuzz_hook_trim(trimmed);
+    char *value = nr_ue_fuzz_hook_trim(eq + 1);
+
+    if (!strcasecmp(key, "enabled"))
+      hook->enabled = atoi(value) != 0;
+    else if (!strcasecmp(key, "target"))
+      hook->target_msg = nr_ue_fuzz_hook_msg_from_name(value);
+    else if (!strcasecmp(key, "action"))
+      hook->action = nr_ue_fuzz_hook_action_from_name(value);
+    else if (!strcasecmp(key, "arm_once"))
+      hook->arm_once = atoi(value) != 0;
+    else if (!strcasecmp(key, "txn_offset"))
+      hook->txn_offset = atoi(value);
+  }
+  fclose(fp);
+
+  LOG_I(NR_RRC,
+        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d\n",
+        rrc->ue_id,
+        hook->enabled ? 1 : 0,
+        nr_ue_fuzz_hook_msg_name(hook->target_msg),
+        nr_ue_fuzz_hook_action_name(hook->action),
+        hook->arm_once ? 1 : 0,
+        hook->txn_offset);
+  nr_ue_fuzz_hook_write_state(rrc);
+}
+
+static void nr_ue_fuzz_hook_record_dl(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg, int txn)
+{
+  nr_ue_fuzz_hook_ensure_paths(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  hook->last_dl_msg = msg;
+  hook->last_dl_txn = txn;
+  if (msg == NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION)
+    hook->seen_reconfiguration = true;
+  if (msg == NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND)
+    hook->seen_security_mode_command = true;
+  nr_ue_fuzz_hook_write_state(rrc);
+}
+
+static void nr_ue_fuzz_hook_cache_ul(NR_UE_RRC_INST_t *rrc,
+                                     nr_ue_fuzz_hook_msg_t msg,
+                                     int srb_id,
+                                     const uint8_t *buffer,
+                                     int size)
+{
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  hook->last_ul_msg = msg;
+  hook->last_ul_srb_id = srb_id;
+  hook->last_ul_size = size > NR_RRC_BUF_SIZE ? NR_RRC_BUF_SIZE : size;
+  if (hook->last_ul_size > 0)
+    memcpy(hook->last_ul_pdu, buffer, hook->last_ul_size);
+  nr_ue_fuzz_hook_write_state(rrc);
+}
+
+static uint8_t nr_ue_fuzz_hook_maybe_mutate_txn(NR_UE_RRC_INST_t *rrc,
+                                                nr_ue_fuzz_hook_msg_t msg,
+                                                uint8_t txn)
+{
+  nr_ue_fuzz_hook_reload_config(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (!hook->enabled || hook->target_msg != msg || hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN)
+    return txn;
+
+  int mutated = ((int)txn + hook->txn_offset) % 4;
+  if (mutated < 0)
+    mutated += 4;
+  LOG_W(NR_RRC,
+        "[UE %ld][HOOK] mutate txn for %s: %u -> %d\n",
+        rrc->ue_id,
+        nr_ue_fuzz_hook_msg_name(msg),
+        txn,
+        mutated);
+  if (hook->arm_once)
+    nr_ue_fuzz_hook_disarm(rrc);
+  nr_ue_fuzz_hook_write_state(rrc);
+  return (uint8_t)mutated;
+}
+
+static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc,
+                                     nr_ue_fuzz_hook_msg_t msg,
+                                     int srb_id,
+                                     uint8_t *buffer,
+                                     int size)
+{
+  nr_ue_fuzz_hook_reload_config(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  const bool hit_target = hook->enabled && hook->target_msg == msg;
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DROP) {
+    LOG_W(NR_RRC, "[UE %ld][HOOK] drop %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
+    nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm(rrc);
+    nr_ue_fuzz_hook_write_state(rrc);
+    return;
+  }
+
+  nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+  nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DUPLICATE) {
+    LOG_W(NR_RRC, "[UE %ld][HOOK] duplicate %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
+    nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm(rrc);
+    nr_ue_fuzz_hook_write_state(rrc);
+  }
+}
 /* NAS Attach request with IMSI */
 static const char nr_nas_attach_req_imsi_dummy_NSA_case[] = {
     0x07,
@@ -865,6 +1140,7 @@ static void nr_rrc_ue_process_RadioBearerConfig(NR_UE_RRC_INST_t *ue_rrc, NR_Rad
 
   ue_rrc->nrRrcState = RRC_STATE_CONNECTED_NR;
   LOG_I(NR_RRC, "State = NR_RRC_CONNECTED\n");
+  nr_ue_fuzz_hook_write_state(ue_rrc);
 }
 
 static void nr_rrc_signal_maxrtxindication(int ue_id)
@@ -1723,6 +1999,8 @@ NR_UE_RRC_INST_t* nr_rrc_init_ue(char* uecap_file, int instance_id, int num_ant_
     rrc->Srb[j] = RB_NOT_PRESENT;
   for (int j = 1; j <= MAX_DRBS_PER_UE; j++)
     set_DRB_status(rrc, j, RB_NOT_PRESENT);
+  nr_ue_fuzz_hook_ensure_paths(rrc);
+  nr_ue_fuzz_hook_write_state(rrc);
   // SRB0 activated by default
   rrc->Srb[0] = RB_ESTABLISHED;
   for (int j = 0; j < NR_MAX_NUM_LCID; j++)
@@ -2088,6 +2366,7 @@ static void rrc_ue_generate_RRCSetupComplete(NR_UE_RRC_INST_t *rrc, const uint8_
 {
   uint8_t buffer[100];
   as_nas_info_t initialNasMsg = {0};
+  const uint8_t txn = nr_ue_fuzz_hook_maybe_mutate_txn(rrc, NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, Transaction_id);
 
   if (IS_SA_MODE(get_softmodem_params())) {
     /* 3GPP TS 38.331:
@@ -2128,7 +2407,7 @@ static void rrc_ue_generate_RRCSetupComplete(NR_UE_RRC_INST_t *rrc, const uint8_
   // Encode RRCSetupComplete
   int size = do_RRCSetupComplete(buffer,
                                  sizeof(buffer),
-                                 Transaction_id,
+                                 txn,
                                  rrc->selected_plmn_identity,
                                  rrc->ra_trigger == RRC_CONNECTION_SETUP,
                                  rrc->fiveG_S_TMSI,
@@ -2141,7 +2420,7 @@ static void rrc_ue_generate_RRCSetupComplete(NR_UE_RRC_INST_t *rrc, const uint8_
   LOG_I(NR_RRC, "[UE %ld][RAPROC] Logical Channel UL-DCCH (SRB1), Generating RRCSetupComplete (bytes%d)\n", rrc->ue_id, size);
   int srb_id = 1; // RRC setup complete on SRB1
   LOG_D(NR_RRC, "[RRC_UE %ld] PDCP_DATA_REQ/%d Bytes RRCSetupComplete ---> %d\n", rrc->ue_id, size, srb_id);
-  nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+  nr_ue_fuzz_hook_send_srb(rrc, NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, srb_id, buffer, size);
 }
 
 static void nr_rrc_rrcsetup_fallback(NR_UE_RRC_INST_t *rrc)
@@ -2225,6 +2504,7 @@ static void nr_rrc_process_rrcsetup(NR_UE_RRC_INST_t *rrc, const NR_RRCSetup_t *
   // if the RRCSetup is received in response to an RRCResumeRequest, RRCResumeRequest1 or RRCSetupRequest
   // enter RRC_CONNECTED
   rrc->nrRrcState = RRC_STATE_CONNECTED_NR;
+  nr_ue_fuzz_hook_write_state(rrc);
 
   // Indicate to NAS that the RRC connection has been established (5.3.1.3 of 3GPP TS 24.501)
   MessageDef *msg_p = itti_alloc_new_message(TASK_RRC_NRUE, 0, NR_NAS_CONN_ESTABLISH_IND);
@@ -2366,6 +2646,8 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
                                                   int msg_size,
                                                   const nr_pdcp_integrity_data_t *msg_integrity)
 {
+  const uint8_t smc_txn =
+      nr_ue_fuzz_hook_maybe_mutate_txn(ue_rrc, NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE, securityModeCommand->rrc_TransactionIdentifier);
   LOG_I(NR_RRC, "Receiving from SRB1 (DL-DCCH), Processing securityModeCommand\n");
 
   AssertFatal(securityModeCommand->criticalExtensions.present == NR_SecurityModeCommand__criticalExtensions_PR_securityModeCommand,
@@ -2463,7 +2745,7 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
   c1->present = NR_UL_DCCH_MessageType__c1_PR_securityModeComplete;
 
   asn1cCalloc(c1->choice.securityModeComplete, modeComplete);
-  modeComplete->rrc_TransactionIdentifier = securityModeCommand->rrc_TransactionIdentifier;
+  modeComplete->rrc_TransactionIdentifier = smc_txn;
   modeComplete->criticalExtensions.present = NR_SecurityModeComplete__criticalExtensions_PR_securityModeComplete;
   asn1cCalloc(modeComplete->criticalExtensions.choice.securityModeComplete, ext);
   ext->nonCriticalExtension = NULL;
@@ -2489,7 +2771,11 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
 
   ue_rrc->as_security_activated = true;
   srb_id = 1; // SecurityModeComplete in SRB1
-  nr_pdcp_data_req_srb(ue_rrc->ue_id, srb_id, 0, (enc_rval.encoded + 7) / 8, buffer, deliver_pdu_srb_rlc, NULL);
+  nr_ue_fuzz_hook_send_srb(ue_rrc,
+                           NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
+                           srb_id,
+                           buffer,
+                           (enc_rval.encoded + 7) / 8);
 
   /* after encoding SecurityModeComplete we activate both ciphering and integrity */
   security_parameters.ciphering_algorithm = ue_rrc->cipheringAlgorithm;
@@ -2503,7 +2789,9 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
 static void nr_rrc_ue_generate_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc, const int srb_id, const uint8_t Transaction_id)
 {
   uint8_t buffer[32];
-  int size = do_NR_RRCReconfigurationComplete(buffer, sizeof(buffer), Transaction_id);
+  const uint8_t txn =
+      nr_ue_fuzz_hook_maybe_mutate_txn(rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, Transaction_id);
+  int size = do_NR_RRCReconfigurationComplete(buffer, sizeof(buffer), txn);
   LOG_I(NR_RRC, " Logical Channel UL-DCCH (SRB1), Generating RRCReconfigurationComplete (bytes %d)\n", size);
   AssertFatal(srb_id == 1 || srb_id == 3, "Invalid SRB ID %d\n", srb_id);
   LOG_D(RLC,
@@ -2511,17 +2799,21 @@ static void nr_rrc_ue_generate_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc,
         "--->][PDCP][RB %02d]\n",
         size,
         srb_id);
-  nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+  nr_ue_fuzz_hook_send_srb(rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, srb_id, buffer, size);
 }
 
 static void nr_rrc_ue_generate_rrcReestablishmentComplete(const NR_UE_RRC_INST_t *rrc,
                                                           const NR_RRCReestablishment_t *rrcReestablishment)
 {
+  NR_UE_RRC_INST_t *rrc_mut = (NR_UE_RRC_INST_t *)rrc;
   uint8_t buffer[NR_RRC_BUF_SIZE] = {0};
-  int size = do_RRCReestablishmentComplete(buffer, NR_RRC_BUF_SIZE, rrcReestablishment->rrc_TransactionIdentifier);
+  const uint8_t txn = nr_ue_fuzz_hook_maybe_mutate_txn(rrc_mut,
+                                                       NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE,
+                                                       rrcReestablishment->rrc_TransactionIdentifier);
+  int size = do_RRCReestablishmentComplete(buffer, NR_RRC_BUF_SIZE, txn);
   LOG_I(NR_RRC, "[RAPROC] Logical Channel UL-DCCH (SRB1), Generating RRCReestablishmentComplete (bytes %d)\n", size);
   int srb_id = 1; // RRC re-establishment complete on SRB1
-  nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+  nr_ue_fuzz_hook_send_srb(rrc_mut, NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE, srb_id, buffer, size);
 }
 
 /** @brief Process RRCReestablishment message
@@ -2591,13 +2883,15 @@ static void nr_rrc_ue_process_rrcReestablishment(NR_UE_RRC_INST_t *rrc,
 static void nr_rrc_ue_process_ueCapabilityEnquiry(NR_UE_RRC_INST_t *rrc, NR_UECapabilityEnquiry_t *UECapabilityEnquiry)
 {
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
+  const uint8_t uecap_txn =
+      nr_ue_fuzz_hook_maybe_mutate_txn(rrc, NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION, UECapabilityEnquiry->rrc_TransactionIdentifier);
   LOG_I(NR_RRC, "Receiving from SRB1 (DL-DCCH), Processing UECapabilityEnquiry\n");
 
   ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
   asn1cCalloc(ul_dcch_msg.message.choice.c1, c1);
   c1->present = NR_UL_DCCH_MessageType__c1_PR_ueCapabilityInformation;
   asn1cCalloc(c1->choice.ueCapabilityInformation, info);
-  info->rrc_TransactionIdentifier = UECapabilityEnquiry->rrc_TransactionIdentifier;
+  info->rrc_TransactionIdentifier = uecap_txn;
   if (!rrc->UECap.UE_NR_Capability) {
     rrc->UECap.UE_NR_Capability = CALLOC(1, sizeof(NR_UE_NR_Capability_t));
     asn1cSequenceAdd(rrc->UECap.UE_NR_Capability->rf_Parameters.supportedBandListNR.list, NR_BandNR_t, nr_bandnr);
@@ -2641,7 +2935,11 @@ static void nr_rrc_ue_process_ueCapabilityEnquiry(NR_UE_RRC_INST_t *rrc, NR_UECa
       }
       LOG_I(NR_RRC, "UECapabilityInformation Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
       int srb_id = 1; // UECapabilityInformation on SRB1
-      nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, (enc_rval.encoded + 7) / 8, buffer, deliver_pdu_srb_rlc, NULL);
+      nr_ue_fuzz_hook_send_srb(rrc,
+                               NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION,
+                               srb_id,
+                               buffer,
+                               (enc_rval.encoded + 7) / 8);
     }
   }
   /* Free struct members after it's done including locally allocated ue_CapabilityRAT_Container */
@@ -2683,6 +2981,9 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
           break;
 
         case NR_DL_DCCH_MessageType__c1_PR_rrcReconfiguration: {
+          nr_ue_fuzz_hook_record_dl(rrc,
+                                    NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION,
+                                    c1->choice.rrcReconfiguration->rrc_TransactionIdentifier);
           nr_rrc_ue_process_rrcReconfiguration(rrc, gNB_indexP, c1->choice.rrcReconfiguration);
           if (rrc->reconfig_after_reestab) {
             // if this is the first RRCReconfiguration message after successful completion of the RRC re-establishment procedure
@@ -2715,6 +3016,7 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
           break;
         case NR_DL_DCCH_MessageType__c1_PR_rrcRelease:
           LOG_I(NR_RRC, "[UE %ld] Received RRC Release (gNB %d)\n", rrc->ue_id, gNB_indexP);
+          nr_ue_fuzz_hook_record_dl(rrc, NR_UE_HOOK_MSG_DL_RRC_RELEASE, -1);
           // delay the actions 60 ms from the moment the RRCRelease message was received
           UPDATE_IE(rrc->RRCRelease, dl_dcch_msg->message.choice.c1->choice.rrcRelease, NR_RRCRelease_t);
           nr_timer_setup(&rrc->release_timer, 60, 10); // 10ms step
@@ -2723,11 +3025,17 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
 
         case NR_DL_DCCH_MessageType__c1_PR_ueCapabilityEnquiry:
           LOG_I(NR_RRC, "Received Capability Enquiry (gNB %d)\n", gNB_indexP);
+          nr_ue_fuzz_hook_record_dl(rrc,
+                                    NR_UE_HOOK_MSG_DL_UE_CAPABILITY_ENQUIRY,
+                                    c1->choice.ueCapabilityEnquiry->rrc_TransactionIdentifier);
           nr_rrc_ue_process_ueCapabilityEnquiry(rrc, c1->choice.ueCapabilityEnquiry);
           break;
 
         case NR_DL_DCCH_MessageType__c1_PR_rrcReestablishment:
           LOG_I(NR_RRC, "Logical Channel DL-DCCH (SRB1), Received RRCReestablishment\n");
+          nr_ue_fuzz_hook_record_dl(rrc,
+                                    NR_UE_HOOK_MSG_DL_RRC_REESTABLISHMENT,
+                                    c1->choice.rrcReestablishment->rrc_TransactionIdentifier);
           nr_rrc_ue_process_rrcReestablishment(rrc,
                                                gNB_indexP,
                                                c1->choice.rrcReestablishment,
@@ -2767,6 +3075,9 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
           break;
         case NR_DL_DCCH_MessageType__c1_PR_securityModeCommand:
           LOG_I(NR_RRC, "Received securityModeCommand (gNB %d)\n", gNB_indexP);
+          nr_ue_fuzz_hook_record_dl(rrc,
+                                    NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND,
+                                    c1->choice.securityModeCommand->rrc_TransactionIdentifier);
           nr_rrc_ue_process_securityModeCommand(rrc, c1->choice.securityModeCommand, Srb_id, Buffer, Buffer_size, msg_integrity);
           break;
       }
@@ -2791,7 +3102,7 @@ static void nr_rrc_ue_send_ul_information_transfer_nas(NR_UE_RRC_INST_t *rrc, ui
         nas_length,
         (int)srb_id,
         enc_bytes);
-  nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, enc_bytes, buffer, deliver_pdu_srb_rlc, NULL);
+  nr_ue_fuzz_hook_send_srb(rrc, NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER, srb_id, buffer, enc_bytes);
   free(buffer);
 }
 
@@ -3649,6 +3960,7 @@ void nr_rrc_going_to_IDLE(NR_UE_RRC_INST_t *rrc,
   LOG_I(NR_RRC, "RRC moved into IDLE state\n");
   if (rrc->nrRrcState != RRC_STATE_DETACH_NR)
     rrc->nrRrcState = RRC_STATE_IDLE_NR;
+  nr_ue_fuzz_hook_write_state(rrc);
 
   rrc->rnti = 0;
 
@@ -3716,6 +4028,7 @@ void nr_rrc_set_mac_queue(instance_t instance, notifiedFIFO_t *mac_input_nf)
 void rrc_ue_generate_measurementReport(rrcPerNB_t *rrc, instance_t ue_id)
 {
   uint8_t buffer[NR_RRC_BUF_SIZE];
+  NR_UE_RRC_INST_t *ue_rrc = get_NR_UE_rrc_inst(ue_id);
   l3_measurements_t *l3m = &rrc->l3_measurements;
   int rsrp_dBm = l3m->rs_type == NR_NR_RS_Type_ssb ? l3m->serving_cell.ss_rsrp_dBm.val : l3m->serving_cell.csi_rsrp_dBm.val;
   int rsrp_index = get_rsrp_index(rsrp_dBm);
@@ -3734,5 +4047,5 @@ void rrc_ue_generate_measurementReport(rrcPerNB_t *rrc, instance_t ue_id)
                                            sizeof(buffer));
 
   int srb_id = 1; // possibly TODO in SRB3 in some cases
-  nr_pdcp_data_req_srb(ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+  nr_ue_fuzz_hook_send_srb(ue_rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, srb_id, buffer, size);
 }
