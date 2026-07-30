@@ -111,6 +111,10 @@ typedef struct nr_ue_fuzz_hook_state_s {
   nr_ue_fuzz_hook_msg_t target_msg;
   nr_ue_fuzz_hook_action_t action;
   int txn_offset;
+  unsigned long hook_fire_count;
+  nr_ue_fuzz_hook_msg_t last_hook_msg;
+  nr_ue_fuzz_hook_action_t last_hook_action;
+  int last_hook_srb_id;
   nr_ue_fuzz_hook_msg_t last_dl_msg;
   int last_dl_txn;
   bool seen_reconfiguration;

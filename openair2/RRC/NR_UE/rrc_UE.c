@@ -10,8 +10,10 @@
 #define RRC_UE_C
 
 #include <ctype.h>
+#include <errno.h>
 #include <strings.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "LTE_MeasObjectToAddMod.h"
 #include "NR_DL-DCCH-Message.h"        //asn_DEF_NR_DL_DCCH_Message
@@ -170,6 +172,10 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "action=%s\n", nr_ue_fuzz_hook_action_name(hook->action));
   fprintf(fp, "arm_once=%d\n", hook->arm_once ? 1 : 0);
   fprintf(fp, "txn_offset=%d\n", hook->txn_offset);
+  fprintf(fp, "hook_fire_count=%lu\n", hook->hook_fire_count);
+  fprintf(fp, "last_hook_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_hook_msg));
+  fprintf(fp, "last_hook_action=%s\n", nr_ue_fuzz_hook_action_name(hook->last_hook_action));
+  fprintf(fp, "last_hook_srb=%d\n", hook->last_hook_srb_id);
   fprintf(fp, "nr_rrc_state=%s\n", nr_ue_fuzz_hook_rrc_state_name(rrc->nrRrcState));
   fprintf(fp, "as_security_activated=%d\n", rrc->as_security_activated ? 1 : 0);
   fprintf(fp, "last_dl_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_dl_msg));
@@ -186,9 +192,32 @@ static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
 {
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   hook->enabled = false;
+  hook->arm_once = false;
   hook->target_msg = NR_UE_HOOK_MSG_NONE;
   hook->action = NR_UE_HOOK_ACTION_NONE;
   hook->txn_offset = 1;
+}
+
+static void nr_ue_fuzz_hook_disarm_persistent(NR_UE_RRC_INST_t *rrc)
+{
+  nr_ue_fuzz_hook_ensure_paths(rrc);
+  nr_ue_fuzz_hook_disarm(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (unlink(hook->control_path) != 0 && errno != ENOENT)
+    LOG_W(NR_RRC, "[UE %ld][HOOK] failed to remove ctl %s: %s\n", rrc->ue_id, hook->control_path, strerror(errno));
+  hook->control_mtime = -1;
+}
+
+static void nr_ue_fuzz_hook_record_fire(NR_UE_RRC_INST_t *rrc,
+                                        nr_ue_fuzz_hook_msg_t msg,
+                                        nr_ue_fuzz_hook_action_t action,
+                                        int srb_id)
+{
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  hook->hook_fire_count++;
+  hook->last_hook_msg = msg;
+  hook->last_hook_action = action;
+  hook->last_hook_srb_id = srb_id;
 }
 
 static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
@@ -292,8 +321,9 @@ static uint8_t nr_ue_fuzz_hook_maybe_mutate_txn(NR_UE_RRC_INST_t *rrc,
         nr_ue_fuzz_hook_msg_name(msg),
         txn,
         mutated);
+  nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_MUTATE_TXN, -1);
   if (hook->arm_once)
-    nr_ue_fuzz_hook_disarm(rrc);
+    nr_ue_fuzz_hook_disarm_persistent(rrc);
   nr_ue_fuzz_hook_write_state(rrc);
   return (uint8_t)mutated;
 }
@@ -311,8 +341,9 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc,
   if (hit_target && hook->action == NR_UE_HOOK_ACTION_DROP) {
     LOG_W(NR_RRC, "[UE %ld][HOOK] drop %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
     nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
+    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DROP, srb_id);
     if (hook->arm_once)
-      nr_ue_fuzz_hook_disarm(rrc);
+      nr_ue_fuzz_hook_disarm_persistent(rrc);
     nr_ue_fuzz_hook_write_state(rrc);
     return;
   }
@@ -322,9 +353,10 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc,
 
   if (hit_target && hook->action == NR_UE_HOOK_ACTION_DUPLICATE) {
     LOG_W(NR_RRC, "[UE %ld][HOOK] duplicate %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
+    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DUPLICATE, srb_id);
     nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
     if (hook->arm_once)
-      nr_ue_fuzz_hook_disarm(rrc);
+      nr_ue_fuzz_hook_disarm_persistent(rrc);
     nr_ue_fuzz_hook_write_state(rrc);
   }
 }
