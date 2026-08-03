@@ -86,6 +86,7 @@ static const char *nr_ue_fuzz_hook_action_name(nr_ue_fuzz_hook_action_t action)
     case NR_UE_HOOK_ACTION_DROP: return "drop";
     case NR_UE_HOOK_ACTION_DUPLICATE: return "duplicate";
     case NR_UE_HOOK_ACTION_MUTATE_TXN: return "mutate_txn";
+    case NR_UE_HOOK_ACTION_MUTATE_FIELD: return "mutate_field";
     case NR_UE_HOOK_ACTION_NONE:
     default: return "none";
   }
@@ -133,7 +134,27 @@ static nr_ue_fuzz_hook_action_t nr_ue_fuzz_hook_action_from_name(const char *nam
     return NR_UE_HOOK_ACTION_DUPLICATE;
   if (!strcasecmp(name, "mutate_txn"))
     return NR_UE_HOOK_ACTION_MUTATE_TXN;
+  if (!strcasecmp(name, "mutate_field"))
+    return NR_UE_HOOK_ACTION_MUTATE_FIELD;
   return NR_UE_HOOK_ACTION_NONE;
+}
+
+static void nr_ue_fuzz_hook_copy_text(char *dst, size_t dst_size, const char *src)
+{
+  if (!dst || dst_size == 0)
+    return;
+  if (!src)
+    src = "";
+  snprintf(dst, dst_size, "%s", src);
+}
+
+static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
+{
+  hook->field_mutation.enabled = false;
+  hook->field_mutation.message[0] = '\0';
+  hook->field_mutation.field[0] = '\0';
+  hook->field_mutation.operator_name[0] = '\0';
+  hook->field_mutation.selected_mode[0] = '\0';
 }
 
 static char *nr_ue_fuzz_hook_trim(char *s)
@@ -185,6 +206,11 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "last_ul_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_ul_msg));
   fprintf(fp, "last_ul_srb=%d\n", hook->last_ul_srb_id);
   fprintf(fp, "last_ul_size=%d\n", hook->last_ul_size);
+  fprintf(fp, "field_mutation_enabled=%d\n", hook->field_mutation.enabled ? 1 : 0);
+  fprintf(fp, "field_mutation_message=%s\n", hook->field_mutation.message);
+  fprintf(fp, "field_mutation_field=%s\n", hook->field_mutation.field);
+  fprintf(fp, "field_mutation_operator=%s\n", hook->field_mutation.operator_name);
+  fprintf(fp, "field_mutation_selected_mode=%s\n", hook->field_mutation.selected_mode);
   fclose(fp);
 }
 
@@ -196,6 +222,7 @@ static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
   hook->target_msg = NR_UE_HOOK_MSG_NONE;
   hook->action = NR_UE_HOOK_ACTION_NONE;
   hook->txn_offset = 1;
+  nr_ue_fuzz_hook_reset_field_mutation(hook);
 }
 
 static void nr_ue_fuzz_hook_disarm_persistent(NR_UE_RRC_INST_t *rrc)
@@ -234,6 +261,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   hook->target_msg = NR_UE_HOOK_MSG_NONE;
   hook->action = NR_UE_HOOK_ACTION_NONE;
   hook->txn_offset = 1;
+  nr_ue_fuzz_hook_reset_field_mutation(hook);
 
   FILE *fp = fopen(hook->control_path, "r");
   if (!fp)
@@ -261,17 +289,30 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       hook->arm_once = atoi(value) != 0;
     else if (!strcasecmp(key, "txn_offset"))
       hook->txn_offset = atoi(value);
+    else if (!strcasecmp(key, "field_mutation_enabled"))
+      hook->field_mutation.enabled = atoi(value) != 0;
+    else if (!strcasecmp(key, "field_mutation_message"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.message, sizeof(hook->field_mutation.message), value);
+    else if (!strcasecmp(key, "field_mutation_field"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.field, sizeof(hook->field_mutation.field), value);
+    else if (!strcasecmp(key, "field_mutation_operator"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_name, sizeof(hook->field_mutation.operator_name), value);
+    else if (!strcasecmp(key, "field_mutation_selected_mode"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.selected_mode, sizeof(hook->field_mutation.selected_mode), value);
   }
   fclose(fp);
 
   LOG_I(NR_RRC,
-        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d\n",
+        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d field_op=%s field=%s mode=%s\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->target_msg),
         nr_ue_fuzz_hook_action_name(hook->action),
         hook->arm_once ? 1 : 0,
-        hook->txn_offset);
+        hook->txn_offset,
+        hook->field_mutation.operator_name,
+        hook->field_mutation.field,
+        hook->field_mutation.selected_mode);
   nr_ue_fuzz_hook_write_state(rrc);
 }
 
@@ -326,6 +367,181 @@ static uint8_t nr_ue_fuzz_hook_maybe_mutate_txn(NR_UE_RRC_INST_t *rrc,
     nr_ue_fuzz_hook_disarm_persistent(rrc);
   nr_ue_fuzz_hook_write_state(rrc);
   return (uint8_t)mutated;
+}
+
+static NR_RRCReconfigurationComplete_v1610_IEs_t *nr_ue_fuzz_hook_ensure_reconfig_complete_v1610(NR_RRCReconfigurationComplete_t *reconfComplete)
+{
+  NR_RRCReconfigurationComplete_IEs_t *ies = reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete;
+  if (!ies->nonCriticalExtension)
+    ies->nonCriticalExtension = CALLOC(1, sizeof(*ies->nonCriticalExtension));
+  if (!ies->nonCriticalExtension->nonCriticalExtension)
+    ies->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*ies->nonCriticalExtension->nonCriticalExtension));
+  if (!ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+    ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension =
+        CALLOC(1, sizeof(*ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+  return ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension;
+}
+
+static NR_UE_MeasurementsAvailable_r16_t *nr_ue_fuzz_hook_ensure_ue_measurements_available(NR_RRCReconfigurationComplete_t *reconfComplete)
+{
+  NR_RRCReconfigurationComplete_v1610_IEs_t *v1610 = nr_ue_fuzz_hook_ensure_reconfig_complete_v1610(reconfComplete);
+  if (!v1610->ue_MeasurementsAvailable_r16)
+    v1610->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*v1610->ue_MeasurementsAvailable_r16));
+  return v1610->ue_MeasurementsAvailable_r16;
+}
+
+static bool nr_ue_fuzz_hook_apply_logmeas_presence(NR_UE_RRC_INST_t *rrc,
+                                                   NR_RRCReconfigurationComplete_t *reconfComplete,
+                                                   const char *mode)
+{
+  if (!mode || !*mode)
+    mode = "force_present_true";
+
+  if (!strcasecmp(mode, "force_present_true")) {
+    NR_UE_MeasurementsAvailable_r16_t *meas = nr_ue_fuzz_hook_ensure_ue_measurements_available(reconfComplete);
+    if (!meas->logMeasAvailable_r16)
+      meas->logMeasAvailable_r16 = CALLOC(1, sizeof(*meas->logMeasAvailable_r16));
+    *meas->logMeasAvailable_r16 = NR_UE_MeasurementsAvailable_r16__logMeasAvailable_r16_true;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force logMeasAvailable in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    NR_RRCReconfigurationComplete_v1610_IEs_t *v1610 =
+        reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension &&
+                reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension &&
+                reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+            ? reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+            : NULL;
+    NR_UE_MeasurementsAvailable_r16_t *meas = v1610 ? v1610->ue_MeasurementsAvailable_r16 : NULL;
+    if (!meas || !meas->logMeasAvailable_r16)
+      return false;
+    free(meas->logMeasAvailable_r16);
+    meas->logMeasAvailable_r16 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit logMeasAvailable in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_siglog_boolean(NR_UE_RRC_INST_t *rrc,
+                                                 NR_RRCReconfigurationComplete_t *reconfComplete,
+                                                 const char *mode)
+{
+  if (!mode || !*mode)
+    mode = "force_true";
+
+  NR_UE_MeasurementsAvailable_r16_t *meas = NULL;
+  if (strcasecmp(mode, "omit") != 0) {
+    meas = nr_ue_fuzz_hook_ensure_ue_measurements_available(reconfComplete);
+    if (!meas->ext1)
+      meas->ext1 = CALLOC(1, sizeof(*meas->ext1));
+    if (!meas->ext1->sigLogMeasConfigAvailable_r17)
+      meas->ext1->sigLogMeasConfigAvailable_r17 = CALLOC(1, sizeof(*meas->ext1->sigLogMeasConfigAvailable_r17));
+  } else {
+    NR_RRCReconfigurationComplete_v1610_IEs_t *v1610 =
+        reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension &&
+                reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension &&
+                reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+            ? reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+            : NULL;
+    meas = v1610 ? v1610->ue_MeasurementsAvailable_r16 : NULL;
+  }
+
+  if (!strcasecmp(mode, "force_true")) {
+    *meas->ext1->sigLogMeasConfigAvailable_r17 = 1;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force sigLogMeasConfigAvailable=true in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "force_false")) {
+    *meas->ext1->sigLogMeasConfigAvailable_r17 = 0;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force sigLogMeasConfigAvailable=false in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!meas || !meas->ext1 || !meas->ext1->sigLogMeasConfigAvailable_r17)
+      return false;
+    free(meas->ext1->sigLogMeasConfigAvailable_r17);
+    meas->ext1->sigLogMeasConfigAvailable_r17 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit sigLogMeasConfigAvailable in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(NR_UE_RRC_INST_t *rrc,
+                                                                         NR_RRCReconfigurationComplete_t *reconfComplete)
+{
+  nr_ue_fuzz_hook_reload_config(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (!hook->enabled
+      || hook->target_msg != NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE
+      || hook->action != NR_UE_HOOK_ACTION_MUTATE_FIELD
+      || !hook->field_mutation.enabled) {
+    return false;
+  }
+
+  bool changed = false;
+  if (!strcasecmp(hook->field_mutation.message, "RRCReconfigurationComplete")
+      && !strcasecmp(hook->field_mutation.operator_name, "optional_presence_toggle")
+      && !strcasecmp(hook->field_mutation.field, "logMeasAvailable")) {
+    changed = nr_ue_fuzz_hook_apply_logmeas_presence(rrc, reconfComplete, hook->field_mutation.selected_mode);
+  } else if (!strcasecmp(hook->field_mutation.message, "RRCReconfigurationComplete")
+             && !strcasecmp(hook->field_mutation.operator_name, "optional_boolean_assignment")
+             && !strcasecmp(hook->field_mutation.field, "sigLogMeasConfigAvailable")) {
+    changed = nr_ue_fuzz_hook_apply_siglog_boolean(rrc, reconfComplete, hook->field_mutation.selected_mode);
+  }
+
+  if (!changed)
+    return false;
+
+  nr_ue_fuzz_hook_record_fire(rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, NR_UE_HOOK_ACTION_MUTATE_FIELD, -1);
+  if (hook->arm_once)
+    nr_ue_fuzz_hook_disarm_persistent(rrc);
+  nr_ue_fuzz_hook_write_state(rrc);
+  return true;
+}
+
+static int nr_ue_fuzz_hook_encode_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc,
+                                                             uint8_t *buffer,
+                                                             size_t buffer_size,
+                                                             const uint8_t txn)
+{
+  nr_ue_fuzz_hook_reload_config(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  const bool wants_mutate_field = hook->enabled
+                                  && hook->target_msg == NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE
+                                  && hook->action == NR_UE_HOOK_ACTION_MUTATE_FIELD
+                                  && hook->field_mutation.enabled;
+  if (!wants_mutate_field)
+    return do_NR_RRCReconfigurationComplete(buffer, buffer_size, txn);
+
+  NR_UL_DCCH_Message_t ul_dcch_msg = {0};
+  ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
+  asn1cCalloc(ul_dcch_msg.message.choice.c1, c1);
+  c1->present = NR_UL_DCCH_MessageType__c1_PR_rrcReconfigurationComplete;
+  asn1cCalloc(c1->choice.rrcReconfigurationComplete, reconfCompleteMsg);
+  reconfCompleteMsg->rrc_TransactionIdentifier = txn;
+  reconfCompleteMsg->criticalExtensions.present = NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete;
+  asn1cCalloc(reconfCompleteMsg->criticalExtensions.choice.rrcReconfigurationComplete, extension);
+  extension->nonCriticalExtension = NULL;
+  extension->lateNonCriticalExtension = NULL;
+
+  nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(rrc, reconfCompleteMsg);
+
+  asn_enc_rval_t enc_rval =
+      uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, buffer_size);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
+  LOG_I(NR_RRC,
+        "rrcReconfigurationComplete Encoded %zd bits (%zd bytes) with field mutation path\n",
+        enc_rval.encoded,
+        (enc_rval.encoded + 7) / 8);
+  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
+  return (enc_rval.encoded + 7) / 8;
 }
 
 static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc,
@@ -2823,7 +3039,7 @@ static void nr_rrc_ue_generate_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc,
   uint8_t buffer[32];
   const uint8_t txn =
       nr_ue_fuzz_hook_maybe_mutate_txn(rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, Transaction_id);
-  int size = do_NR_RRCReconfigurationComplete(buffer, sizeof(buffer), txn);
+  int size = nr_ue_fuzz_hook_encode_RRCReconfigurationComplete(rrc, buffer, sizeof(buffer), txn);
   LOG_I(NR_RRC, " Logical Channel UL-DCCH (SRB1), Generating RRCReconfigurationComplete (bytes %d)\n", size);
   AssertFatal(srb_id == 1 || srb_id == 3, "Invalid SRB ID %d\n", srb_id);
   LOG_D(RLC,

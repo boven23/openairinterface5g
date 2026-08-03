@@ -103,7 +103,16 @@ typedef enum nr_ue_fuzz_hook_action_e {
   NR_UE_HOOK_ACTION_DROP,
   NR_UE_HOOK_ACTION_DUPLICATE,
   NR_UE_HOOK_ACTION_MUTATE_TXN,
+  NR_UE_HOOK_ACTION_MUTATE_FIELD,
 } nr_ue_fuzz_hook_action_t;
+
+typedef struct nr_ue_fuzz_hook_field_mutation_s {
+  bool enabled;
+  char message[64];
+  char field[64];
+  char operator_name[64];
+  char selected_mode[64];
+} nr_ue_fuzz_hook_field_mutation_t;
 
 typedef struct nr_ue_fuzz_hook_state_s {
   bool enabled;
@@ -126,6 +135,7 @@ typedef struct nr_ue_fuzz_hook_state_s {
   long control_mtime;
   char control_path[128];
   char state_path[128];
+  nr_ue_fuzz_hook_field_mutation_t field_mutation;
 } nr_ue_fuzz_hook_state_t;
 
 typedef struct UE_RRC_SI_INFO_NR_r17_s {
