@@ -154,7 +154,13 @@ static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
   hook->field_mutation.message[0] = '\0';
   hook->field_mutation.field[0] = '\0';
   hook->field_mutation.operator_name[0] = '\0';
+  hook->field_mutation.operator_family[0] = '\0';
+  hook->field_mutation.transform_name[0] = '\0';
   hook->field_mutation.selected_mode[0] = '\0';
+  hook->field_mutation.has_range_min = false;
+  hook->field_mutation.range_min = 0;
+  hook->field_mutation.has_range_max = false;
+  hook->field_mutation.range_max = 0;
 }
 
 static char *nr_ue_fuzz_hook_trim(char *s)
@@ -210,7 +216,11 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "field_mutation_message=%s\n", hook->field_mutation.message);
   fprintf(fp, "field_mutation_field=%s\n", hook->field_mutation.field);
   fprintf(fp, "field_mutation_operator=%s\n", hook->field_mutation.operator_name);
+  fprintf(fp, "field_mutation_operator_family=%s\n", hook->field_mutation.operator_family);
+  fprintf(fp, "field_mutation_transform=%s\n", hook->field_mutation.transform_name);
   fprintf(fp, "field_mutation_selected_mode=%s\n", hook->field_mutation.selected_mode);
+  fprintf(fp, "field_mutation_value_space_minimum=%d\n", hook->field_mutation.has_range_min ? hook->field_mutation.range_min : 0);
+  fprintf(fp, "field_mutation_value_space_maximum=%d\n", hook->field_mutation.has_range_max ? hook->field_mutation.range_max : 0);
   fclose(fp);
 }
 
@@ -297,22 +307,38 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.field, sizeof(hook->field_mutation.field), value);
     else if (!strcasecmp(key, "field_mutation_operator"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_name, sizeof(hook->field_mutation.operator_name), value);
+    else if (!strcasecmp(key, "field_mutation_operator_family"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
+    else if (!strcasecmp(key, "field_mutation_transform"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.transform_name, sizeof(hook->field_mutation.transform_name), value);
     else if (!strcasecmp(key, "field_mutation_selected_mode"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.selected_mode, sizeof(hook->field_mutation.selected_mode), value);
+    else if (!strcasecmp(key, "field_mutation_value_space_minimum")) {
+      hook->field_mutation.range_min = atoi(value);
+      hook->field_mutation.has_range_min = true;
+    }
+    else if (!strcasecmp(key, "field_mutation_value_space_maximum")) {
+      hook->field_mutation.range_max = atoi(value);
+      hook->field_mutation.has_range_max = true;
+    }
   }
   fclose(fp);
 
   LOG_I(NR_RRC,
-        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d field_op=%s field=%s mode=%s\n",
+        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d field_family=%s field_op=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->target_msg),
         nr_ue_fuzz_hook_action_name(hook->action),
         hook->arm_once ? 1 : 0,
         hook->txn_offset,
+        hook->field_mutation.operator_family,
         hook->field_mutation.operator_name,
+        hook->field_mutation.transform_name,
         hook->field_mutation.field,
-        hook->field_mutation.selected_mode);
+        hook->field_mutation.selected_mode,
+        hook->field_mutation.has_range_min ? hook->field_mutation.range_min : 0,
+        hook->field_mutation.has_range_max ? hook->field_mutation.range_max : 0);
   nr_ue_fuzz_hook_write_state(rrc);
 }
 
@@ -344,6 +370,76 @@ static void nr_ue_fuzz_hook_cache_ul(NR_UE_RRC_INST_t *rrc,
   nr_ue_fuzz_hook_write_state(rrc);
 }
 
+static int nr_ue_fuzz_hook_wrap_to_range(int value, int min_value, int max_value)
+{
+  if (max_value < min_value) {
+    const int tmp = min_value;
+    min_value = max_value;
+    max_value = tmp;
+  }
+
+  const long span = (long)max_value - (long)min_value + 1;
+  if (span <= 0)
+    return min_value;
+
+  long normalized = ((long)value - (long)min_value) % span;
+  if (normalized < 0)
+    normalized += span;
+  return (int)((long)min_value + normalized);
+}
+
+static int nr_ue_fuzz_hook_pick_integer_transform(const nr_ue_fuzz_hook_state_t *hook,
+                                                  int current_value,
+                                                  int fallback_min,
+                                                  int fallback_max)
+{
+  const nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
+  const int min_value = mutation->has_range_min ? mutation->range_min : fallback_min;
+  const int max_value = mutation->has_range_max ? mutation->range_max : fallback_max;
+  const int fallback_offset = hook->txn_offset == 0 ? 1 : hook->txn_offset;
+  const char *transform = mutation->transform_name;
+  const char *mode = mutation->selected_mode;
+
+  if (!transform || *transform == '\0')
+    return nr_ue_fuzz_hook_wrap_to_range(current_value + fallback_offset, min_value, max_value);
+
+  if (!strcasecmp(transform, "runtime_echoed_mismatch")) {
+    int reference = hook->last_dl_txn >= 0 ? hook->last_dl_txn : current_value;
+
+    if (mode && *mode) {
+      if (!strcasecmp(mode, "boundary_min")) {
+        int candidate = min_value;
+        if (candidate == reference && max_value > min_value)
+          candidate = max_value;
+        return candidate;
+      }
+      if (!strcasecmp(mode, "boundary_max")) {
+        int candidate = max_value;
+        if (candidate == reference && max_value > min_value)
+          candidate = min_value;
+        return candidate;
+      }
+    }
+
+    int candidate = nr_ue_fuzz_hook_wrap_to_range(reference + fallback_offset, min_value, max_value);
+    if (candidate == reference && max_value > min_value)
+      candidate = nr_ue_fuzz_hook_wrap_to_range(reference + fallback_offset + 1, min_value, max_value);
+    return candidate;
+  }
+
+  if (!strcasecmp(transform, "domain_value_selection")) {
+    if (mode && *mode) {
+      if (!strcasecmp(mode, "boundary_min"))
+        return min_value;
+      if (!strcasecmp(mode, "boundary_max"))
+        return max_value;
+    }
+    return nr_ue_fuzz_hook_wrap_to_range(current_value + fallback_offset, min_value, max_value);
+  }
+
+  return nr_ue_fuzz_hook_wrap_to_range(current_value + fallback_offset, min_value, max_value);
+}
+
 static uint8_t nr_ue_fuzz_hook_maybe_mutate_txn(NR_UE_RRC_INST_t *rrc,
                                                 nr_ue_fuzz_hook_msg_t msg,
                                                 uint8_t txn)
@@ -353,20 +449,50 @@ static uint8_t nr_ue_fuzz_hook_maybe_mutate_txn(NR_UE_RRC_INST_t *rrc,
   if (!hook->enabled || hook->target_msg != msg || hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN)
     return txn;
 
-  int mutated = ((int)txn + hook->txn_offset) % 4;
-  if (mutated < 0)
-    mutated += 4;
-  LOG_W(NR_RRC,
-        "[UE %ld][HOOK] mutate txn for %s: %u -> %d\n",
-        rrc->ue_id,
-        nr_ue_fuzz_hook_msg_name(msg),
-        txn,
-        mutated);
+  int mutated = 0;
+  if (hook->field_mutation.enabled && !strcasecmp(hook->field_mutation.operator_family, "integer_transform")) {
+    mutated = nr_ue_fuzz_hook_pick_integer_transform(hook, (int)txn, 0, 3);
+    LOG_W(NR_RRC,
+          "[UE %ld][HOOK] integer transform for %s field=%s transform=%s mode=%s: %u -> %d\n",
+          rrc->ue_id,
+          nr_ue_fuzz_hook_msg_name(msg),
+          hook->field_mutation.field,
+          hook->field_mutation.transform_name,
+          hook->field_mutation.selected_mode,
+          txn,
+          mutated);
+  } else {
+    mutated = nr_ue_fuzz_hook_wrap_to_range((int)txn + hook->txn_offset, 0, 3);
+    LOG_W(NR_RRC,
+          "[UE %ld][HOOK] legacy txn mutation for %s: %u -> %d\n",
+          rrc->ue_id,
+          nr_ue_fuzz_hook_msg_name(msg),
+          txn,
+          mutated);
+  }
+
   nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_MUTATE_TXN, -1);
   if (hook->arm_once)
     nr_ue_fuzz_hook_disarm_persistent(rrc);
   nr_ue_fuzz_hook_write_state(rrc);
   return (uint8_t)mutated;
+}
+
+typedef bool (*nr_ue_fuzz_hook_field_adapter_fn_t)(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode);
+
+typedef struct nr_ue_fuzz_hook_field_adapter_s {
+  nr_ue_fuzz_hook_msg_t target_msg;
+  const char *message_name;
+  const char *field_name;
+  const char *operator_name;
+  nr_ue_fuzz_hook_field_adapter_fn_t apply;
+} nr_ue_fuzz_hook_field_adapter_t;
+
+static bool nr_ue_fuzz_hook_text_eq(const char *lhs, const char *rhs)
+{
+  if (!lhs || !rhs)
+    return false;
+  return !strcasecmp(lhs, rhs);
 }
 
 static NR_RRCReconfigurationComplete_v1610_IEs_t *nr_ue_fuzz_hook_ensure_reconfig_complete_v1610(NR_RRCReconfigurationComplete_t *reconfComplete)
@@ -473,6 +599,54 @@ static bool nr_ue_fuzz_hook_apply_siglog_boolean(NR_UE_RRC_INST_t *rrc,
   return false;
 }
 
+static bool nr_ue_fuzz_hook_apply_logmeas_presence_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_logmeas_presence(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+static bool nr_ue_fuzz_hook_apply_siglog_boolean_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_siglog_boolean(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+static const nr_ue_fuzz_hook_field_adapter_t nr_ue_fuzz_hook_field_adapters[] = {
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "logMeasAvailable",
+        .operator_name = "optional_presence_toggle",
+        .apply = nr_ue_fuzz_hook_apply_logmeas_presence_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "sigLogMeasConfigAvailable",
+        .operator_name = "optional_boolean_assignment",
+        .apply = nr_ue_fuzz_hook_apply_siglog_boolean_adapter,
+    },
+};
+
+static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter(const nr_ue_fuzz_hook_state_t *hook)
+{
+  if (!hook || !hook->field_mutation.enabled)
+    return NULL;
+
+  for (size_t i = 0; i < sizeof(nr_ue_fuzz_hook_field_adapters) / sizeof(nr_ue_fuzz_hook_field_adapters[0]); ++i) {
+    const nr_ue_fuzz_hook_field_adapter_t *adapter = &nr_ue_fuzz_hook_field_adapters[i];
+    if (adapter->target_msg != hook->target_msg)
+      continue;
+    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.message, adapter->message_name))
+      continue;
+    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.field, adapter->field_name))
+      continue;
+    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_name, adapter->operator_name))
+      continue;
+    return adapter;
+  }
+
+  return NULL;
+}
+
 static bool nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(NR_UE_RRC_INST_t *rrc,
                                                                          NR_RRCReconfigurationComplete_t *reconfComplete)
 {
@@ -485,16 +659,19 @@ static bool nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(NR_UE_R
     return false;
   }
 
-  bool changed = false;
-  if (!strcasecmp(hook->field_mutation.message, "RRCReconfigurationComplete")
-      && !strcasecmp(hook->field_mutation.operator_name, "optional_presence_toggle")
-      && !strcasecmp(hook->field_mutation.field, "logMeasAvailable")) {
-    changed = nr_ue_fuzz_hook_apply_logmeas_presence(rrc, reconfComplete, hook->field_mutation.selected_mode);
-  } else if (!strcasecmp(hook->field_mutation.message, "RRCReconfigurationComplete")
-             && !strcasecmp(hook->field_mutation.operator_name, "optional_boolean_assignment")
-             && !strcasecmp(hook->field_mutation.field, "sigLogMeasConfigAvailable")) {
-    changed = nr_ue_fuzz_hook_apply_siglog_boolean(rrc, reconfComplete, hook->field_mutation.selected_mode);
+  const nr_ue_fuzz_hook_field_adapter_t *adapter = nr_ue_fuzz_hook_find_field_adapter(hook);
+  if (!adapter) {
+    LOG_W(NR_RRC,
+          "[UE %ld][HOOK] no field adapter for target=%s message=%s field=%s operator=%s\n",
+          rrc->ue_id,
+          nr_ue_fuzz_hook_msg_name(hook->target_msg),
+          hook->field_mutation.message,
+          hook->field_mutation.field,
+          hook->field_mutation.operator_name);
+    return false;
   }
+
+  bool changed = adapter->apply(rrc, reconfComplete, hook->field_mutation.selected_mode);
 
   if (!changed)
     return false;
@@ -513,10 +690,12 @@ static int nr_ue_fuzz_hook_encode_RRCReconfigurationComplete(NR_UE_RRC_INST_t *r
 {
   nr_ue_fuzz_hook_reload_config(rrc);
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  const nr_ue_fuzz_hook_field_adapter_t *adapter = nr_ue_fuzz_hook_find_field_adapter(hook);
   const bool wants_mutate_field = hook->enabled
                                   && hook->target_msg == NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE
                                   && hook->action == NR_UE_HOOK_ACTION_MUTATE_FIELD
-                                  && hook->field_mutation.enabled;
+                                  && hook->field_mutation.enabled
+                                  && adapter != NULL;
   if (!wants_mutate_field)
     return do_NR_RRCReconfigurationComplete(buffer, buffer_size, txn);
 

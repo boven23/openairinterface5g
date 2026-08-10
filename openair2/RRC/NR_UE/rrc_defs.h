@@ -111,7 +111,13 @@ typedef struct nr_ue_fuzz_hook_field_mutation_s {
   char message[64];
   char field[64];
   char operator_name[64];
+  char operator_family[64];
+  char transform_name[64];
   char selected_mode[64];
+  bool has_range_min;
+  int range_min;
+  bool has_range_max;
+  int range_max;
 } nr_ue_fuzz_hook_field_mutation_t;
 
 typedef struct nr_ue_fuzz_hook_state_s {
