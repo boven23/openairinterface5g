@@ -163,6 +163,20 @@ static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
   hook->field_mutation.range_max = 0;
 }
 
+static void nr_ue_fuzz_hook_write_timer_state(FILE *fp, const char *name, const NR_timer_t *timer)
+{
+  if (!fp || !name || !timer)
+    return;
+
+  const bool active = nr_timer_is_active(timer);
+  fprintf(fp, "timer.%s=%s\n", name, active ? "running" : "stopped");
+  fprintf(fp, "timer.%s.active=%d\n", name, active ? 1 : 0);
+  fprintf(fp, "timer.%s.elapsed_ms=%u\n", name, nr_timer_elapsed_time(timer));
+  fprintf(fp, "timer.%s.target_ms=%u\n", name, timer->target);
+  fprintf(fp, "timer.%s.remaining_ms=%u\n", name, active ? nr_timer_remaining_time(timer) : 0);
+  fprintf(fp, "timer.%s.suspended=%d\n", name, timer->suspended ? 1 : 0);
+}
+
 static char *nr_ue_fuzz_hook_trim(char *s)
 {
   while (*s && isspace((unsigned char)*s))
@@ -191,6 +205,7 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
 {
   nr_ue_fuzz_hook_ensure_paths(rrc);
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  NR_UE_Timers_Constants_t *timers = &rrc->timers_and_constants;
   FILE *fp = fopen(hook->state_path, "w");
   if (!fp)
     return;
@@ -205,6 +220,7 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "last_hook_srb=%d\n", hook->last_hook_srb_id);
   fprintf(fp, "nr_rrc_state=%s\n", nr_ue_fuzz_hook_rrc_state_name(rrc->nrRrcState));
   fprintf(fp, "as_security_activated=%d\n", rrc->as_security_activated ? 1 : 0);
+  nr_ue_fuzz_hook_write_timer_state(fp, "T310", &timers->T310);
   fprintf(fp, "last_dl_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_dl_msg));
   fprintf(fp, "last_dl_txn=%d\n", hook->last_dl_txn);
   fprintf(fp, "seen_reconfiguration=%d\n", hook->seen_reconfiguration ? 1 : 0);
@@ -495,6 +511,23 @@ static bool nr_ue_fuzz_hook_text_eq(const char *lhs, const char *rhs)
   return !strcasecmp(lhs, rhs);
 }
 
+typedef long **(*nr_ue_fuzz_hook_optional_enum_locator_fn_t)(NR_RRCReconfigurationComplete_t *reconfComplete, bool create);
+typedef BOOLEAN_t **(*nr_ue_fuzz_hook_optional_boolean_locator_fn_t)(NR_RRCReconfigurationComplete_t *reconfComplete, bool create);
+
+static NR_RRCReconfigurationComplete_v1610_IEs_t *nr_ue_fuzz_hook_get_reconfig_complete_v1610(NR_RRCReconfigurationComplete_t *reconfComplete)
+{
+  if (!reconfComplete)
+    return NULL;
+
+  NR_RRCReconfigurationComplete_IEs_t *ies = reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete;
+  if (!ies || !ies->nonCriticalExtension || !ies->nonCriticalExtension->nonCriticalExtension
+      || !ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension) {
+    return NULL;
+  }
+
+  return ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension;
+}
+
 static NR_RRCReconfigurationComplete_v1610_IEs_t *nr_ue_fuzz_hook_ensure_reconfig_complete_v1610(NR_RRCReconfigurationComplete_t *reconfComplete)
 {
   NR_RRCReconfigurationComplete_IEs_t *ies = reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete;
@@ -516,83 +549,118 @@ static NR_UE_MeasurementsAvailable_r16_t *nr_ue_fuzz_hook_ensure_ue_measurements
   return v1610->ue_MeasurementsAvailable_r16;
 }
 
-static bool nr_ue_fuzz_hook_apply_logmeas_presence(NR_UE_RRC_INST_t *rrc,
-                                                   NR_RRCReconfigurationComplete_t *reconfComplete,
-                                                   const char *mode)
+static NR_UE_MeasurementsAvailable_r16_t *nr_ue_fuzz_hook_get_ue_measurements_available(NR_RRCReconfigurationComplete_t *reconfComplete)
 {
+  NR_RRCReconfigurationComplete_v1610_IEs_t *v1610 = nr_ue_fuzz_hook_get_reconfig_complete_v1610(reconfComplete);
+  return v1610 ? v1610->ue_MeasurementsAvailable_r16 : NULL;
+}
+
+static long **nr_ue_fuzz_hook_locate_logmeasavailable_slot(NR_RRCReconfigurationComplete_t *reconfComplete, bool create)
+{
+  NR_UE_MeasurementsAvailable_r16_t *meas =
+      create ? nr_ue_fuzz_hook_ensure_ue_measurements_available(reconfComplete)
+             : nr_ue_fuzz_hook_get_ue_measurements_available(reconfComplete);
+  if (!meas)
+    return NULL;
+  return &meas->logMeasAvailable_r16;
+}
+
+static BOOLEAN_t **nr_ue_fuzz_hook_locate_siglogmeasconfigavailable_slot(NR_RRCReconfigurationComplete_t *reconfComplete, bool create)
+{
+  NR_UE_MeasurementsAvailable_r16_t *meas =
+      create ? nr_ue_fuzz_hook_ensure_ue_measurements_available(reconfComplete)
+             : nr_ue_fuzz_hook_get_ue_measurements_available(reconfComplete);
+  if (!meas)
+    return NULL;
+
+  if (create && !meas->ext1)
+    meas->ext1 = CALLOC(1, sizeof(*meas->ext1));
+  if (!meas->ext1)
+    return NULL;
+
+  return &meas->ext1->sigLogMeasConfigAvailable_r17;
+}
+
+static bool nr_ue_fuzz_hook_apply_optional_singleton_enum(NR_UE_RRC_INST_t *rrc,
+                                                          NR_RRCReconfigurationComplete_t *reconfComplete,
+                                                          const char *mode,
+                                                          const char *default_mode,
+                                                          const char *field_name,
+                                                          nr_ue_fuzz_hook_optional_enum_locator_fn_t locate_slot,
+                                                          long true_value)
+{
+  if (!locate_slot)
+    return false;
+
   if (!mode || !*mode)
-    mode = "force_present_true";
+    mode = default_mode;
 
   if (!strcasecmp(mode, "force_present_true")) {
-    NR_UE_MeasurementsAvailable_r16_t *meas = nr_ue_fuzz_hook_ensure_ue_measurements_available(reconfComplete);
-    if (!meas->logMeasAvailable_r16)
-      meas->logMeasAvailable_r16 = CALLOC(1, sizeof(*meas->logMeasAvailable_r16));
-    *meas->logMeasAvailable_r16 = NR_UE_MeasurementsAvailable_r16__logMeasAvailable_r16_true;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force logMeasAvailable in RRCReconfigurationComplete\n", rrc->ue_id);
+    long **slot = locate_slot(reconfComplete, true);
+    if (!slot)
+      return false;
+    if (!*slot)
+      *slot = CALLOC(1, sizeof(**slot));
+    **slot = true_value;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force %s in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
     return true;
   }
 
   if (!strcasecmp(mode, "omit")) {
-    NR_RRCReconfigurationComplete_v1610_IEs_t *v1610 =
-        reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension &&
-                reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension &&
-                reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
-            ? reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
-            : NULL;
-    NR_UE_MeasurementsAvailable_r16_t *meas = v1610 ? v1610->ue_MeasurementsAvailable_r16 : NULL;
-    if (!meas || !meas->logMeasAvailable_r16)
+    long **slot = locate_slot(reconfComplete, false);
+    if (!slot || !*slot)
       return false;
-    free(meas->logMeasAvailable_r16);
-    meas->logMeasAvailable_r16 = NULL;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] omit logMeasAvailable in RRCReconfigurationComplete\n", rrc->ue_id);
+    free(*slot);
+    *slot = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit %s in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
     return true;
   }
 
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_siglog_boolean(NR_UE_RRC_INST_t *rrc,
-                                                 NR_RRCReconfigurationComplete_t *reconfComplete,
-                                                 const char *mode)
+static bool nr_ue_fuzz_hook_apply_optional_boolean_assignment(NR_UE_RRC_INST_t *rrc,
+                                                              NR_RRCReconfigurationComplete_t *reconfComplete,
+                                                              const char *mode,
+                                                              const char *default_mode,
+                                                              const char *field_name,
+                                                              nr_ue_fuzz_hook_optional_boolean_locator_fn_t locate_slot)
 {
-  if (!mode || !*mode)
-    mode = "force_true";
+  if (!locate_slot)
+    return false;
 
-  NR_UE_MeasurementsAvailable_r16_t *meas = NULL;
-  if (strcasecmp(mode, "omit") != 0) {
-    meas = nr_ue_fuzz_hook_ensure_ue_measurements_available(reconfComplete);
-    if (!meas->ext1)
-      meas->ext1 = CALLOC(1, sizeof(*meas->ext1));
-    if (!meas->ext1->sigLogMeasConfigAvailable_r17)
-      meas->ext1->sigLogMeasConfigAvailable_r17 = CALLOC(1, sizeof(*meas->ext1->sigLogMeasConfigAvailable_r17));
-  } else {
-    NR_RRCReconfigurationComplete_v1610_IEs_t *v1610 =
-        reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension &&
-                reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension &&
-                reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
-            ? reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
-            : NULL;
-    meas = v1610 ? v1610->ue_MeasurementsAvailable_r16 : NULL;
-  }
+  if (!mode || !*mode)
+    mode = default_mode;
 
   if (!strcasecmp(mode, "force_true")) {
-    *meas->ext1->sigLogMeasConfigAvailable_r17 = 1;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force sigLogMeasConfigAvailable=true in RRCReconfigurationComplete\n", rrc->ue_id);
+    BOOLEAN_t **slot = locate_slot(reconfComplete, true);
+    if (!slot)
+      return false;
+    if (!*slot)
+      *slot = CALLOC(1, sizeof(**slot));
+    **slot = 1;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force %s=true in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
     return true;
   }
 
   if (!strcasecmp(mode, "force_false")) {
-    *meas->ext1->sigLogMeasConfigAvailable_r17 = 0;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force sigLogMeasConfigAvailable=false in RRCReconfigurationComplete\n", rrc->ue_id);
+    BOOLEAN_t **slot = locate_slot(reconfComplete, true);
+    if (!slot)
+      return false;
+    if (!*slot)
+      *slot = CALLOC(1, sizeof(**slot));
+    **slot = 0;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force %s=false in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
     return true;
   }
 
   if (!strcasecmp(mode, "omit")) {
-    if (!meas || !meas->ext1 || !meas->ext1->sigLogMeasConfigAvailable_r17)
+    BOOLEAN_t **slot = locate_slot(reconfComplete, false);
+    if (!slot || !*slot)
       return false;
-    free(meas->ext1->sigLogMeasConfigAvailable_r17);
-    meas->ext1->sigLogMeasConfigAvailable_r17 = NULL;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] omit sigLogMeasConfigAvailable in RRCReconfigurationComplete\n", rrc->ue_id);
+    free(*slot);
+    *slot = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit %s in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
     return true;
   }
 
@@ -601,12 +669,25 @@ static bool nr_ue_fuzz_hook_apply_siglog_boolean(NR_UE_RRC_INST_t *rrc,
 
 static bool nr_ue_fuzz_hook_apply_logmeas_presence_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_logmeas_presence(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_optional_singleton_enum(
+      rrc,
+      (NR_RRCReconfigurationComplete_t *)payload,
+      mode,
+      "force_present_true",
+      "logMeasAvailable",
+      nr_ue_fuzz_hook_locate_logmeasavailable_slot,
+      NR_UE_MeasurementsAvailable_r16__logMeasAvailable_r16_true);
 }
 
 static bool nr_ue_fuzz_hook_apply_siglog_boolean_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_siglog_boolean(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_optional_boolean_assignment(
+      rrc,
+      (NR_RRCReconfigurationComplete_t *)payload,
+      mode,
+      "force_true",
+      "sigLogMeasConfigAvailable",
+      nr_ue_fuzz_hook_locate_siglogmeasconfigavailable_slot);
 }
 
 static const nr_ue_fuzz_hook_field_adapter_t nr_ue_fuzz_hook_field_adapters[] = {
