@@ -1,16 +1,4 @@
 /home/boven23/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/boven23/.local/share/JetBrains/Toolbox/apps/clion/bin/ninja/linux/x64/ninja -G Ninja -S /home/boven23/Desktop/openairinterface5g -B /home/boven23/Desktop/openairinterface5g/cmake-build-debug
--- The C compiler identification is GNU 15.2.0
--- The CXX compiler identification is GNU 15.2.0
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: /bin/cc - skipped
--- Detecting C compile features
--- Detecting C compile features - done
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /bin/c++ - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
 -- Ccache not found. Consider installing it for faster compilation. Command: sudo apt/dnf install ccache
 -- Check if /opt/asn1c/bin/asn1c supports -gen-APER
 -- Check if /opt/asn1c/bin/asn1c supports -no-gen-UPER
@@ -28,6 +16,6 @@
 -- No Doxygen documentation requested
 -- No Support for Aerial
 -- No Support for WLS
--- Configuring done (0.5s)
--- Generating done (4.4s)
+-- Configuring done (0.3s)
+-- Generating done (8.5s)
 -- Build files have been written to: /home/boven23/Desktop/openairinterface5g/cmake-build-debug
