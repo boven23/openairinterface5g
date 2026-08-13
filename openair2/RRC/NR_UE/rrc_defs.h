@@ -102,6 +102,8 @@ typedef enum nr_ue_fuzz_hook_action_e {
   NR_UE_HOOK_ACTION_NONE = 0,
   NR_UE_HOOK_ACTION_DROP,
   NR_UE_HOOK_ACTION_DUPLICATE,
+  NR_UE_HOOK_ACTION_REPLAY,
+  NR_UE_HOOK_ACTION_DELAY,
   NR_UE_HOOK_ACTION_MUTATE_TXN,
   NR_UE_HOOK_ACTION_MUTATE_FIELD,
 } nr_ue_fuzz_hook_action_t;
@@ -126,6 +128,9 @@ typedef struct nr_ue_fuzz_hook_state_s {
   nr_ue_fuzz_hook_msg_t target_msg;
   nr_ue_fuzz_hook_action_t action;
   int txn_offset;
+  int delay_ms;
+  int replay_delay_ms;
+  char replay_mode[64];
   unsigned long hook_fire_count;
   nr_ue_fuzz_hook_msg_t last_hook_msg;
   nr_ue_fuzz_hook_action_t last_hook_action;

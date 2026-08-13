@@ -85,6 +85,8 @@ static const char *nr_ue_fuzz_hook_action_name(nr_ue_fuzz_hook_action_t action)
   switch (action) {
     case NR_UE_HOOK_ACTION_DROP: return "drop";
     case NR_UE_HOOK_ACTION_DUPLICATE: return "duplicate";
+    case NR_UE_HOOK_ACTION_REPLAY: return "replay";
+    case NR_UE_HOOK_ACTION_DELAY: return "delay";
     case NR_UE_HOOK_ACTION_MUTATE_TXN: return "mutate_txn";
     case NR_UE_HOOK_ACTION_MUTATE_FIELD: return "mutate_field";
     case NR_UE_HOOK_ACTION_NONE:
@@ -132,6 +134,10 @@ static nr_ue_fuzz_hook_action_t nr_ue_fuzz_hook_action_from_name(const char *nam
     return NR_UE_HOOK_ACTION_DROP;
   if (!strcasecmp(name, "duplicate"))
     return NR_UE_HOOK_ACTION_DUPLICATE;
+  if (!strcasecmp(name, "replay"))
+    return NR_UE_HOOK_ACTION_REPLAY;
+  if (!strcasecmp(name, "delay"))
+    return NR_UE_HOOK_ACTION_DELAY;
   if (!strcasecmp(name, "mutate_txn"))
     return NR_UE_HOOK_ACTION_MUTATE_TXN;
   if (!strcasecmp(name, "mutate_field"))
@@ -199,6 +205,9 @@ static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
   hook->control_mtime = -1;
   hook->last_dl_txn = -1;
   hook->txn_offset = 1;
+  hook->delay_ms = 0;
+  hook->replay_delay_ms = 0;
+  hook->replay_mode[0] = '\0';
 }
 
 static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
@@ -214,6 +223,9 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "action=%s\n", nr_ue_fuzz_hook_action_name(hook->action));
   fprintf(fp, "arm_once=%d\n", hook->arm_once ? 1 : 0);
   fprintf(fp, "txn_offset=%d\n", hook->txn_offset);
+  fprintf(fp, "delay_ms=%d\n", hook->delay_ms);
+  fprintf(fp, "replay_delay_ms=%d\n", hook->replay_delay_ms);
+  fprintf(fp, "replay_mode=%s\n", hook->replay_mode);
   fprintf(fp, "hook_fire_count=%lu\n", hook->hook_fire_count);
   fprintf(fp, "last_hook_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_hook_msg));
   fprintf(fp, "last_hook_action=%s\n", nr_ue_fuzz_hook_action_name(hook->last_hook_action));
@@ -248,6 +260,9 @@ static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
   hook->target_msg = NR_UE_HOOK_MSG_NONE;
   hook->action = NR_UE_HOOK_ACTION_NONE;
   hook->txn_offset = 1;
+  hook->delay_ms = 0;
+  hook->replay_delay_ms = 0;
+  hook->replay_mode[0] = '\0';
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 }
 
@@ -287,6 +302,9 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   hook->target_msg = NR_UE_HOOK_MSG_NONE;
   hook->action = NR_UE_HOOK_ACTION_NONE;
   hook->txn_offset = 1;
+  hook->delay_ms = 0;
+  hook->replay_delay_ms = 0;
+  hook->replay_mode[0] = '\0';
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 
   FILE *fp = fopen(hook->control_path, "r");
@@ -315,6 +333,12 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       hook->arm_once = atoi(value) != 0;
     else if (!strcasecmp(key, "txn_offset"))
       hook->txn_offset = atoi(value);
+    else if (!strcasecmp(key, "delay_ms"))
+      hook->delay_ms = atoi(value);
+    else if (!strcasecmp(key, "replay_delay_ms"))
+      hook->replay_delay_ms = atoi(value);
+    else if (!strcasecmp(key, "replay_mode"))
+      nr_ue_fuzz_hook_copy_text(hook->replay_mode, sizeof(hook->replay_mode), value);
     else if (!strcasecmp(key, "field_mutation_enabled"))
       hook->field_mutation.enabled = atoi(value) != 0;
     else if (!strcasecmp(key, "field_mutation_message"))
@@ -341,13 +365,16 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   fclose(fp);
 
   LOG_I(NR_RRC,
-        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d field_family=%s field_op=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
+        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s field_family=%s field_op=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->target_msg),
         nr_ue_fuzz_hook_action_name(hook->action),
         hook->arm_once ? 1 : 0,
         hook->txn_offset,
+        hook->delay_ms,
+        hook->replay_delay_ms,
+        hook->replay_mode,
         hook->field_mutation.operator_family,
         hook->field_mutation.operator_name,
         hook->field_mutation.transform_name,
@@ -384,6 +411,13 @@ static void nr_ue_fuzz_hook_cache_ul(NR_UE_RRC_INST_t *rrc,
   if (hook->last_ul_size > 0)
     memcpy(hook->last_ul_pdu, buffer, hook->last_ul_size);
   nr_ue_fuzz_hook_write_state(rrc);
+}
+
+static void nr_ue_fuzz_hook_sleep_ms(int delay_ms)
+{
+  if (delay_ms <= 0)
+    return;
+  usleep((useconds_t)delay_ms * 1000);
 }
 
 static int nr_ue_fuzz_hook_wrap_to_range(int value, int min_value, int max_value)
@@ -824,13 +858,51 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc,
     return;
   }
 
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DELAY) {
+    const int delay_ms = hook->delay_ms > 0 ? hook->delay_ms : 50;
+    LOG_W(NR_RRC,
+          "[UE %ld][HOOK] delay %s on SRB%d by %d ms\n",
+          rrc->ue_id,
+          nr_ue_fuzz_hook_msg_name(msg),
+          srb_id,
+          delay_ms);
+    nr_ue_fuzz_hook_sleep_ms(delay_ms);
+  }
+
   nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
   nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DELAY) {
+    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DELAY, srb_id);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(rrc);
+    nr_ue_fuzz_hook_write_state(rrc);
+    return;
+  }
 
   if (hit_target && hook->action == NR_UE_HOOK_ACTION_DUPLICATE) {
     LOG_W(NR_RRC, "[UE %ld][HOOK] duplicate %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
     nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DUPLICATE, srb_id);
     nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(rrc);
+    nr_ue_fuzz_hook_write_state(rrc);
+    return;
+  }
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_REPLAY) {
+    const int replay_delay_ms = hook->replay_delay_ms > 0 ? hook->replay_delay_ms : 0;
+    const char *replay_mode = hook->replay_mode[0] != '\0' ? hook->replay_mode : "immediate_replay";
+    LOG_W(NR_RRC,
+          "[UE %ld][HOOK] replay %s on SRB%d mode=%s delay_ms=%d\n",
+          rrc->ue_id,
+          nr_ue_fuzz_hook_msg_name(msg),
+          srb_id,
+          replay_mode,
+          replay_delay_ms);
+    nr_ue_fuzz_hook_sleep_ms(replay_delay_ms);
+    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_REPLAY, srb_id);
+    nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, hook->last_ul_size, hook->last_ul_pdu, deliver_pdu_srb_rlc, NULL);
     if (hook->arm_once)
       nr_ue_fuzz_hook_disarm_persistent(rrc);
     nr_ue_fuzz_hook_write_state(rrc);
