@@ -34,3 +34,12 @@ nfapi_nr_interface_scf
 *.log
 *.out
 CMakeUserPresets.json
+
+# Local CMake build outputs
+cmake-build-*/
+CMakeFiles/
+  
+CMakeCache.txt
+compile_commands.json
+Debug/
+debug/
