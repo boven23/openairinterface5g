@@ -45,7 +45,6 @@ unsigned short config_frames[4] = {2,9,11,13};
 #include "PHY/phy_vars.h"
 #include "RRC/NR/nr_rrc_defs.h"
 #include "RRC/NR/nr_rrc_proto.h"
-#include "RRC/NR/rrc_fuzz_inject.h"
 #include "RRC_nr_paramsvalues.h"
 #include "SIMULATION/TOOLS/sim.h"
 #include "T.h"
@@ -260,7 +259,6 @@ static int create_gNB_tasks(ngran_node_t node_type, configmodule_interface_t *cf
         LOG_E(NR_RRC, "Create task for NR RRC gNB failed\n");
         return -1;
       }
-      rrc_fuzz_injector_start_from_env();
     }
 
     // E1AP initialisation, whether the node is a CU or has integrated CU
