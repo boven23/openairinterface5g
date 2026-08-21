@@ -741,11 +741,15 @@ static const nr_ue_fuzz_hook_field_adapter_t nr_ue_fuzz_hook_field_adapters[] = 
     },
 };
 
+// 引入自动生成的代码文件 (零配置挂载黑科技)
+#include "nr_ue_fuzz_hook_auto_generated.inc.c"
+
 static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter(const nr_ue_fuzz_hook_state_t *hook)
 {
   if (!hook || !hook->field_mutation.enabled)
     return NULL;
 
+  // 1. 优先在人工手工编写的高级 Adapter 数组中查找
   for (size_t i = 0; i < sizeof(nr_ue_fuzz_hook_field_adapters) / sizeof(nr_ue_fuzz_hook_field_adapters[0]); ++i) {
     const nr_ue_fuzz_hook_field_adapter_t *adapter = &nr_ue_fuzz_hook_field_adapters[i];
     if (adapter->target_msg != hook->target_msg)
@@ -759,7 +763,8 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
     return adapter;
   }
 
-  return NULL;
+  // 2. 如果手工配置里没写，就去 Python 自动生成的流水线数组里找
+  return nr_ue_fuzz_hook_find_auto_field_adapter(hook);
 }
 
 static bool nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(NR_UE_RRC_INST_t *rrc,
