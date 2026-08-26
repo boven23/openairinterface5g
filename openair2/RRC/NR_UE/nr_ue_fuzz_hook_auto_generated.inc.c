@@ -2,81 +2,6 @@
 // Do not edit manually.
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: RRCReconfigurationComplete__logMeasAvailable__optional_presence_toggle
- * domain_id: RRCReconfigurationComplete__logMeasAvailable
- * message: RRCReconfigurationComplete
- * field: logMeasAvailable
- * operator_family: optional_presence_toggle
- * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16
- * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle
- * adapter_function: nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle_adapter
- * payload_type: NR_RRCReconfigurationComplete_t
- * review points:
- *   - confirm_oai_struct_member_path
- *   - confirm_optional_branch_and_release_extension
- */
-static bool nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle(NR_UE_RRC_INST_t *rrc,
-                              NR_RRCReconfigurationComplete_t *payload,
-                              const char *mode)
-{
-  if (!payload)
-    return false;
-
-  if (!mode || !*mode)
-    mode = "force_present_true";
-
-  if (!strcasecmp(mode, "force_present_true")) {
-    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete)
-      return false; /* review: CHOICE branch should already be selected */
-    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
-      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
-    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
-      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
-    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
-      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
-    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
-      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
-    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16)
-      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16));
-    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = NR_UE_MeasurementsAvailable_r16__logMeasAvailable_r16_true;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force logMeasAvailable in RRCReconfigurationComplete\\n", rrc->ue_id);
-    return true;
-  }
-
-  if (!strcasecmp(mode, "omit")) {
-    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
-        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
-        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
-        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
-        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
-        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16)
-      return false;
-    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16);
-    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = NULL;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] omit logMeasAvailable in RRCReconfigurationComplete\\n", rrc->ue_id);
-    return true;
-  }
-
-  return false;
-}
-
-static bool nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
-{
-  return nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
-}
-
-/* registry entry
-{
-    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
-    .message_name = "RRCReconfigurationComplete",
-    .field_name = "logMeasAvailable",
-    .operator_name = "optional_presence_toggle",
-    .apply = nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle_adapter,
-},
-*/
-
-/* AUTO-GENERATED REVIEW STUB
  * adapter_id: RRCReconfigurationComplete__logMeasAvailableBT__optional_presence_toggle
  * domain_id: RRCReconfigurationComplete__logMeasAvailableBT
  * message: RRCReconfigurationComplete
@@ -148,6 +73,81 @@ static bool nr_ue_fuzz_hook_apply_logmeasavailablebt_optional_presence_toggle_ad
     .field_name = "logMeasAvailableBT",
     .operator_name = "optional_presence_toggle",
     .apply = nr_ue_fuzz_hook_apply_logmeasavailablebt_optional_presence_toggle_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: RRCReconfigurationComplete__logMeasAvailable__optional_presence_toggle
+ * domain_id: RRCReconfigurationComplete__logMeasAvailable
+ * message: RRCReconfigurationComplete
+ * field: logMeasAvailable
+ * operator_family: optional_presence_toggle
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle
+ * adapter_function: nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ */
+static bool nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_present_true";
+
+  if (!strcasecmp(mode, "force_present_true")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete)
+      return false; /* review: CHOICE branch should already be selected */
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = NR_UE_MeasurementsAvailable_r16__logMeasAvailable_r16_true;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force logMeasAvailable in RRCReconfigurationComplete\\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16)
+      return false;
+    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit logMeasAvailable in RRCReconfigurationComplete\\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "logMeasAvailable",
+    .operator_name = "optional_presence_toggle",
+    .apply = nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle_adapter,
 },
 */
 
@@ -405,16 +405,16 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
     {
         .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
         .message_name = "RRCReconfigurationComplete",
-        .field_name = "logMeasAvailable",
+        .field_name = "logMeasAvailableBT",
         .operator_name = "optional_presence_toggle",
-        .apply = nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle_adapter,
+        .apply = nr_ue_fuzz_hook_apply_logmeasavailablebt_optional_presence_toggle_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
         .message_name = "RRCReconfigurationComplete",
-        .field_name = "logMeasAvailableBT",
+        .field_name = "logMeasAvailable",
         .operator_name = "optional_presence_toggle",
-        .apply = nr_ue_fuzz_hook_apply_logmeasavailablebt_optional_presence_toggle_adapter,
+        .apply = nr_ue_fuzz_hook_apply_logmeasavailable_optional_presence_toggle_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,

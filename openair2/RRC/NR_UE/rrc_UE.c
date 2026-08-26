@@ -233,6 +233,13 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "nr_rrc_state=%s\n", nr_ue_fuzz_hook_rrc_state_name(rrc->nrRrcState));
   fprintf(fp, "as_security_activated=%d\n", rrc->as_security_activated ? 1 : 0);
   nr_ue_fuzz_hook_write_timer_state(fp, "T310", &timers->T310);
+  nr_ue_fuzz_hook_write_timer_state(fp, "T300", &timers->T300);
+  nr_ue_fuzz_hook_write_timer_state(fp, "T301", &timers->T301);
+  nr_ue_fuzz_hook_write_timer_state(fp, "T304", &timers->T304);
+  nr_ue_fuzz_hook_write_timer_state(fp, "T311", &timers->T311);
+  nr_ue_fuzz_hook_write_timer_state(fp, "T319", &timers->T319);
+  nr_ue_fuzz_hook_write_timer_state(fp, "T320", &timers->T320);
+  nr_ue_fuzz_hook_write_timer_state(fp, "T321", &timers->T321);
   fprintf(fp, "last_dl_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_dl_msg));
   fprintf(fp, "last_dl_txn=%d\n", hook->last_dl_txn);
   fprintf(fp, "seen_reconfiguration=%d\n", hook->seen_reconfiguration ? 1 : 0);
