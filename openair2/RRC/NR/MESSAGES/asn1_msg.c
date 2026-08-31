@@ -891,7 +891,9 @@ int do_nrMeasurementReport_SA(long trigger_to_measid,
                               uint16_t neighbor_Nid_cell,
                               int neighbor_rsrp_index,
                               uint8_t *buffer,
-                              size_t buffer_size)
+                              size_t buffer_size,
+                              void *mutation_context,
+                              bool (*mutate_fn)(void *mutation_context, NR_MeasurementReport_t *measurement_report))
 {
   asn_enc_rval_t enc_rval;
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
@@ -948,6 +950,9 @@ int do_nrMeasurementReport_SA(long trigger_to_measid,
     }
     ASN_SEQUENCE_ADD(&measResultListNR->list, meas_result_neigh_cell);
   }
+
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, measurementReport);
 
   enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, buffer_size);
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);

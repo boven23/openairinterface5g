@@ -120,7 +120,9 @@ int do_nrMeasurementReport_SA(long trigger_to_measid,
                               uint16_t neighbor_Nid_cell,
                               int neighbor_rsrp_index,
                               uint8_t *buffer,
-                              size_t buffer_size);
+                              size_t buffer_size,
+                              void *mutation_context,
+                              bool (*mutate_fn)(void *mutation_context, NR_MeasurementReport_t *measurement_report));
 
 int do_NR_RRCReconfigurationComplete_for_nsa(uint8_t *buffer, size_t buffer_size, NR_RRC_TransactionIdentifier_t Transaction_id);
 

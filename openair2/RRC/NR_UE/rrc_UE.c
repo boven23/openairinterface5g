@@ -774,13 +774,14 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
   return nr_ue_fuzz_hook_find_auto_field_adapter(hook);
 }
 
-static bool nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(NR_UE_RRC_INST_t *rrc,
-                                                                         NR_RRCReconfigurationComplete_t *reconfComplete)
+static bool nr_ue_fuzz_hook_try_apply_field_mutation(NR_UE_RRC_INST_t *rrc,
+                                                      nr_ue_fuzz_hook_msg_t target_msg,
+                                                      void *payload)
 {
   nr_ue_fuzz_hook_reload_config(rrc);
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   if (!hook->enabled
-      || hook->target_msg != NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE
+      || hook->target_msg != target_msg
       || hook->action != NR_UE_HOOK_ACTION_MUTATE_FIELD
       || !hook->field_mutation.enabled) {
     return false;
@@ -798,16 +799,34 @@ static bool nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(NR_UE_R
     return false;
   }
 
-  bool changed = adapter->apply(rrc, reconfComplete, hook->field_mutation.selected_mode);
+  bool changed = adapter->apply(rrc, payload, hook->field_mutation.selected_mode);
 
   if (!changed)
     return false;
 
-  nr_ue_fuzz_hook_record_fire(rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, NR_UE_HOOK_ACTION_MUTATE_FIELD, -1);
+  nr_ue_fuzz_hook_record_fire(rrc, target_msg, NR_UE_HOOK_ACTION_MUTATE_FIELD, -1);
   if (hook->arm_once)
     nr_ue_fuzz_hook_disarm_persistent(rrc);
   nr_ue_fuzz_hook_write_state(rrc);
   return true;
+}
+
+static bool nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(NR_UE_RRC_INST_t *rrc,
+                                                                         NR_RRCReconfigurationComplete_t *reconfComplete)
+{
+  return nr_ue_fuzz_hook_try_apply_field_mutation(
+      rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, reconfComplete);
+}
+
+static bool nr_ue_fuzz_hook_apply_measurement_report_field_mutation(void *context,
+                                                                    NR_MeasurementReport_t *measurement_report)
+{
+  if (!context || !measurement_report)
+    return false;
+
+  return nr_ue_fuzz_hook_try_apply_field_mutation((NR_UE_RRC_INST_t *)context,
+                                                  NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
+                                                  measurement_report);
 }
 
 static int nr_ue_fuzz_hook_encode_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc,
@@ -4636,7 +4655,9 @@ void rrc_ue_generate_measurementReport(rrcPerNB_t *rrc, instance_t ue_id)
                                            l3m->neighboring_cell[0].Nid_cell,
                                            neighbor_rsrp_index,
                                            buffer,
-                                           sizeof(buffer));
+                                           sizeof(buffer),
+                                           ue_rrc,
+                                           nr_ue_fuzz_hook_apply_measurement_report_field_mutation);
 
   int srb_id = 1; // possibly TODO in SRB3 in some cases
   nr_ue_fuzz_hook_send_srb(ue_rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, srb_id, buffer, size);
