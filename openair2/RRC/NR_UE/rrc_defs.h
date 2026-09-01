@@ -131,6 +131,8 @@ typedef struct nr_ue_fuzz_hook_state_s {
   int delay_ms;
   int replay_delay_ms;
   char replay_mode[64];
+  bool measurement_bootstrap_enabled;
+  bool measurement_bootstrap_done;
   unsigned long hook_fire_count;
   nr_ue_fuzz_hook_msg_t last_hook_msg;
   nr_ue_fuzz_hook_action_t last_hook_action;

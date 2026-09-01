@@ -105,6 +105,8 @@ static const char *nr_ue_fuzz_hook_rrc_state_name(Rrc_State_NR_t state)
   }
 }
 
+static void nr_ue_fuzz_hook_bootstrap_measurement_report(NR_UE_RRC_INST_t *rrc, int gNB_index);
+
 static nr_ue_fuzz_hook_msg_t nr_ue_fuzz_hook_msg_from_name(const char *name)
 {
   if (!name || *name == '\0')
@@ -208,6 +210,8 @@ static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
   hook->delay_ms = 0;
   hook->replay_delay_ms = 0;
   hook->replay_mode[0] = '\0';
+  hook->measurement_bootstrap_enabled = false;
+  hook->measurement_bootstrap_done = false;
 }
 
 static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
@@ -226,6 +230,8 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "delay_ms=%d\n", hook->delay_ms);
   fprintf(fp, "replay_delay_ms=%d\n", hook->replay_delay_ms);
   fprintf(fp, "replay_mode=%s\n", hook->replay_mode);
+  fprintf(fp, "measurement_bootstrap_enabled=%d\n", hook->measurement_bootstrap_enabled ? 1 : 0);
+  fprintf(fp, "measurement_bootstrap_done=%d\n", hook->measurement_bootstrap_done ? 1 : 0);
   fprintf(fp, "hook_fire_count=%lu\n", hook->hook_fire_count);
   fprintf(fp, "last_hook_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_hook_msg));
   fprintf(fp, "last_hook_action=%s\n", nr_ue_fuzz_hook_action_name(hook->last_hook_action));
@@ -270,6 +276,8 @@ static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
   hook->delay_ms = 0;
   hook->replay_delay_ms = 0;
   hook->replay_mode[0] = '\0';
+  hook->measurement_bootstrap_enabled = false;
+  hook->measurement_bootstrap_done = false;
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 }
 
@@ -312,6 +320,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   hook->delay_ms = 0;
   hook->replay_delay_ms = 0;
   hook->replay_mode[0] = '\0';
+  hook->measurement_bootstrap_enabled = false;
+  hook->measurement_bootstrap_done = false;
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 
   FILE *fp = fopen(hook->control_path, "r");
@@ -346,6 +356,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       hook->replay_delay_ms = atoi(value);
     else if (!strcasecmp(key, "replay_mode"))
       nr_ue_fuzz_hook_copy_text(hook->replay_mode, sizeof(hook->replay_mode), value);
+    else if (!strcasecmp(key, "measurement_bootstrap") || !strcasecmp(key, "measurement_bootstrap_enabled"))
+      hook->measurement_bootstrap_enabled = atoi(value) != 0;
     else if (!strcasecmp(key, "field_mutation_enabled"))
       hook->field_mutation.enabled = atoi(value) != 0;
     else if (!strcasecmp(key, "field_mutation_message"))
@@ -372,7 +384,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   fclose(fp);
 
   LOG_I(NR_RRC,
-        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s field_family=%s field_op=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
+        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d field_family=%s field_op=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->target_msg),
@@ -382,6 +394,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
         hook->delay_ms,
         hook->replay_delay_ms,
         hook->replay_mode,
+        hook->measurement_bootstrap_enabled ? 1 : 0,
+        hook->measurement_bootstrap_done ? 1 : 0,
         hook->field_mutation.operator_family,
         hook->field_mutation.operator_name,
         hook->field_mutation.transform_name,
@@ -765,7 +779,12 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
       continue;
     if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.field, adapter->field_name))
       continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_name, adapter->operator_name))
+    /* Match operator_name against either adapter.operator_name (= operator_family like
+     * "integer_transform") or the high-level semantic name carried in operator_family field.
+     * This bridges the Python case spec's "domain_guided_field_mutation" operator value
+     * to the C registry's "integer_transform" operator_family label. */
+    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_name, adapter->operator_name)
+        && !nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_family, adapter->operator_name))
       continue;
     return adapter;
   }
@@ -2482,6 +2501,7 @@ static void nr_rrc_ue_process_rrcReconfiguration(NR_UE_RRC_INST_t *rrc, int gNB_
         if (num_neighbors > 0) {
           nr_rrc_mac_config_req_meas(rrc->ue_id, neighbor_cells, num_neighbors);
         }
+        nr_ue_fuzz_hook_bootstrap_measurement_report(rrc, gNB_index);
       }
       if (ie->lateNonCriticalExtension) {
         LOG_E(NR_RRC, "RRCReconfiguration includes lateNonCriticalExtension. Not handled.\n");
@@ -4076,6 +4096,47 @@ static void nr_rrc_handle_meas_indication(NR_UE_RRC_INST_t *rrc, NRRrcMacMeasDat
 
     nr_ue_meas_filtering(rrcNB, meas_cell, meas_ind->Nid_cell, meas_ind->is_csi_meas, meas_ind->rsrp_dBm);
     nr_ue_check_meas_report(rrc, meas_ind->gnb_index);
+  }
+}
+
+static void nr_ue_fuzz_hook_bootstrap_measurement_report(NR_UE_RRC_INST_t *rrc, int gNB_index)
+{
+  if (!rrc)
+    return;
+
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (!hook->enabled || hook->target_msg != NR_UE_HOOK_MSG_MEASUREMENT_REPORT || !hook->measurement_bootstrap_enabled)
+    return;
+  if (hook->measurement_bootstrap_done)
+    return;
+
+  rrcPerNB_t *rrcNB = rrc->perNB + gNB_index;
+  l3_measurements_t *l3_measurements = &rrcNB->l3_measurements;
+
+  if (l3_measurements->trigger_to_measid <= 0) {
+    for (int i = 0; i < MAX_MEAS_CONFIG; i++) {
+      if (rrcNB->MeasId[i] != NULL) {
+        l3_measurements->trigger_to_measid = rrcNB->MeasId[i]->measId;
+        l3_measurements->trigger_quantity = NR_MeasTriggerQuantityOffset_PR_rsrp;
+        l3_measurements->rs_type = NR_NR_RS_Type_ssb;
+        l3_measurements->max_reports = 1;
+        l3_measurements->neighbor_cell_valid = false;
+        LOG_W(NR_RRC, "[UE %ld][HOOK] bootstrap: force trigger_to_measid=%ld\n",
+              rrc->ue_id, l3_measurements->trigger_to_measid);
+        break;
+      }
+    }
+  }
+
+  if (l3_measurements->trigger_to_measid > 0) {
+    rrc_ue_generate_measurementReport(rrcNB, rrc->ue_id);
+    l3_measurements->reports_sent = 1;
+    hook->measurement_bootstrap_done = true;
+    nr_ue_fuzz_hook_write_state(rrc);
+  } else {
+    LOG_W(NR_RRC,
+          "[UE %ld][HOOK] measurement bootstrap did not start a report trigger; measurement config may be incomplete\n",
+          rrc->ue_id);
   }
 }
 

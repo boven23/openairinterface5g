@@ -305,7 +305,8 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_auto_field_ad
     if (adapter->target_msg != hook->target_msg) continue;
     if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.message, adapter->message_name)) continue;
     if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.field, adapter->field_name)) continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_name, adapter->operator_name)) continue;
+    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_name, adapter->operator_name)
+        && !nr_ue_fuzz_hook_text_eq(hook-> field_mutation.operator_family, adapter->operator_name)) continue;
     return adapter;
   }
   
