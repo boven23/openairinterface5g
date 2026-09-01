@@ -364,8 +364,10 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.field, sizeof(hook->field_mutation.field), value);
     else if (!strcasecmp(key, "field_mutation_operator_family"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
-    else if (!strcasecmp(key, "field_mutation_operator"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
+    else if (!strcasecmp(key, "field_mutation_operator")) {
+      if (hook->field_mutation.operator_family[0] == '\0')  /* only fallback when operator_family not yet set */
+        nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
+    }
     else if (!strcasecmp(key, "field_mutation_transform"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.transform_name, sizeof(hook->field_mutation.transform_name), value);
     else if (!strcasecmp(key, "field_mutation_selected_mode"))
