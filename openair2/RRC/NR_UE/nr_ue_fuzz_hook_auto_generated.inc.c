@@ -57,7 +57,7 @@ static bool nr_ue_fuzz_hook_apply_measid_integer_transform_adapter(NR_UE_RRC_INS
     .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
     .message_name = "MeasurementReport",
     .field_name = "measId",
-    .operator_name = "integer_transform",
+    .operator_family = "integer_transform",
     .apply = nr_ue_fuzz_hook_apply_measid_integer_transform_adapter,
 },
 */
@@ -122,7 +122,7 @@ static bool nr_ue_fuzz_hook_apply_sfn_offsetresult_integer_transform_adapter(NR_
     .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
     .message_name = "MeasurementReport",
     .field_name = "sfn-OffsetResult",
-    .operator_name = "integer_transform",
+    .operator_family = "integer_transform",
     .apply = nr_ue_fuzz_hook_apply_sfn_offsetresult_integer_transform_adapter,
 },
 */
@@ -187,7 +187,7 @@ static bool nr_ue_fuzz_hook_apply_frameboundaryoffsetresult_integer_transform_ad
     .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
     .message_name = "MeasurementReport",
     .field_name = "frameBoundaryOffsetResult",
-    .operator_name = "integer_transform",
+    .operator_family = "integer_transform",
     .apply = nr_ue_fuzz_hook_apply_frameboundaryoffsetresult_integer_transform_adapter,
 },
 */
@@ -258,7 +258,7 @@ static bool nr_ue_fuzz_hook_apply_rsrp_result_integer_transform_adapter(NR_UE_RR
     .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
     .message_name = "MeasurementReport",
     .field_name = "rsrp-Result",
-    .operator_name = "integer_transform",
+    .operator_family = "integer_transform",
     .apply = nr_ue_fuzz_hook_apply_rsrp_result_integer_transform_adapter,
 },
 */
@@ -268,28 +268,28 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
         .message_name = "MeasurementReport",
         .field_name = "measId",
-        .operator_name = "integer_transform",
+        .operator_family = "integer_transform",
         .apply = nr_ue_fuzz_hook_apply_measid_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
         .message_name = "MeasurementReport",
         .field_name = "sfn-OffsetResult",
-        .operator_name = "integer_transform",
+        .operator_family = "integer_transform",
         .apply = nr_ue_fuzz_hook_apply_sfn_offsetresult_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
         .message_name = "MeasurementReport",
         .field_name = "frameBoundaryOffsetResult",
-        .operator_name = "integer_transform",
+        .operator_family = "integer_transform",
         .apply = nr_ue_fuzz_hook_apply_frameboundaryoffsetresult_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
         .message_name = "MeasurementReport",
         .field_name = "rsrp-Result",
-        .operator_name = "integer_transform",
+        .operator_family = "integer_transform",
         .apply = nr_ue_fuzz_hook_apply_rsrp_result_integer_transform_adapter,
     },
 };
@@ -305,8 +305,7 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_auto_field_ad
     if (adapter->target_msg != hook->target_msg) continue;
     if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.message, adapter->message_name)) continue;
     if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.field, adapter->field_name)) continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_name, adapter->operator_name)
-        && !nr_ue_fuzz_hook_text_eq(hook-> field_mutation.operator_family, adapter->operator_name)) continue;
+    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_family, adapter->operator_family)) continue;
     return adapter;
   }
   

@@ -161,7 +161,6 @@ static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
   hook->field_mutation.enabled = false;
   hook->field_mutation.message[0] = '\0';
   hook->field_mutation.field[0] = '\0';
-  hook->field_mutation.operator_name[0] = '\0';
   hook->field_mutation.operator_family[0] = '\0';
   hook->field_mutation.transform_name[0] = '\0';
   hook->field_mutation.selected_mode[0] = '\0';
@@ -256,7 +255,6 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "field_mutation_enabled=%d\n", hook->field_mutation.enabled ? 1 : 0);
   fprintf(fp, "field_mutation_message=%s\n", hook->field_mutation.message);
   fprintf(fp, "field_mutation_field=%s\n", hook->field_mutation.field);
-  fprintf(fp, "field_mutation_operator=%s\n", hook->field_mutation.operator_name);
   fprintf(fp, "field_mutation_operator_family=%s\n", hook->field_mutation.operator_family);
   fprintf(fp, "field_mutation_transform=%s\n", hook->field_mutation.transform_name);
   fprintf(fp, "field_mutation_selected_mode=%s\n", hook->field_mutation.selected_mode);
@@ -364,9 +362,9 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.message, sizeof(hook->field_mutation.message), value);
     else if (!strcasecmp(key, "field_mutation_field"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.field, sizeof(hook->field_mutation.field), value);
-    else if (!strcasecmp(key, "field_mutation_operator"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_name, sizeof(hook->field_mutation.operator_name), value);
     else if (!strcasecmp(key, "field_mutation_operator_family"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
+    else if (!strcasecmp(key, "field_mutation_operator"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
     else if (!strcasecmp(key, "field_mutation_transform"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.transform_name, sizeof(hook->field_mutation.transform_name), value);
@@ -384,7 +382,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   fclose(fp);
 
   LOG_I(NR_RRC,
-        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d field_family=%s field_op=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
+        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d operator_family=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->target_msg),
@@ -397,7 +395,6 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
         hook->measurement_bootstrap_enabled ? 1 : 0,
         hook->measurement_bootstrap_done ? 1 : 0,
         hook->field_mutation.operator_family,
-        hook->field_mutation.operator_name,
         hook->field_mutation.transform_name,
         hook->field_mutation.field,
         hook->field_mutation.selected_mode,
@@ -555,7 +552,7 @@ typedef struct nr_ue_fuzz_hook_field_adapter_s {
   nr_ue_fuzz_hook_msg_t target_msg;
   const char *message_name;
   const char *field_name;
-  const char *operator_name;
+  const char *operator_family;
   nr_ue_fuzz_hook_field_adapter_fn_t apply;
 } nr_ue_fuzz_hook_field_adapter_t;
 
@@ -750,14 +747,14 @@ static const nr_ue_fuzz_hook_field_adapter_t nr_ue_fuzz_hook_field_adapters[] = 
         .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
         .message_name = "RRCReconfigurationComplete",
         .field_name = "logMeasAvailable",
-        .operator_name = "optional_presence_toggle",
+        .operator_family = "optional_presence_toggle",
         .apply = nr_ue_fuzz_hook_apply_logmeas_presence_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
         .message_name = "RRCReconfigurationComplete",
         .field_name = "sigLogMeasConfigAvailable",
-        .operator_name = "optional_boolean_assignment",
+        .operator_family = "optional_boolean_assignment",
         .apply = nr_ue_fuzz_hook_apply_siglog_boolean_adapter,
     },
 };
@@ -779,12 +776,7 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
       continue;
     if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.field, adapter->field_name))
       continue;
-    /* Match operator_name against either adapter.operator_name (= operator_family like
-     * "integer_transform") or the high-level semantic name carried in operator_family field.
-     * This bridges the Python case spec's "domain_guided_field_mutation" operator value
-     * to the C registry's "integer_transform" operator_family label. */
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_name, adapter->operator_name)
-        && !nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_family, adapter->operator_name))
+    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_family, adapter->operator_family))
       continue;
     return adapter;
   }
@@ -809,12 +801,12 @@ static bool nr_ue_fuzz_hook_try_apply_field_mutation(NR_UE_RRC_INST_t *rrc,
   const nr_ue_fuzz_hook_field_adapter_t *adapter = nr_ue_fuzz_hook_find_field_adapter(hook);
   if (!adapter) {
     LOG_W(NR_RRC,
-          "[UE %ld][HOOK] no field adapter for target=%s message=%s field=%s operator=%s\n",
+          "[UE %ld][HOOK] no field adapter for target=%s message=%s field=%s operator_family=%s\n",
           rrc->ue_id,
           nr_ue_fuzz_hook_msg_name(hook->target_msg),
           hook->field_mutation.message,
           hook->field_mutation.field,
-          hook->field_mutation.operator_name);
+          hook->field_mutation.operator_family);
     return false;
   }
 
