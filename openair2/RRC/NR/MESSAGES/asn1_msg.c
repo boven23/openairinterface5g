@@ -790,7 +790,8 @@ int do_NR_RRCReconfigurationComplete_for_nsa(
 }
 
 //------------------------------------------------------------------------------
-int do_NR_RRCReconfigurationComplete(uint8_t *buffer, size_t buffer_size, const uint8_t Transaction_id)
+int do_NR_RRCReconfigurationComplete(uint8_t *buffer, size_t buffer_size, const uint8_t Transaction_id,
+                                    void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn)
 //------------------------------------------------------------------------------
 {
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
@@ -803,6 +804,8 @@ int do_NR_RRCReconfigurationComplete(uint8_t *buffer, size_t buffer_size, const 
   asn1cCalloc(reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete, extension);
   extension->nonCriticalExtension = NULL;
   extension->lateNonCriticalExtension = NULL;
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &ul_dcch_msg);
   if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
     xer_fprint(stdout, &asn_DEF_NR_UL_DCCH_Message, (void *)&ul_dcch_msg);
   }
@@ -822,7 +825,9 @@ int do_RRCSetupComplete(uint8_t *buffer,
                         bool is_rrc_connection_setup,
                         uint64_t fiveG_s_tmsi,
                         const int dedicatedInfoNASLength,
-                        const char *dedicatedInfoNAS)
+                        const char *dedicatedInfoNAS,
+                        void *mutation_context,
+                        nr_rrc_ul_dcch_mutator_t mutate_fn)
 {
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
   ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
@@ -864,6 +869,8 @@ int do_RRCSetupComplete(uint8_t *buffer,
 
   memset(&ies->dedicatedNAS_Message,0,sizeof(OCTET_STRING_t));
   OCTET_STRING_fromBuf(&ies->dedicatedNAS_Message, dedicatedInfoNAS, dedicatedInfoNASLength);
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &ul_dcch_msg);
   if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
     xer_fprint(stdout, &asn_DEF_NR_UL_DCCH_Message, (void *)&ul_dcch_msg);
   }
@@ -893,7 +900,7 @@ int do_nrMeasurementReport_SA(long trigger_to_measid,
                               uint8_t *buffer,
                               size_t buffer_size,
                               void *mutation_context,
-                              bool (*mutate_fn)(void *mutation_context, NR_MeasurementReport_t *measurement_report))
+                              nr_rrc_ul_dcch_mutator_t mutate_fn)
 {
   asn_enc_rval_t enc_rval;
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
@@ -952,7 +959,7 @@ int do_nrMeasurementReport_SA(long trigger_to_measid,
   }
 
   if (mutate_fn)
-    (void)mutate_fn(mutation_context, measurementReport);
+    (void)mutate_fn(mutation_context, &ul_dcch_msg);
 
   enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, buffer_size);
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
@@ -963,6 +970,7 @@ int do_nrMeasurementReport_SA(long trigger_to_measid,
 
   LOG_I(NR_RRC, "MeasurementReport Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
 
+  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
   return ((enc_rval.encoded + 7) / 8);
 }
 
@@ -996,7 +1004,8 @@ int do_NR_DLInformationTransfer(uint8_t *buffer,
   return (r.encoded + 7) / 8;
 }
 
-int do_NR_ULInformationTransfer(uint8_t **buffer, uint32_t pdu_length, uint8_t *pdu_buffer)
+int do_NR_ULInformationTransfer(uint8_t **buffer, uint32_t pdu_length, uint8_t *pdu_buffer,
+                               void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn)
 {
     ssize_t encoded;
     NR_UL_DCCH_Message_t ul_dcch_msg;
@@ -1009,13 +1018,15 @@ int do_NR_ULInformationTransfer(uint8_t **buffer, uint32_t pdu_length, uint8_t *
     ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer->criticalExtensions.choice.ulInformationTransfer = CALLOC(1,sizeof(struct NR_ULInformationTransfer_IEs));
     struct NR_ULInformationTransfer_IEs *ulInformationTransfer = ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer->criticalExtensions.choice.ulInformationTransfer;
     ulInformationTransfer->dedicatedNAS_Message = CALLOC(1,sizeof(NR_DedicatedNAS_Message_t));
-    ulInformationTransfer->dedicatedNAS_Message->buf = pdu_buffer;
-    ulInformationTransfer->dedicatedNAS_Message->size = pdu_length;
+    /* Adapters may replace fields; keep the ASN tree independent of the caller's NAS buffer. */
+    int copied = OCTET_STRING_fromBuf(ulInformationTransfer->dedicatedNAS_Message, (const char *)pdu_buffer, pdu_length);
+    AssertFatal(copied == 0, "Failed to copy ULInformationTransfer NAS payload\n");
     ulInformationTransfer->lateNonCriticalExtension = NULL;
+    if (mutate_fn)
+      (void)mutate_fn(mutation_context, &ul_dcch_msg);
     encoded = uper_encode_to_new_buffer (&asn_DEF_NR_UL_DCCH_Message, NULL, (void *) &ul_dcch_msg, (void **) buffer);
     AssertFatal(encoded > 0,"ASN1 message encoding failed (%s, %ld)!\n",
                 "ULInformationTransfer",encoded);
-    ulInformationTransfer->dedicatedNAS_Message->buf = NULL; // Let caller decide when to free it
     ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
     LOG_D(NR_RRC,"ULInformationTransfer Encoded %zd bytes\n",encoded);
 
@@ -1103,7 +1114,8 @@ int do_RRCReestablishment(int8_t nh_ncc, uint8_t *const buffer, size_t buffer_si
   return ((enc_rval.encoded + 7) / 8);
 }
 
-int do_RRCReestablishmentComplete(uint8_t *buffer, size_t buffer_size, int64_t rrc_TransactionIdentifier)
+int do_RRCReestablishmentComplete(uint8_t *buffer, size_t buffer_size, int64_t rrc_TransactionIdentifier,
+                                 void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn)
 {
   asn_enc_rval_t enc_rval;
   NR_UL_DCCH_Message_t ul_dcch_msg;
@@ -1121,6 +1133,8 @@ int do_RRCReestablishmentComplete(uint8_t *buffer, size_t buffer_size, int64_t r
   rrcReestablishmentComplete->criticalExtensions.choice.rrcReestablishmentComplete = CALLOC(1, sizeof(NR_RRCReestablishmentComplete_IEs_t));
   rrcReestablishmentComplete->criticalExtensions.choice.rrcReestablishmentComplete->lateNonCriticalExtension = NULL;
   rrcReestablishmentComplete->criticalExtensions.choice.rrcReestablishmentComplete->nonCriticalExtension = NULL;
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &ul_dcch_msg);
 
   if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
     xer_fprint(stdout, &asn_DEF_NR_UL_CCCH_Message, (void *)&ul_dcch_msg);

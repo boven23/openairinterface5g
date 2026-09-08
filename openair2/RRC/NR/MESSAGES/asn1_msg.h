@@ -43,6 +43,10 @@
 #include "openair2/LAYER2/nr_pdcp/nr_pdcp_configuration.h"
 #include "common/utils/nr/nr_common.h"
 struct asn_TYPE_descriptor_s;
+struct NR_UL_DCCH_Message;
+
+/* Optional pre-encode callback. The constructor retains ownership of the ASN tree. */
+typedef bool (*nr_rrc_ul_dcch_mutator_t)(void *context, struct NR_UL_DCCH_Message *message);
 
 typedef struct {
   uint8_t transaction_id;
@@ -101,7 +105,9 @@ int do_RRCSetupComplete(uint8_t *buffer,
                         bool is_rrc_connection_setup,
                         uint64_t fiveG_S_TMSI,
                         const int dedicatedInfoNASLength,
-                        const char *dedicatedInfoNAS);
+                        const char *dedicatedInfoNAS,
+                        void *mutation_context,
+                        nr_rrc_ul_dcch_mutator_t mutate_fn);
 
 int do_NR_HandoverPreparationInformation(const uint8_t *uecap_buf, int uecap_buf_size, uint8_t *buf, int buf_size);
 
@@ -122,11 +128,12 @@ int do_nrMeasurementReport_SA(long trigger_to_measid,
                               uint8_t *buffer,
                               size_t buffer_size,
                               void *mutation_context,
-                              bool (*mutate_fn)(void *mutation_context, NR_MeasurementReport_t *measurement_report));
+                              nr_rrc_ul_dcch_mutator_t mutate_fn);
 
 int do_NR_RRCReconfigurationComplete_for_nsa(uint8_t *buffer, size_t buffer_size, NR_RRC_TransactionIdentifier_t Transaction_id);
 
-int do_NR_RRCReconfigurationComplete(uint8_t *buffer, size_t buffer_size, const uint8_t Transaction_id);
+int do_NR_RRCReconfigurationComplete(uint8_t *buffer, size_t buffer_size, const uint8_t Transaction_id,
+                                    void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn);
 
 int do_NR_DLInformationTransfer(uint8_t *buffer,
                                 size_t buffer_len,
@@ -136,7 +143,9 @@ int do_NR_DLInformationTransfer(uint8_t *buffer,
 
 int do_NR_ULInformationTransfer(uint8_t **buffer,
                                 uint32_t pdu_length,
-                                uint8_t *pdu_buffer);
+                                uint8_t *pdu_buffer,
+                                void *mutation_context,
+                                nr_rrc_ul_dcch_mutator_t mutate_fn);
 
 int do_RRCReestablishmentRequest(uint8_t *buffer,
                                  NR_ReestablishmentCause_t cause,
@@ -145,7 +154,8 @@ int do_RRCReestablishmentRequest(uint8_t *buffer,
 
 int do_RRCReestablishment(int8_t nh_ncc, uint8_t *const buffer, size_t buffer_size, const uint8_t Transaction_id);
 
-int do_RRCReestablishmentComplete(uint8_t *buffer, size_t buffer_size, int64_t rrc_TransactionIdentifier);
+int do_RRCReestablishmentComplete(uint8_t *buffer, size_t buffer_size, int64_t rrc_TransactionIdentifier,
+                                 void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn);
 
 NR_MeasConfig_t *get_MeasConfig(const NR_MeasTiming_t *mt,
                                 int band,

@@ -104,7 +104,6 @@ typedef enum nr_ue_fuzz_hook_action_e {
   NR_UE_HOOK_ACTION_DUPLICATE,
   NR_UE_HOOK_ACTION_REPLAY,
   NR_UE_HOOK_ACTION_DELAY,
-  NR_UE_HOOK_ACTION_MUTATE_TXN,
   NR_UE_HOOK_ACTION_MUTATE_FIELD,
 } nr_ue_fuzz_hook_action_t;
 

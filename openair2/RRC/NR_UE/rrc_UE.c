@@ -60,898 +60,7 @@
 
 static NR_UE_RRC_INST_t *NR_UE_rrc_inst[MAX_NUM_NR_UE_INST] = {0};
 
-static const char *nr_ue_fuzz_hook_msg_name(nr_ue_fuzz_hook_msg_t msg)
-{
-  switch (msg) {
-    case NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE: return "RRCSetupComplete";
-    case NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE: return "SecurityModeComplete";
-    case NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE: return "RRCReconfigurationComplete";
-    case NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE: return "RRCReestablishmentComplete";
-    case NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION: return "UECapabilityInformation";
-    case NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER: return "ULInformationTransfer";
-    case NR_UE_HOOK_MSG_MEASUREMENT_REPORT: return "MeasurementReport";
-    case NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION: return "DL_RRCReconfiguration";
-    case NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND: return "DL_SecurityModeCommand";
-    case NR_UE_HOOK_MSG_DL_UE_CAPABILITY_ENQUIRY: return "DL_UECapabilityEnquiry";
-    case NR_UE_HOOK_MSG_DL_RRC_REESTABLISHMENT: return "DL_RRCReestablishment";
-    case NR_UE_HOOK_MSG_DL_RRC_RELEASE: return "DL_RRCRelease";
-    case NR_UE_HOOK_MSG_NONE:
-    default: return "NONE";
-  }
-}
-
-static const char *nr_ue_fuzz_hook_action_name(nr_ue_fuzz_hook_action_t action)
-{
-  switch (action) {
-    case NR_UE_HOOK_ACTION_DROP: return "drop";
-    case NR_UE_HOOK_ACTION_DUPLICATE: return "duplicate";
-    case NR_UE_HOOK_ACTION_REPLAY: return "replay";
-    case NR_UE_HOOK_ACTION_DELAY: return "delay";
-    case NR_UE_HOOK_ACTION_MUTATE_TXN: return "mutate_txn";
-    case NR_UE_HOOK_ACTION_MUTATE_FIELD: return "mutate_field";
-    case NR_UE_HOOK_ACTION_NONE:
-    default: return "none";
-  }
-}
-
-static const char *nr_ue_fuzz_hook_rrc_state_name(Rrc_State_NR_t state)
-{
-  switch (state) {
-    case RRC_STATE_IDLE_NR: return "IDLE";
-    case RRC_STATE_INACTIVE_NR: return "INACTIVE";
-    case RRC_STATE_CONNECTED_NR: return "CONNECTED";
-    case RRC_STATE_DETACH_NR: return "DETACH";
-    default: return "UNKNOWN";
-  }
-}
-
-static void nr_ue_fuzz_hook_bootstrap_measurement_report(NR_UE_RRC_INST_t *rrc, int gNB_index);
-
-static nr_ue_fuzz_hook_msg_t nr_ue_fuzz_hook_msg_from_name(const char *name)
-{
-  if (!name || *name == '\0')
-    return NR_UE_HOOK_MSG_NONE;
-  if (!strcasecmp(name, "RRCSetupComplete"))
-    return NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE;
-  if (!strcasecmp(name, "SecurityModeComplete"))
-    return NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE;
-  if (!strcasecmp(name, "RRCReconfigurationComplete"))
-    return NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE;
-  if (!strcasecmp(name, "RRCReestablishmentComplete"))
-    return NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE;
-  if (!strcasecmp(name, "UECapabilityInformation"))
-    return NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION;
-  if (!strcasecmp(name, "ULInformationTransfer"))
-    return NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER;
-  if (!strcasecmp(name, "MeasurementReport"))
-    return NR_UE_HOOK_MSG_MEASUREMENT_REPORT;
-  return NR_UE_HOOK_MSG_NONE;
-}
-
-static nr_ue_fuzz_hook_action_t nr_ue_fuzz_hook_action_from_name(const char *name)
-{
-  if (!name || *name == '\0')
-    return NR_UE_HOOK_ACTION_NONE;
-  if (!strcasecmp(name, "drop"))
-    return NR_UE_HOOK_ACTION_DROP;
-  if (!strcasecmp(name, "duplicate"))
-    return NR_UE_HOOK_ACTION_DUPLICATE;
-  if (!strcasecmp(name, "replay"))
-    return NR_UE_HOOK_ACTION_REPLAY;
-  if (!strcasecmp(name, "delay"))
-    return NR_UE_HOOK_ACTION_DELAY;
-  if (!strcasecmp(name, "mutate_txn"))
-    return NR_UE_HOOK_ACTION_MUTATE_TXN;
-  if (!strcasecmp(name, "mutate_field"))
-    return NR_UE_HOOK_ACTION_MUTATE_FIELD;
-  return NR_UE_HOOK_ACTION_NONE;
-}
-
-static void nr_ue_fuzz_hook_copy_text(char *dst, size_t dst_size, const char *src)
-{
-  if (!dst || dst_size == 0)
-    return;
-  if (!src)
-    src = "";
-  snprintf(dst, dst_size, "%s", src);
-}
-
-static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
-{
-  hook->field_mutation.enabled = false;
-  hook->field_mutation.message[0] = '\0';
-  hook->field_mutation.field[0] = '\0';
-  hook->field_mutation.operator_family[0] = '\0';
-  hook->field_mutation.transform_name[0] = '\0';
-  hook->field_mutation.selected_mode[0] = '\0';
-  hook->field_mutation.has_range_min = false;
-  hook->field_mutation.range_min = 0;
-  hook->field_mutation.has_range_max = false;
-  hook->field_mutation.range_max = 0;
-}
-
-static void nr_ue_fuzz_hook_write_timer_state(FILE *fp, const char *name, const NR_timer_t *timer)
-{
-  if (!fp || !name || !timer)
-    return;
-
-  const bool active = nr_timer_is_active(timer);
-  fprintf(fp, "timer.%s=%s\n", name, active ? "running" : "stopped");
-  fprintf(fp, "timer.%s.active=%d\n", name, active ? 1 : 0);
-  fprintf(fp, "timer.%s.elapsed_ms=%u\n", name, nr_timer_elapsed_time(timer));
-  fprintf(fp, "timer.%s.target_ms=%u\n", name, timer->target);
-  fprintf(fp, "timer.%s.remaining_ms=%u\n", name, active ? nr_timer_remaining_time(timer) : 0);
-  fprintf(fp, "timer.%s.suspended=%d\n", name, timer->suspended ? 1 : 0);
-}
-
-static char *nr_ue_fuzz_hook_trim(char *s)
-{
-  while (*s && isspace((unsigned char)*s))
-    s++;
-  size_t len = strlen(s);
-  while (len > 0 && isspace((unsigned char)s[len - 1])) {
-    s[len - 1] = '\0';
-    len--;
-  }
-  return s;
-}
-
-static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
-{
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  if (hook->control_path[0] != '\0')
-    return;
-  snprintf(hook->control_path, sizeof(hook->control_path), "/tmp/oai_nr_ue_hook_%ld.ctl", rrc->ue_id);
-  snprintf(hook->state_path, sizeof(hook->state_path), "/tmp/oai_nr_ue_hook_%ld.state", rrc->ue_id);
-  hook->control_mtime = -1;
-  hook->last_dl_txn = -1;
-  hook->txn_offset = 1;
-  hook->delay_ms = 0;
-  hook->replay_delay_ms = 0;
-  hook->replay_mode[0] = '\0';
-  hook->measurement_bootstrap_enabled = false;
-  hook->measurement_bootstrap_done = false;
-}
-
-static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
-{
-  nr_ue_fuzz_hook_ensure_paths(rrc);
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  NR_UE_Timers_Constants_t *timers = &rrc->timers_and_constants;
-  FILE *fp = fopen(hook->state_path, "w");
-  if (!fp)
-    return;
-  fprintf(fp, "enabled=%d\n", hook->enabled ? 1 : 0);
-  fprintf(fp, "target=%s\n", nr_ue_fuzz_hook_msg_name(hook->target_msg));
-  fprintf(fp, "action=%s\n", nr_ue_fuzz_hook_action_name(hook->action));
-  fprintf(fp, "arm_once=%d\n", hook->arm_once ? 1 : 0);
-  fprintf(fp, "txn_offset=%d\n", hook->txn_offset);
-  fprintf(fp, "delay_ms=%d\n", hook->delay_ms);
-  fprintf(fp, "replay_delay_ms=%d\n", hook->replay_delay_ms);
-  fprintf(fp, "replay_mode=%s\n", hook->replay_mode);
-  fprintf(fp, "measurement_bootstrap_enabled=%d\n", hook->measurement_bootstrap_enabled ? 1 : 0);
-  fprintf(fp, "measurement_bootstrap_done=%d\n", hook->measurement_bootstrap_done ? 1 : 0);
-  fprintf(fp, "hook_fire_count=%lu\n", hook->hook_fire_count);
-  fprintf(fp, "last_hook_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_hook_msg));
-  fprintf(fp, "last_hook_action=%s\n", nr_ue_fuzz_hook_action_name(hook->last_hook_action));
-  fprintf(fp, "last_hook_srb=%d\n", hook->last_hook_srb_id);
-  fprintf(fp, "nr_rrc_state=%s\n", nr_ue_fuzz_hook_rrc_state_name(rrc->nrRrcState));
-  fprintf(fp, "as_security_activated=%d\n", rrc->as_security_activated ? 1 : 0);
-  nr_ue_fuzz_hook_write_timer_state(fp, "T310", &timers->T310);
-  nr_ue_fuzz_hook_write_timer_state(fp, "T300", &timers->T300);
-  nr_ue_fuzz_hook_write_timer_state(fp, "T301", &timers->T301);
-  nr_ue_fuzz_hook_write_timer_state(fp, "T304", &timers->T304);
-  nr_ue_fuzz_hook_write_timer_state(fp, "T311", &timers->T311);
-  nr_ue_fuzz_hook_write_timer_state(fp, "T319", &timers->T319);
-  nr_ue_fuzz_hook_write_timer_state(fp, "T320", &timers->T320);
-  nr_ue_fuzz_hook_write_timer_state(fp, "T321", &timers->T321);
-  fprintf(fp, "last_dl_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_dl_msg));
-  fprintf(fp, "last_dl_txn=%d\n", hook->last_dl_txn);
-  fprintf(fp, "seen_reconfiguration=%d\n", hook->seen_reconfiguration ? 1 : 0);
-  fprintf(fp, "seen_security_mode_command=%d\n", hook->seen_security_mode_command ? 1 : 0);
-  fprintf(fp, "last_ul_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_ul_msg));
-  fprintf(fp, "last_ul_srb=%d\n", hook->last_ul_srb_id);
-  fprintf(fp, "last_ul_size=%d\n", hook->last_ul_size);
-  fprintf(fp, "field_mutation_enabled=%d\n", hook->field_mutation.enabled ? 1 : 0);
-  fprintf(fp, "field_mutation_message=%s\n", hook->field_mutation.message);
-  fprintf(fp, "field_mutation_field=%s\n", hook->field_mutation.field);
-  fprintf(fp, "field_mutation_operator_family=%s\n", hook->field_mutation.operator_family);
-  fprintf(fp, "field_mutation_transform=%s\n", hook->field_mutation.transform_name);
-  fprintf(fp, "field_mutation_selected_mode=%s\n", hook->field_mutation.selected_mode);
-  fprintf(fp, "field_mutation_value_space_minimum=%d\n", hook->field_mutation.has_range_min ? hook->field_mutation.range_min : 0);
-  fprintf(fp, "field_mutation_value_space_maximum=%d\n", hook->field_mutation.has_range_max ? hook->field_mutation.range_max : 0);
-  fclose(fp);
-}
-
-static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
-{
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  hook->enabled = false;
-  hook->arm_once = false;
-  hook->target_msg = NR_UE_HOOK_MSG_NONE;
-  hook->action = NR_UE_HOOK_ACTION_NONE;
-  hook->txn_offset = 1;
-  hook->delay_ms = 0;
-  hook->replay_delay_ms = 0;
-  hook->replay_mode[0] = '\0';
-  hook->measurement_bootstrap_enabled = false;
-  hook->measurement_bootstrap_done = false;
-  nr_ue_fuzz_hook_reset_field_mutation(hook);
-}
-
-static void nr_ue_fuzz_hook_disarm_persistent(NR_UE_RRC_INST_t *rrc)
-{
-  nr_ue_fuzz_hook_ensure_paths(rrc);
-  nr_ue_fuzz_hook_disarm(rrc);
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  if (unlink(hook->control_path) != 0 && errno != ENOENT)
-    LOG_W(NR_RRC, "[UE %ld][HOOK] failed to remove ctl %s: %s\n", rrc->ue_id, hook->control_path, strerror(errno));
-  hook->control_mtime = -1;
-}
-
-static void nr_ue_fuzz_hook_record_fire(NR_UE_RRC_INST_t *rrc,
-                                        nr_ue_fuzz_hook_msg_t msg,
-                                        nr_ue_fuzz_hook_action_t action,
-                                        int srb_id)
-{
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  hook->hook_fire_count++;
-  hook->last_hook_msg = msg;
-  hook->last_hook_action = action;
-  hook->last_hook_srb_id = srb_id;
-}
-
-static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
-{
-  nr_ue_fuzz_hook_ensure_paths(rrc);
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  struct stat st = {0};
-  if (stat(hook->control_path, &st) != 0 || hook->control_mtime == st.st_mtime)
-    return;
-
-  hook->control_mtime = st.st_mtime;
-  hook->enabled = false;
-  hook->arm_once = false;
-  hook->target_msg = NR_UE_HOOK_MSG_NONE;
-  hook->action = NR_UE_HOOK_ACTION_NONE;
-  hook->txn_offset = 1;
-  hook->delay_ms = 0;
-  hook->replay_delay_ms = 0;
-  hook->replay_mode[0] = '\0';
-  hook->measurement_bootstrap_enabled = false;
-  hook->measurement_bootstrap_done = false;
-  nr_ue_fuzz_hook_reset_field_mutation(hook);
-
-  FILE *fp = fopen(hook->control_path, "r");
-  if (!fp)
-    return;
-
-  char line[256];
-  while (fgets(line, sizeof(line), fp) != NULL) {
-    char *trimmed = nr_ue_fuzz_hook_trim(line);
-    if (*trimmed == '\0' || *trimmed == '#')
-      continue;
-    char *eq = strchr(trimmed, '=');
-    if (!eq)
-      continue;
-    *eq = '\0';
-    char *key = nr_ue_fuzz_hook_trim(trimmed);
-    char *value = nr_ue_fuzz_hook_trim(eq + 1);
-
-    if (!strcasecmp(key, "enabled"))
-      hook->enabled = atoi(value) != 0;
-    else if (!strcasecmp(key, "target"))
-      hook->target_msg = nr_ue_fuzz_hook_msg_from_name(value);
-    else if (!strcasecmp(key, "action"))
-      hook->action = nr_ue_fuzz_hook_action_from_name(value);
-    else if (!strcasecmp(key, "arm_once"))
-      hook->arm_once = atoi(value) != 0;
-    else if (!strcasecmp(key, "txn_offset"))
-      hook->txn_offset = atoi(value);
-    else if (!strcasecmp(key, "delay_ms"))
-      hook->delay_ms = atoi(value);
-    else if (!strcasecmp(key, "replay_delay_ms"))
-      hook->replay_delay_ms = atoi(value);
-    else if (!strcasecmp(key, "replay_mode"))
-      nr_ue_fuzz_hook_copy_text(hook->replay_mode, sizeof(hook->replay_mode), value);
-    else if (!strcasecmp(key, "measurement_bootstrap") || !strcasecmp(key, "measurement_bootstrap_enabled"))
-      hook->measurement_bootstrap_enabled = atoi(value) != 0;
-    else if (!strcasecmp(key, "field_mutation_enabled"))
-      hook->field_mutation.enabled = atoi(value) != 0;
-    else if (!strcasecmp(key, "field_mutation_message"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.message, sizeof(hook->field_mutation.message), value);
-    else if (!strcasecmp(key, "field_mutation_field"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.field, sizeof(hook->field_mutation.field), value);
-    else if (!strcasecmp(key, "field_mutation_operator_family"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
-    else if (!strcasecmp(key, "field_mutation_operator")) {
-      if (hook->field_mutation.operator_family[0] == '\0')  /* only fallback when operator_family not yet set */
-        nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
-    }
-    else if (!strcasecmp(key, "field_mutation_transform"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.transform_name, sizeof(hook->field_mutation.transform_name), value);
-    else if (!strcasecmp(key, "field_mutation_selected_mode"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.selected_mode, sizeof(hook->field_mutation.selected_mode), value);
-    else if (!strcasecmp(key, "field_mutation_value_space_minimum")) {
-      hook->field_mutation.range_min = atoi(value);
-      hook->field_mutation.has_range_min = true;
-    }
-    else if (!strcasecmp(key, "field_mutation_value_space_maximum")) {
-      hook->field_mutation.range_max = atoi(value);
-      hook->field_mutation.has_range_max = true;
-    }
-  }
-  fclose(fp);
-
-  LOG_I(NR_RRC,
-        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d operator_family=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
-        rrc->ue_id,
-        hook->enabled ? 1 : 0,
-        nr_ue_fuzz_hook_msg_name(hook->target_msg),
-        nr_ue_fuzz_hook_action_name(hook->action),
-        hook->arm_once ? 1 : 0,
-        hook->txn_offset,
-        hook->delay_ms,
-        hook->replay_delay_ms,
-        hook->replay_mode,
-        hook->measurement_bootstrap_enabled ? 1 : 0,
-        hook->measurement_bootstrap_done ? 1 : 0,
-        hook->field_mutation.operator_family,
-        hook->field_mutation.transform_name,
-        hook->field_mutation.field,
-        hook->field_mutation.selected_mode,
-        hook->field_mutation.has_range_min ? hook->field_mutation.range_min : 0,
-        hook->field_mutation.has_range_max ? hook->field_mutation.range_max : 0);
-  nr_ue_fuzz_hook_write_state(rrc);
-}
-
-static void nr_ue_fuzz_hook_record_dl(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg, int txn)
-{
-  nr_ue_fuzz_hook_ensure_paths(rrc);
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  hook->last_dl_msg = msg;
-  hook->last_dl_txn = txn;
-  if (msg == NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION)
-    hook->seen_reconfiguration = true;
-  if (msg == NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND)
-    hook->seen_security_mode_command = true;
-  nr_ue_fuzz_hook_write_state(rrc);
-}
-
-static void nr_ue_fuzz_hook_cache_ul(NR_UE_RRC_INST_t *rrc,
-                                     nr_ue_fuzz_hook_msg_t msg,
-                                     int srb_id,
-                                     const uint8_t *buffer,
-                                     int size)
-{
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  hook->last_ul_msg = msg;
-  hook->last_ul_srb_id = srb_id;
-  hook->last_ul_size = size > NR_RRC_BUF_SIZE ? NR_RRC_BUF_SIZE : size;
-  if (hook->last_ul_size > 0)
-    memcpy(hook->last_ul_pdu, buffer, hook->last_ul_size);
-  nr_ue_fuzz_hook_write_state(rrc);
-}
-
-static void nr_ue_fuzz_hook_sleep_ms(int delay_ms)
-{
-  if (delay_ms <= 0)
-    return;
-  usleep((useconds_t)delay_ms * 1000);
-}
-
-static int nr_ue_fuzz_hook_wrap_to_range(int value, int min_value, int max_value)
-{
-  if (max_value < min_value) {
-    const int tmp = min_value;
-    min_value = max_value;
-    max_value = tmp;
-  }
-
-  const long span = (long)max_value - (long)min_value + 1;
-  if (span <= 0)
-    return min_value;
-
-  long normalized = ((long)value - (long)min_value) % span;
-  if (normalized < 0)
-    normalized += span;
-  return (int)((long)min_value + normalized);
-}
-
-static int nr_ue_fuzz_hook_pick_integer_transform(const nr_ue_fuzz_hook_state_t *hook,
-                                                  int current_value,
-                                                  int fallback_min,
-                                                  int fallback_max)
-{
-  const nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
-  const int min_value = mutation->has_range_min ? mutation->range_min : fallback_min;
-  const int max_value = mutation->has_range_max ? mutation->range_max : fallback_max;
-  const int fallback_offset = hook->txn_offset == 0 ? 1 : hook->txn_offset;
-  const char *transform = mutation->transform_name;
-  const char *mode = mutation->selected_mode;
-
-  if (!transform || *transform == '\0')
-    return nr_ue_fuzz_hook_wrap_to_range(current_value + fallback_offset, min_value, max_value);
-
-  if (!strcasecmp(transform, "runtime_echoed_mismatch")) {
-    int reference = hook->last_dl_txn >= 0 ? hook->last_dl_txn : current_value;
-
-    if (mode && *mode) {
-      if (!strcasecmp(mode, "boundary_min")) {
-        int candidate = min_value;
-        if (candidate == reference && max_value > min_value)
-          candidate = max_value;
-        return candidate;
-      }
-      if (!strcasecmp(mode, "boundary_max")) {
-        int candidate = max_value;
-        if (candidate == reference && max_value > min_value)
-          candidate = min_value;
-        return candidate;
-      }
-    }
-
-    int candidate = nr_ue_fuzz_hook_wrap_to_range(reference + fallback_offset, min_value, max_value);
-    if (candidate == reference && max_value > min_value)
-      candidate = nr_ue_fuzz_hook_wrap_to_range(reference + fallback_offset + 1, min_value, max_value);
-    return candidate;
-  }
-
-  if (!strcasecmp(transform, "domain_value_selection")) {
-    if (mode && *mode) {
-      if (!strcasecmp(mode, "boundary_min"))
-        return min_value;
-      if (!strcasecmp(mode, "boundary_max"))
-        return max_value;
-    }
-    return nr_ue_fuzz_hook_wrap_to_range(current_value + fallback_offset, min_value, max_value);
-  }
-
-  return nr_ue_fuzz_hook_wrap_to_range(current_value + fallback_offset, min_value, max_value);
-}
-
-static uint8_t nr_ue_fuzz_hook_maybe_mutate_txn(NR_UE_RRC_INST_t *rrc,
-                                                nr_ue_fuzz_hook_msg_t msg,
-                                                uint8_t txn)
-{
-  nr_ue_fuzz_hook_reload_config(rrc);
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  if (!hook->enabled || hook->target_msg != msg || hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN)
-    return txn;
-
-  int mutated = 0;
-  if (hook->field_mutation.enabled && !strcasecmp(hook->field_mutation.operator_family, "integer_transform")) {
-    mutated = nr_ue_fuzz_hook_pick_integer_transform(hook, (int)txn, 0, 3);
-    LOG_W(NR_RRC,
-          "[UE %ld][HOOK] integer transform for %s field=%s transform=%s mode=%s: %u -> %d\n",
-          rrc->ue_id,
-          nr_ue_fuzz_hook_msg_name(msg),
-          hook->field_mutation.field,
-          hook->field_mutation.transform_name,
-          hook->field_mutation.selected_mode,
-          txn,
-          mutated);
-  } else {
-    mutated = nr_ue_fuzz_hook_wrap_to_range((int)txn + hook->txn_offset, 0, 3);
-    LOG_W(NR_RRC,
-          "[UE %ld][HOOK] legacy txn mutation for %s: %u -> %d\n",
-          rrc->ue_id,
-          nr_ue_fuzz_hook_msg_name(msg),
-          txn,
-          mutated);
-  }
-
-  nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_MUTATE_TXN, -1);
-  if (hook->arm_once)
-    nr_ue_fuzz_hook_disarm_persistent(rrc);
-  nr_ue_fuzz_hook_write_state(rrc);
-  return (uint8_t)mutated;
-}
-
-typedef bool (*nr_ue_fuzz_hook_field_adapter_fn_t)(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode);
-
-typedef struct nr_ue_fuzz_hook_field_adapter_s {
-  nr_ue_fuzz_hook_msg_t target_msg;
-  const char *message_name;
-  const char *field_name;
-  const char *operator_family;
-  nr_ue_fuzz_hook_field_adapter_fn_t apply;
-} nr_ue_fuzz_hook_field_adapter_t;
-
-static bool nr_ue_fuzz_hook_text_eq(const char *lhs, const char *rhs)
-{
-  if (!lhs || !rhs)
-    return false;
-  return !strcasecmp(lhs, rhs);
-}
-
-typedef long **(*nr_ue_fuzz_hook_optional_enum_locator_fn_t)(NR_RRCReconfigurationComplete_t *reconfComplete, bool create);
-typedef BOOLEAN_t **(*nr_ue_fuzz_hook_optional_boolean_locator_fn_t)(NR_RRCReconfigurationComplete_t *reconfComplete, bool create);
-
-static NR_RRCReconfigurationComplete_v1610_IEs_t *nr_ue_fuzz_hook_get_reconfig_complete_v1610(NR_RRCReconfigurationComplete_t *reconfComplete)
-{
-  if (!reconfComplete)
-    return NULL;
-
-  NR_RRCReconfigurationComplete_IEs_t *ies = reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete;
-  if (!ies || !ies->nonCriticalExtension || !ies->nonCriticalExtension->nonCriticalExtension
-      || !ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension) {
-    return NULL;
-  }
-
-  return ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension;
-}
-
-static NR_RRCReconfigurationComplete_v1610_IEs_t *nr_ue_fuzz_hook_ensure_reconfig_complete_v1610(NR_RRCReconfigurationComplete_t *reconfComplete)
-{
-  NR_RRCReconfigurationComplete_IEs_t *ies = reconfComplete->criticalExtensions.choice.rrcReconfigurationComplete;
-  if (!ies->nonCriticalExtension)
-    ies->nonCriticalExtension = CALLOC(1, sizeof(*ies->nonCriticalExtension));
-  if (!ies->nonCriticalExtension->nonCriticalExtension)
-    ies->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*ies->nonCriticalExtension->nonCriticalExtension));
-  if (!ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
-    ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension =
-        CALLOC(1, sizeof(*ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
-  return ies->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension;
-}
-
-static NR_UE_MeasurementsAvailable_r16_t *nr_ue_fuzz_hook_ensure_ue_measurements_available(NR_RRCReconfigurationComplete_t *reconfComplete)
-{
-  NR_RRCReconfigurationComplete_v1610_IEs_t *v1610 = nr_ue_fuzz_hook_ensure_reconfig_complete_v1610(reconfComplete);
-  if (!v1610->ue_MeasurementsAvailable_r16)
-    v1610->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*v1610->ue_MeasurementsAvailable_r16));
-  return v1610->ue_MeasurementsAvailable_r16;
-}
-
-static NR_UE_MeasurementsAvailable_r16_t *nr_ue_fuzz_hook_get_ue_measurements_available(NR_RRCReconfigurationComplete_t *reconfComplete)
-{
-  NR_RRCReconfigurationComplete_v1610_IEs_t *v1610 = nr_ue_fuzz_hook_get_reconfig_complete_v1610(reconfComplete);
-  return v1610 ? v1610->ue_MeasurementsAvailable_r16 : NULL;
-}
-
-static long **nr_ue_fuzz_hook_locate_logmeasavailable_slot(NR_RRCReconfigurationComplete_t *reconfComplete, bool create)
-{
-  NR_UE_MeasurementsAvailable_r16_t *meas =
-      create ? nr_ue_fuzz_hook_ensure_ue_measurements_available(reconfComplete)
-             : nr_ue_fuzz_hook_get_ue_measurements_available(reconfComplete);
-  if (!meas)
-    return NULL;
-  return &meas->logMeasAvailable_r16;
-}
-
-static BOOLEAN_t **nr_ue_fuzz_hook_locate_siglogmeasconfigavailable_slot(NR_RRCReconfigurationComplete_t *reconfComplete, bool create)
-{
-  NR_UE_MeasurementsAvailable_r16_t *meas =
-      create ? nr_ue_fuzz_hook_ensure_ue_measurements_available(reconfComplete)
-             : nr_ue_fuzz_hook_get_ue_measurements_available(reconfComplete);
-  if (!meas)
-    return NULL;
-
-  if (create && !meas->ext1)
-    meas->ext1 = CALLOC(1, sizeof(*meas->ext1));
-  if (!meas->ext1)
-    return NULL;
-
-  return &meas->ext1->sigLogMeasConfigAvailable_r17;
-}
-
-static bool nr_ue_fuzz_hook_apply_optional_singleton_enum(NR_UE_RRC_INST_t *rrc,
-                                                          NR_RRCReconfigurationComplete_t *reconfComplete,
-                                                          const char *mode,
-                                                          const char *default_mode,
-                                                          const char *field_name,
-                                                          nr_ue_fuzz_hook_optional_enum_locator_fn_t locate_slot,
-                                                          long true_value)
-{
-  if (!locate_slot)
-    return false;
-
-  if (!mode || !*mode)
-    mode = default_mode;
-
-  if (!strcasecmp(mode, "force_present_true")) {
-    long **slot = locate_slot(reconfComplete, true);
-    if (!slot)
-      return false;
-    if (!*slot)
-      *slot = CALLOC(1, sizeof(**slot));
-    **slot = true_value;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force %s in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
-    return true;
-  }
-
-  if (!strcasecmp(mode, "omit")) {
-    long **slot = locate_slot(reconfComplete, false);
-    if (!slot || !*slot)
-      return false;
-    free(*slot);
-    *slot = NULL;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] omit %s in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
-    return true;
-  }
-
-  return false;
-}
-
-static bool nr_ue_fuzz_hook_apply_optional_boolean_assignment(NR_UE_RRC_INST_t *rrc,
-                                                              NR_RRCReconfigurationComplete_t *reconfComplete,
-                                                              const char *mode,
-                                                              const char *default_mode,
-                                                              const char *field_name,
-                                                              nr_ue_fuzz_hook_optional_boolean_locator_fn_t locate_slot)
-{
-  if (!locate_slot)
-    return false;
-
-  if (!mode || !*mode)
-    mode = default_mode;
-
-  if (!strcasecmp(mode, "force_true")) {
-    BOOLEAN_t **slot = locate_slot(reconfComplete, true);
-    if (!slot)
-      return false;
-    if (!*slot)
-      *slot = CALLOC(1, sizeof(**slot));
-    **slot = 1;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force %s=true in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
-    return true;
-  }
-
-  if (!strcasecmp(mode, "force_false")) {
-    BOOLEAN_t **slot = locate_slot(reconfComplete, true);
-    if (!slot)
-      return false;
-    if (!*slot)
-      *slot = CALLOC(1, sizeof(**slot));
-    **slot = 0;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force %s=false in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
-    return true;
-  }
-
-  if (!strcasecmp(mode, "omit")) {
-    BOOLEAN_t **slot = locate_slot(reconfComplete, false);
-    if (!slot || !*slot)
-      return false;
-    free(*slot);
-    *slot = NULL;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] omit %s in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
-    return true;
-  }
-
-  return false;
-}
-
-static bool nr_ue_fuzz_hook_apply_logmeas_presence_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
-{
-  return nr_ue_fuzz_hook_apply_optional_singleton_enum(
-      rrc,
-      (NR_RRCReconfigurationComplete_t *)payload,
-      mode,
-      "force_present_true",
-      "logMeasAvailable",
-      nr_ue_fuzz_hook_locate_logmeasavailable_slot,
-      NR_UE_MeasurementsAvailable_r16__logMeasAvailable_r16_true);
-}
-
-static bool nr_ue_fuzz_hook_apply_siglog_boolean_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
-{
-  return nr_ue_fuzz_hook_apply_optional_boolean_assignment(
-      rrc,
-      (NR_RRCReconfigurationComplete_t *)payload,
-      mode,
-      "force_true",
-      "sigLogMeasConfigAvailable",
-      nr_ue_fuzz_hook_locate_siglogmeasconfigavailable_slot);
-}
-
-static const nr_ue_fuzz_hook_field_adapter_t nr_ue_fuzz_hook_field_adapters[] = {
-    {
-        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
-        .message_name = "RRCReconfigurationComplete",
-        .field_name = "logMeasAvailable",
-        .operator_family = "optional_presence_toggle",
-        .apply = nr_ue_fuzz_hook_apply_logmeas_presence_adapter,
-    },
-    {
-        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
-        .message_name = "RRCReconfigurationComplete",
-        .field_name = "sigLogMeasConfigAvailable",
-        .operator_family = "optional_boolean_assignment",
-        .apply = nr_ue_fuzz_hook_apply_siglog_boolean_adapter,
-    },
-};
-
-// 引入自动生成的代码文件 (零配置挂载黑科技)
-#include "nr_ue_fuzz_hook_auto_generated.inc.c"
-
-static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter(const nr_ue_fuzz_hook_state_t *hook)
-{
-  if (!hook || !hook->field_mutation.enabled)
-    return NULL;
-
-  // 1. 优先在人工手工编写的高级 Adapter 数组中查找
-  for (size_t i = 0; i < sizeof(nr_ue_fuzz_hook_field_adapters) / sizeof(nr_ue_fuzz_hook_field_adapters[0]); ++i) {
-    const nr_ue_fuzz_hook_field_adapter_t *adapter = &nr_ue_fuzz_hook_field_adapters[i];
-    if (adapter->target_msg != hook->target_msg)
-      continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.message, adapter->message_name))
-      continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.field, adapter->field_name))
-      continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_family, adapter->operator_family))
-      continue;
-    return adapter;
-  }
-
-  // 2. 如果手工配置里没写，就去 Python 自动生成的流水线数组里找
-  return nr_ue_fuzz_hook_find_auto_field_adapter(hook);
-}
-
-static bool nr_ue_fuzz_hook_try_apply_field_mutation(NR_UE_RRC_INST_t *rrc,
-                                                      nr_ue_fuzz_hook_msg_t target_msg,
-                                                      void *payload)
-{
-  nr_ue_fuzz_hook_reload_config(rrc);
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  if (!hook->enabled
-      || hook->target_msg != target_msg
-      || hook->action != NR_UE_HOOK_ACTION_MUTATE_FIELD
-      || !hook->field_mutation.enabled) {
-    return false;
-  }
-
-  const nr_ue_fuzz_hook_field_adapter_t *adapter = nr_ue_fuzz_hook_find_field_adapter(hook);
-  if (!adapter) {
-    LOG_W(NR_RRC,
-          "[UE %ld][HOOK] no field adapter for target=%s message=%s field=%s operator_family=%s\n",
-          rrc->ue_id,
-          nr_ue_fuzz_hook_msg_name(hook->target_msg),
-          hook->field_mutation.message,
-          hook->field_mutation.field,
-          hook->field_mutation.operator_family);
-    return false;
-  }
-
-  bool changed = adapter->apply(rrc, payload, hook->field_mutation.selected_mode);
-
-  if (!changed)
-    return false;
-
-  nr_ue_fuzz_hook_record_fire(rrc, target_msg, NR_UE_HOOK_ACTION_MUTATE_FIELD, -1);
-  if (hook->arm_once)
-    nr_ue_fuzz_hook_disarm_persistent(rrc);
-  nr_ue_fuzz_hook_write_state(rrc);
-  return true;
-}
-
-static bool nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(NR_UE_RRC_INST_t *rrc,
-                                                                         NR_RRCReconfigurationComplete_t *reconfComplete)
-{
-  return nr_ue_fuzz_hook_try_apply_field_mutation(
-      rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, reconfComplete);
-}
-
-static bool nr_ue_fuzz_hook_apply_measurement_report_field_mutation(void *context,
-                                                                    NR_MeasurementReport_t *measurement_report)
-{
-  if (!context || !measurement_report)
-    return false;
-
-  return nr_ue_fuzz_hook_try_apply_field_mutation((NR_UE_RRC_INST_t *)context,
-                                                  NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
-                                                  measurement_report);
-}
-
-static int nr_ue_fuzz_hook_encode_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc,
-                                                             uint8_t *buffer,
-                                                             size_t buffer_size,
-                                                             const uint8_t txn)
-{
-  nr_ue_fuzz_hook_reload_config(rrc);
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  const nr_ue_fuzz_hook_field_adapter_t *adapter = nr_ue_fuzz_hook_find_field_adapter(hook);
-  const bool wants_mutate_field = hook->enabled
-                                  && hook->target_msg == NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE
-                                  && hook->action == NR_UE_HOOK_ACTION_MUTATE_FIELD
-                                  && hook->field_mutation.enabled
-                                  && adapter != NULL;
-  if (!wants_mutate_field)
-    return do_NR_RRCReconfigurationComplete(buffer, buffer_size, txn);
-
-  NR_UL_DCCH_Message_t ul_dcch_msg = {0};
-  ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
-  asn1cCalloc(ul_dcch_msg.message.choice.c1, c1);
-  c1->present = NR_UL_DCCH_MessageType__c1_PR_rrcReconfigurationComplete;
-  asn1cCalloc(c1->choice.rrcReconfigurationComplete, reconfCompleteMsg);
-  reconfCompleteMsg->rrc_TransactionIdentifier = txn;
-  reconfCompleteMsg->criticalExtensions.present = NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete;
-  asn1cCalloc(reconfCompleteMsg->criticalExtensions.choice.rrcReconfigurationComplete, extension);
-  extension->nonCriticalExtension = NULL;
-  extension->lateNonCriticalExtension = NULL;
-
-  nr_ue_fuzz_hook_maybe_apply_reconfig_complete_field_mutation(rrc, reconfCompleteMsg);
-
-  asn_enc_rval_t enc_rval =
-      uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, buffer_size);
-  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
-  LOG_I(NR_RRC,
-        "rrcReconfigurationComplete Encoded %zd bits (%zd bytes) with field mutation path\n",
-        enc_rval.encoded,
-        (enc_rval.encoded + 7) / 8);
-  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
-  return (enc_rval.encoded + 7) / 8;
-}
-
-static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc,
-                                     nr_ue_fuzz_hook_msg_t msg,
-                                     int srb_id,
-                                     uint8_t *buffer,
-                                     int size)
-{
-  nr_ue_fuzz_hook_reload_config(rrc);
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  const bool hit_target = hook->enabled && hook->target_msg == msg;
-
-  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DROP) {
-    LOG_W(NR_RRC, "[UE %ld][HOOK] drop %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
-    nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
-    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DROP, srb_id);
-    if (hook->arm_once)
-      nr_ue_fuzz_hook_disarm_persistent(rrc);
-    nr_ue_fuzz_hook_write_state(rrc);
-    return;
-  }
-
-  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DELAY) {
-    const int delay_ms = hook->delay_ms > 0 ? hook->delay_ms : 50;
-    LOG_W(NR_RRC,
-          "[UE %ld][HOOK] delay %s on SRB%d by %d ms\n",
-          rrc->ue_id,
-          nr_ue_fuzz_hook_msg_name(msg),
-          srb_id,
-          delay_ms);
-    nr_ue_fuzz_hook_sleep_ms(delay_ms);
-  }
-
-  nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
-  nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
-
-  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DELAY) {
-    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DELAY, srb_id);
-    if (hook->arm_once)
-      nr_ue_fuzz_hook_disarm_persistent(rrc);
-    nr_ue_fuzz_hook_write_state(rrc);
-    return;
-  }
-
-  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DUPLICATE) {
-    LOG_W(NR_RRC, "[UE %ld][HOOK] duplicate %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
-    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DUPLICATE, srb_id);
-    nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
-    if (hook->arm_once)
-      nr_ue_fuzz_hook_disarm_persistent(rrc);
-    nr_ue_fuzz_hook_write_state(rrc);
-    return;
-  }
-
-  if (hit_target && hook->action == NR_UE_HOOK_ACTION_REPLAY) {
-    const int replay_delay_ms = hook->replay_delay_ms > 0 ? hook->replay_delay_ms : 0;
-    const char *replay_mode = hook->replay_mode[0] != '\0' ? hook->replay_mode : "immediate_replay";
-    LOG_W(NR_RRC,
-          "[UE %ld][HOOK] replay %s on SRB%d mode=%s delay_ms=%d\n",
-          rrc->ue_id,
-          nr_ue_fuzz_hook_msg_name(msg),
-          srb_id,
-          replay_mode,
-          replay_delay_ms);
-    nr_ue_fuzz_hook_sleep_ms(replay_delay_ms);
-    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_REPLAY, srb_id);
-    nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, hook->last_ul_size, hook->last_ul_pdu, deliver_pdu_srb_rlc, NULL);
-    if (hook->arm_once)
-      nr_ue_fuzz_hook_disarm_persistent(rrc);
-    nr_ue_fuzz_hook_write_state(rrc);
-  }
-}
+#include "nr_ue_fuzz_hook.inc.c"
 /* NAS Attach request with IMSI */
 static const char nr_nas_attach_req_imsi_dummy_NSA_case[] = {
     0x07,
@@ -2991,7 +2100,6 @@ static void rrc_ue_generate_RRCSetupComplete(NR_UE_RRC_INST_t *rrc, const uint8_
 {
   uint8_t buffer[100];
   as_nas_info_t initialNasMsg = {0};
-  const uint8_t txn = nr_ue_fuzz_hook_maybe_mutate_txn(rrc, NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, Transaction_id);
 
   if (IS_SA_MODE(get_softmodem_params())) {
     /* 3GPP TS 38.331:
@@ -3032,12 +2140,14 @@ static void rrc_ue_generate_RRCSetupComplete(NR_UE_RRC_INST_t *rrc, const uint8_
   // Encode RRCSetupComplete
   int size = do_RRCSetupComplete(buffer,
                                  sizeof(buffer),
-                                 txn,
+                                 Transaction_id,
                                  rrc->selected_plmn_identity,
                                  rrc->ra_trigger == RRC_CONNECTION_SETUP,
                                  rrc->fiveG_S_TMSI,
                                  (const uint32_t)initialNasMsg.length,
-                                 (const char*)initialNasMsg.nas_data);
+                                 (const char*)initialNasMsg.nas_data,
+                                 rrc,
+                                 nr_ue_fuzz_hook_mutate_ul_dcch);
 
   // Free dynamically allocated data (heap allocated in both SA and NSA)
   free(initialNasMsg.nas_data);
@@ -3271,8 +2381,6 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
                                                   int msg_size,
                                                   const nr_pdcp_integrity_data_t *msg_integrity)
 {
-  const uint8_t smc_txn =
-      nr_ue_fuzz_hook_maybe_mutate_txn(ue_rrc, NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE, securityModeCommand->rrc_TransactionIdentifier);
   LOG_I(NR_RRC, "Receiving from SRB1 (DL-DCCH), Processing securityModeCommand\n");
 
   AssertFatal(securityModeCommand->criticalExtensions.present == NR_SecurityModeCommand__criticalExtensions_PR_securityModeCommand,
@@ -3370,7 +2478,7 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
   c1->present = NR_UL_DCCH_MessageType__c1_PR_securityModeComplete;
 
   asn1cCalloc(c1->choice.securityModeComplete, modeComplete);
-  modeComplete->rrc_TransactionIdentifier = smc_txn;
+  modeComplete->rrc_TransactionIdentifier = securityModeCommand->rrc_TransactionIdentifier;
   modeComplete->criticalExtensions.present = NR_SecurityModeComplete__criticalExtensions_PR_securityModeComplete;
   asn1cCalloc(modeComplete->criticalExtensions.choice.securityModeComplete, ext);
   ext->nonCriticalExtension = NULL;
@@ -3378,6 +2486,7 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
         "Receiving from SRB1 (DL-DCCH), encoding securityModeComplete, rrc_TransactionIdentifier: %ld\n",
         securityModeCommand->rrc_TransactionIdentifier);
   uint8_t buffer[200];
+  nr_ue_fuzz_hook_mutate_ul_dcch(ue_rrc, &ul_dcch_msg);
   asn_enc_rval_t enc_rval =
       uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, sizeof(buffer));
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %jd)!\n", enc_rval.failed_type->name, enc_rval.encoded);
@@ -3414,9 +2523,8 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
 static void nr_rrc_ue_generate_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc, const int srb_id, const uint8_t Transaction_id)
 {
   uint8_t buffer[32];
-  const uint8_t txn =
-      nr_ue_fuzz_hook_maybe_mutate_txn(rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, Transaction_id);
-  int size = nr_ue_fuzz_hook_encode_RRCReconfigurationComplete(rrc, buffer, sizeof(buffer), txn);
+  int size = do_NR_RRCReconfigurationComplete(buffer, sizeof(buffer), Transaction_id,
+                                             rrc, nr_ue_fuzz_hook_mutate_ul_dcch);
   LOG_I(NR_RRC, " Logical Channel UL-DCCH (SRB1), Generating RRCReconfigurationComplete (bytes %d)\n", size);
   AssertFatal(srb_id == 1 || srb_id == 3, "Invalid SRB ID %d\n", srb_id);
   LOG_D(RLC,
@@ -3432,10 +2540,8 @@ static void nr_rrc_ue_generate_rrcReestablishmentComplete(const NR_UE_RRC_INST_t
 {
   NR_UE_RRC_INST_t *rrc_mut = (NR_UE_RRC_INST_t *)rrc;
   uint8_t buffer[NR_RRC_BUF_SIZE] = {0};
-  const uint8_t txn = nr_ue_fuzz_hook_maybe_mutate_txn(rrc_mut,
-                                                       NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE,
-                                                       rrcReestablishment->rrc_TransactionIdentifier);
-  int size = do_RRCReestablishmentComplete(buffer, NR_RRC_BUF_SIZE, txn);
+  int size = do_RRCReestablishmentComplete(buffer, NR_RRC_BUF_SIZE, rrcReestablishment->rrc_TransactionIdentifier,
+                                          rrc_mut, nr_ue_fuzz_hook_mutate_ul_dcch);
   LOG_I(NR_RRC, "[RAPROC] Logical Channel UL-DCCH (SRB1), Generating RRCReestablishmentComplete (bytes %d)\n", size);
   int srb_id = 1; // RRC re-establishment complete on SRB1
   nr_ue_fuzz_hook_send_srb(rrc_mut, NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE, srb_id, buffer, size);
@@ -3508,15 +2614,13 @@ static void nr_rrc_ue_process_rrcReestablishment(NR_UE_RRC_INST_t *rrc,
 static void nr_rrc_ue_process_ueCapabilityEnquiry(NR_UE_RRC_INST_t *rrc, NR_UECapabilityEnquiry_t *UECapabilityEnquiry)
 {
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
-  const uint8_t uecap_txn =
-      nr_ue_fuzz_hook_maybe_mutate_txn(rrc, NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION, UECapabilityEnquiry->rrc_TransactionIdentifier);
   LOG_I(NR_RRC, "Receiving from SRB1 (DL-DCCH), Processing UECapabilityEnquiry\n");
 
   ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
   asn1cCalloc(ul_dcch_msg.message.choice.c1, c1);
   c1->present = NR_UL_DCCH_MessageType__c1_PR_ueCapabilityInformation;
   asn1cCalloc(c1->choice.ueCapabilityInformation, info);
-  info->rrc_TransactionIdentifier = uecap_txn;
+  info->rrc_TransactionIdentifier = UECapabilityEnquiry->rrc_TransactionIdentifier;
   if (!rrc->UECap.UE_NR_Capability) {
     rrc->UECap.UE_NR_Capability = CALLOC(1, sizeof(NR_UE_NR_Capability_t));
     asn1cSequenceAdd(rrc->UECap.UE_NR_Capability->rf_Parameters.supportedBandListNR.list, NR_BandNR_t, nr_bandnr);
@@ -3551,6 +2655,7 @@ static void nr_rrc_ue_process_ueCapabilityEnquiry(NR_UE_RRC_INST_t *rrc, NR_UECa
       OCTET_STRING_fromBuf(&ue_CapabilityRAT_Container->ue_CapabilityRAT_Container, (const char *)rrc->UECap.sdu, rrc->UECap.sdu_size);
       asn1cSeqAdd(&UEcapList->list, ue_CapabilityRAT_Container);
       uint8_t buffer[MAX_UE_NR_CAPABILITY_SIZE + 16];
+      nr_ue_fuzz_hook_mutate_ul_dcch(rrc, &ul_dcch_msg);
       asn_enc_rval_t enc_rval =
           uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, sizeof(buffer));
       AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %jd)!\n", enc_rval.failed_type->name, enc_rval.encoded);
@@ -3719,7 +2824,8 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
 static void nr_rrc_ue_send_ul_information_transfer_nas(NR_UE_RRC_INST_t *rrc, uint32_t nas_length, uint8_t *nas_pdu)
 {
   uint8_t *buffer = NULL;
-  const int enc_bytes = do_NR_ULInformationTransfer(&buffer, nas_length, nas_pdu);
+  const int enc_bytes = do_NR_ULInformationTransfer(&buffer, nas_length, nas_pdu,
+                                                  rrc, nr_ue_fuzz_hook_mutate_ul_dcch);
   const rb_id_t srb_id = rrc->Srb[2] == RB_ESTABLISHED ? 2 : 1;
   LOG_D(NR_RRC,
         "[UE %ld] PDCP_DATA_REQ ULInformationTransfer (NAS %u B) -> SRB%d encoded %d B\n",
@@ -4701,7 +3807,7 @@ void rrc_ue_generate_measurementReport(rrcPerNB_t *rrc, instance_t ue_id)
   int neighbor_rsrp_dBm =
       l3m->rs_type == NR_NR_RS_Type_ssb ? l3m->neighboring_cell[0].ss_rsrp_dBm.val : l3m->neighboring_cell[0].csi_rsrp_dBm.val;
   int neighbor_rsrp_index = get_rsrp_index(neighbor_rsrp_dBm);
-  uint8_t size = do_nrMeasurementReport_SA(l3m->trigger_to_measid,
+  int size = do_nrMeasurementReport_SA(l3m->trigger_to_measid,
                                            l3m->trigger_quantity,
                                            l3m->rs_type,
                                            l3m->serving_cell.Nid_cell,
@@ -4712,7 +3818,7 @@ void rrc_ue_generate_measurementReport(rrcPerNB_t *rrc, instance_t ue_id)
                                            buffer,
                                            sizeof(buffer),
                                            ue_rrc,
-                                           nr_ue_fuzz_hook_apply_measurement_report_field_mutation);
+                                           nr_ue_fuzz_hook_mutate_ul_dcch);
 
   int srb_id = 1; // possibly TODO in SRB3 in some cases
   nr_ue_fuzz_hook_send_srb(ue_rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, srb_id, buffer, size);

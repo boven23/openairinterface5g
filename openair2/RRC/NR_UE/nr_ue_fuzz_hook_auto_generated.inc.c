@@ -2,85 +2,6 @@
 // Do not edit manually.
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__lateNonCriticalExtension__optional_octet_string_assignment
- * domain_id: MeasurementReport__criticalExtensions__measurementReport__lateNonCriticalExtension
- * message: MeasurementReport
- * field: lateNonCriticalExtension
- * operator_family: optional_octet_string_assignment
- * candidate_chain: criticalExtensions.choice.measurementReport->lateNonCriticalExtension
- * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment_adapter
- * payload_type: NR_MeasurementReport_t
- * review points:
- *   - confirm_oai_struct_member_path
- *   - confirm_optional_branch_and_release_extension
- */
-static bool nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
-                              NR_MeasurementReport_t *payload,
-                              const char *mode)
-{
-  if (!payload)
-    return false;
-
-  if (!mode || !*mode)
-    mode = "force_zero";
-
-  static const unsigned char zero_value[] = {0x00};
-  static const unsigned char ff_value[] = {0xff};
-
-  if (!strcasecmp(mode, "force_zero")) {
-    payload->criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
-    if (!payload->criticalExtensions.choice.measurementReport)
-      payload->criticalExtensions.choice.measurementReport = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport));
-    if (!payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension)
-      payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension));
-    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension, (const char *)zero_value, sizeof(zero_value)) < 0)
-      return false;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force lateNonCriticalExtension=0x00 in MeasurementReport\\n", rrc->ue_id);
-    return true;
-  }
-
-  if (!strcasecmp(mode, "force_ff")) {
-    payload->criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
-    if (!payload->criticalExtensions.choice.measurementReport)
-      payload->criticalExtensions.choice.measurementReport = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport));
-    if (!payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension)
-      payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension));
-    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension, (const char *)ff_value, sizeof(ff_value)) < 0)
-      return false;
-    LOG_W(NR_RRC, "[UE %ld][HOOK] force lateNonCriticalExtension=0xff in MeasurementReport\\n", rrc->ue_id);
-    return true;
-  }
-
-  if (!strcasecmp(mode, "omit")) {
-    if (!payload->criticalExtensions.choice.measurementReport
-        || !payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension)
-      return false;
-    ASN_STRUCT_FREE(asn_DEF_OCTET_STRING, payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension);
-    LOG_W(NR_RRC, "[UE %ld][HOOK] omit lateNonCriticalExtension in MeasurementReport\\n", rrc->ue_id);
-    return true;
-  }
-
-  return false;
-}
-
-static bool nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
-{
-  return nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
-}
-
-/* registry entry
-{
-    .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
-    .message_name = "MeasurementReport",
-    .field_name = "lateNonCriticalExtension",
-    .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment_adapter,
-},
-*/
-
-/* AUTO-GENERATED REVIEW STUB
  * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measId__integer_transform
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measId
  * message: MeasurementReport
@@ -100,7 +21,9 @@ static bool nr_ue_fuzz_hook_apply_measid_integer_transform(NR_UE_RRC_INST_t *rrc
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
-  if (!payload)
+  if (!payload
+      || payload->criticalExtensions.present != NR_MeasurementReport__criticalExtensions_PR_measurementReport
+      || !payload->criticalExtensions.choice.measurementReport)
     return false;
 
   if (!mode || !*mode)
@@ -116,13 +39,12 @@ static bool nr_ue_fuzz_hook_apply_measid_integer_transform(NR_UE_RRC_INST_t *rrc
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else {
+    return false;
   }
 
-    payload->criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
-    if (!payload->criticalExtensions.choice.measurementReport)
-      payload->criticalExtensions.choice.measurementReport = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport));
   payload->criticalExtensions.choice.measurementReport->measResults.measId = chosen_value;
-  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate measId in MeasurementReport\\n", rrc->ue_id);
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate measId in MeasurementReport\n", rrc->ue_id);
   return true;
 }
 
@@ -161,7 +83,9 @@ static bool nr_ue_fuzz_hook_apply_sfn_offsetresult_integer_transform(NR_UE_RRC_I
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
-  if (!payload)
+  if (!payload
+      || payload->criticalExtensions.present != NR_MeasurementReport__criticalExtensions_PR_measurementReport
+      || !payload->criticalExtensions.choice.measurementReport)
     return false;
 
   if (!mode || !*mode)
@@ -177,17 +101,16 @@ static bool nr_ue_fuzz_hook_apply_sfn_offsetresult_integer_transform(NR_UE_RRC_I
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else {
+    return false;
   }
 
-    payload->criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
-    if (!payload->criticalExtensions.choice.measurementReport)
-      payload->criticalExtensions.choice.measurementReport = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport));
     if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1)
       payload->criticalExtensions.choice.measurementReport->measResults.ext1 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext1));
     if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA)
       payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA));
   payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->sfn_OffsetResult = chosen_value;
-  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate sfn-OffsetResult in MeasurementReport\\n", rrc->ue_id);
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate sfn-OffsetResult in MeasurementReport\n", rrc->ue_id);
   return true;
 }
 
@@ -226,7 +149,9 @@ static bool nr_ue_fuzz_hook_apply_frameboundaryoffsetresult_integer_transform(NR
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
-  if (!payload)
+  if (!payload
+      || payload->criticalExtensions.present != NR_MeasurementReport__criticalExtensions_PR_measurementReport
+      || !payload->criticalExtensions.choice.measurementReport)
     return false;
 
   if (!mode || !*mode)
@@ -242,17 +167,16 @@ static bool nr_ue_fuzz_hook_apply_frameboundaryoffsetresult_integer_transform(NR
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else {
+    return false;
   }
 
-    payload->criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
-    if (!payload->criticalExtensions.choice.measurementReport)
-      payload->criticalExtensions.choice.measurementReport = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport));
     if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1)
       payload->criticalExtensions.choice.measurementReport->measResults.ext1 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext1));
     if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA)
       payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA));
   payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->frameBoundaryOffsetResult = chosen_value;
-  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate frameBoundaryOffsetResult in MeasurementReport\\n", rrc->ue_id);
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate frameBoundaryOffsetResult in MeasurementReport\n", rrc->ue_id);
   return true;
 }
 
@@ -291,7 +215,9 @@ static bool nr_ue_fuzz_hook_apply_rsrp_result_integer_transform(NR_UE_RRC_INST_t
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
-  if (!payload)
+  if (!payload
+      || payload->criticalExtensions.present != NR_MeasurementReport__criticalExtensions_PR_measurementReport
+      || !payload->criticalExtensions.choice.measurementReport)
     return false;
 
   if (!mode || !*mode)
@@ -307,11 +233,10 @@ static bool nr_ue_fuzz_hook_apply_rsrp_result_integer_transform(NR_UE_RRC_INST_t
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else {
+    return false;
   }
 
-    payload->criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
-    if (!payload->criticalExtensions.choice.measurementReport)
-      payload->criticalExtensions.choice.measurementReport = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport));
     if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1)
       payload->criticalExtensions.choice.measurementReport->measResults.ext1 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext1));
     if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA)
@@ -319,11 +244,11 @@ static bool nr_ue_fuzz_hook_apply_rsrp_result_integer_transform(NR_UE_RRC_INST_t
     if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result)
       payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result));
   if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result)
-    payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result = calloc(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result));
+    payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result));
   if (!payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result)
     return false;
   *payload->criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result = chosen_value;
-  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate rsrp-Result in MeasurementReport\\n", rrc->ue_id);
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate rsrp-Result in MeasurementReport\n", rrc->ue_id);
   return true;
 }
 
@@ -342,14 +267,83 @@ static bool nr_ue_fuzz_hook_apply_rsrp_result_integer_transform_adapter(NR_UE_RR
 },
 */
 
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: MeasurementReport__criticalExtensions__measurementReport__lateNonCriticalExtension__optional_octet_string_assignment
+ * domain_id: MeasurementReport__criticalExtensions__measurementReport__lateNonCriticalExtension
+ * message: MeasurementReport
+ * field: lateNonCriticalExtension
+ * operator_family: optional_octet_string_assignment
+ * candidate_chain: criticalExtensions.choice.measurementReport->lateNonCriticalExtension
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment_adapter
+ * payload_type: NR_MeasurementReport_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ */
+static bool nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+                              NR_MeasurementReport_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_MeasurementReport__criticalExtensions_PR_measurementReport
+      || !payload->criticalExtensions.choice.measurementReport)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_zero";
+
+  static const unsigned char zero_value[] = {0x00};
+  static const unsigned char ff_value[] = {0xff};
+
+  if (!strcasecmp(mode, "force_zero")) {
+    if (!payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension, (const char *)zero_value, sizeof(zero_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force lateNonCriticalExtension=0x00 in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "force_ff")) {
+    if (!payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension, (const char *)ff_value, sizeof(ff_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force lateNonCriticalExtension=0xff in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.measurementReport
+        || !payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension)
+      return false;
+    ASN_STRUCT_FREE(asn_DEF_OCTET_STRING, payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension);
+    payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit lateNonCriticalExtension in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
+    .message_name = "MeasurementReport",
+    .field_name = "lateNonCriticalExtension",
+    .operator_family = "optional_octet_string_assignment",
+    .apply = nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment_adapter,
+},
+*/
+
 static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
-    {
-        .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
-        .message_name = "MeasurementReport",
-        .field_name = "lateNonCriticalExtension",
-        .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment_adapter,
-    },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
         .message_name = "MeasurementReport",
@@ -378,22 +372,11 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .operator_family = "integer_transform",
         .apply = nr_ue_fuzz_hook_apply_rsrp_result_integer_transform_adapter,
     },
+    {
+        .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
+        .message_name = "MeasurementReport",
+        .field_name = "lateNonCriticalExtension",
+        .operator_family = "optional_octet_string_assignment",
+        .apply = nr_ue_fuzz_hook_apply_latenoncriticalextension_optional_octet_string_assignment_adapter,
+    },
 };
-
-static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_auto_field_adapter(const nr_ue_fuzz_hook_state_t *hook)
-{
-  if (!hook || !hook->field_mutation.enabled)
-    return NULL;
-
-  size_t count = sizeof(auto_generated_field_adapters) / sizeof(auto_generated_field_adapters[0]);
-  for (size_t i = 0; i < count; ++i) {
-    const nr_ue_fuzz_hook_field_adapter_t *adapter = &auto_generated_field_adapters[i];
-    if (adapter->target_msg != hook->target_msg) continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.message, adapter->message_name)) continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.field, adapter->field_name)) continue;
-    if (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_family, adapter->operator_family)) continue;
-    return adapter;
-  }
-  
-  return NULL;
-}
