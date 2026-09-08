@@ -98,6 +98,8 @@ static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
 {
   hook->field_mutation.enabled = false;
   hook->field_mutation.message[0] = '\0';
+  hook->field_mutation.adapter_key[0] = '\0';
+  hook->field_mutation.domain_id[0] = '\0';
   hook->field_mutation.field[0] = '\0';
   hook->field_mutation.operator_family[0] = '\0';
   hook->field_mutation.transform_name[0] = '\0';
@@ -192,6 +194,8 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "last_ul_size=%d\n", hook->last_ul_size);
   fprintf(fp, "field_mutation_enabled=%d\n", hook->field_mutation.enabled ? 1 : 0);
   fprintf(fp, "field_mutation_message=%s\n", hook->field_mutation.message);
+  fprintf(fp, "field_mutation_adapter_key=%s\n", hook->field_mutation.adapter_key);
+  fprintf(fp, "field_mutation_domain_id=%s\n", hook->field_mutation.domain_id);
   fprintf(fp, "field_mutation_field=%s\n", hook->field_mutation.field);
   fprintf(fp, "field_mutation_operator_family=%s\n", hook->field_mutation.operator_family);
   fprintf(fp, "field_mutation_transform=%s\n", hook->field_mutation.transform_name);
@@ -264,7 +268,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   if (!fp)
     return;
 
-  char line[256];
+  char line[1024];
   while (fgets(line, sizeof(line), fp) != NULL) {
     char *trimmed = nr_ue_fuzz_hook_trim(line);
     if (*trimmed == '\0' || *trimmed == '#')
@@ -298,6 +302,10 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       hook->field_mutation.enabled = atoi(value) != 0;
     else if (!strcasecmp(key, "field_mutation_message"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.message, sizeof(hook->field_mutation.message), value);
+    else if (!strcasecmp(key, "field_mutation_adapter_key"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.adapter_key, sizeof(hook->field_mutation.adapter_key), value);
+    else if (!strcasecmp(key, "field_mutation_domain_id"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.domain_id, sizeof(hook->field_mutation.domain_id), value);
     else if (!strcasecmp(key, "field_mutation_field"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.field, sizeof(hook->field_mutation.field), value);
     else if (!strcasecmp(key, "field_mutation_operator_family"))
@@ -318,7 +326,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   fclose(fp);
 
   LOG_I(NR_RRC,
-        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d operator_family=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
+        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d adapter_key=%s operator_family=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->target_msg),
@@ -330,6 +338,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
         hook->replay_mode,
         hook->measurement_bootstrap_enabled ? 1 : 0,
         hook->measurement_bootstrap_done ? 1 : 0,
+        hook->field_mutation.adapter_key,
         hook->field_mutation.operator_family,
         hook->field_mutation.transform_name,
         hook->field_mutation.field,

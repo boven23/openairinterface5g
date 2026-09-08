@@ -5,6 +5,8 @@ typedef bool (*nr_ue_fuzz_hook_field_adapter_fn_t)(NR_UE_RRC_INST_t *rrc, void *
 
 typedef struct nr_ue_fuzz_hook_field_adapter_s {
   nr_ue_fuzz_hook_msg_t target_msg;
+  const char *adapter_key;
+  const char *domain_id;
   const char *message_name;
   const char *field_name;
   const char *operator_family;
@@ -256,11 +258,41 @@ NR_UE_TXN_ADAPTER(nr_ue_txn_capability, NR_UECapabilityInformation_t)
 #undef NR_UE_TXN_ADAPTER
 
 static const nr_ue_fuzz_hook_field_adapter_t builtin_field_adapters[] = {
-    {NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, "RRCSetupComplete", "transactionIdentifier", "integer_transform", nr_ue_txn_setup},
-    {NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE, "SecurityModeComplete", "transactionIdentifier", "integer_transform", nr_ue_txn_security},
-    {NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, "RRCReconfigurationComplete", "transactionIdentifier", "integer_transform", nr_ue_txn_reconfiguration},
-    {NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE, "RRCReestablishmentComplete", "transactionIdentifier", "integer_transform", nr_ue_txn_reestablishment},
-    {NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION, "UECapabilityInformation", "transactionIdentifier", "integer_transform", nr_ue_txn_capability},
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE,
+        .message_name = "RRCSetupComplete",
+        .field_name = "transactionIdentifier",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_txn_setup,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
+        .message_name = "SecurityModeComplete",
+        .field_name = "transactionIdentifier",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_txn_security,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "transactionIdentifier",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_txn_reconfiguration,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE,
+        .message_name = "RRCReestablishmentComplete",
+        .field_name = "transactionIdentifier",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_txn_reestablishment,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION,
+        .message_name = "UECapabilityInformation",
+        .field_name = "transactionIdentifier",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_txn_capability,
+    },
     {
         .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
         .message_name = "RRCReconfigurationComplete",
@@ -285,6 +317,8 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
   if (!hook || !hook->field_mutation.enabled)
     return NULL;
   const nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
+  const bool has_adapter_key = mutation->adapter_key[0] != '\0';
+  const bool has_domain_id = mutation->domain_id[0] != '\0';
 
   const nr_ue_fuzz_hook_field_adapter_t *found = NULL;
   const struct {
@@ -297,8 +331,23 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
   for (size_t c = 0; c < sizeof(catalogs) / sizeof(catalogs[0]); ++c) {
     for (size_t i = 0; i < catalogs[c].count; ++i) {
       const nr_ue_fuzz_hook_field_adapter_t *adapter = &catalogs[c].entries[i];
-      if (adapter->target_msg != hook->target_msg
-          || !nr_ue_fuzz_hook_text_eq(mutation->message, adapter->message_name)
+      if (adapter->target_msg != hook->target_msg)
+        continue;
+
+      if (has_adapter_key) {
+        if (nr_ue_fuzz_hook_text_eq(mutation->adapter_key, adapter->adapter_key))
+          return adapter;
+        continue;
+      }
+
+      if (has_domain_id) {
+        if (nr_ue_fuzz_hook_text_eq(mutation->domain_id, adapter->domain_id)
+            && nr_ue_fuzz_hook_text_eq(mutation->operator_family, adapter->operator_family))
+          return adapter;
+        continue;
+      }
+
+      if (!nr_ue_fuzz_hook_text_eq(mutation->message, adapter->message_name)
           || !nr_ue_fuzz_hook_text_eq(mutation->field, adapter->field_name)
           || !nr_ue_fuzz_hook_text_eq(mutation->operator_family, adapter->operator_family))
         continue;
@@ -355,8 +404,12 @@ static bool nr_ue_fuzz_hook_mutate_ul_dcch(void *context, NR_UL_DCCH_Message_t *
     return false;
   const nr_ue_fuzz_hook_field_adapter_t *adapter = nr_ue_fuzz_hook_find_field_adapter(hook);
   if (!adapter) {
-    LOG_W(NR_RRC, "[UE %ld][HOOK] no unique adapter for %s.%s:%s\n",
-          rrc->ue_id, hook->field_mutation.message, hook->field_mutation.field, hook->field_mutation.operator_family);
+    LOG_W(NR_RRC, "[UE %ld][HOOK] no unique adapter for key=%s %s.%s:%s\n",
+          rrc->ue_id,
+          hook->field_mutation.adapter_key,
+          hook->field_mutation.message,
+          hook->field_mutation.field,
+          hook->field_mutation.operator_family);
     return false;
   }
   if (!adapter->apply(rrc, payload, hook->field_mutation.selected_mode))

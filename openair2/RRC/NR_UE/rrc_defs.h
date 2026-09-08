@@ -110,6 +110,8 @@ typedef enum nr_ue_fuzz_hook_action_e {
 typedef struct nr_ue_fuzz_hook_field_mutation_s {
   bool enabled;
   char message[64];
+  char adapter_key[32];
+  char domain_id[256];
   char field[64];
   char operator_family[64];
   char transform_name[64];
