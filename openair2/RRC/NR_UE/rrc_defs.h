@@ -42,17 +42,14 @@
 #include "notified_fifo.h"
 #include "RRC/NR_UE/nr_mac_rrc_types.h"
 
-#define NB_CNX_UE 2//MAX_MANAGED_RG_PER_MOBILE
+#define NB_CNX_UE 2 // MAX_MANAGED_RG_PER_MOBILE
 #define MAX_MEAS_OBJ 64
 #define MAX_MEAS_CONFIG 64
 #define MAX_MEAS_ID 64
 #define MAX_QUANTITY_CONFIG 2
 #define NUMBER_OF_NEIGHBORING_CELLS_MAX 1
 
-typedef enum {
-  nr_SecondaryCellGroupConfig_r15=0,
-  nr_RadioBearerConfigX_r15=1
-} nsa_message_t;
+typedef enum { nr_SecondaryCellGroupConfig_r15 = 0, nr_RadioBearerConfigX_r15 = 1 } nsa_message_t;
 
 #define MAX_UE_NR_CAPABILITY_SIZE 2048
 typedef struct OAI_NR_UECapability_s {
@@ -104,6 +101,7 @@ typedef enum nr_ue_fuzz_hook_action_e {
   NR_UE_HOOK_ACTION_DUPLICATE,
   NR_UE_HOOK_ACTION_REPLAY,
   NR_UE_HOOK_ACTION_DELAY,
+  NR_UE_HOOK_ACTION_MUTATE_TXN,
   NR_UE_HOOK_ACTION_MUTATE_FIELD,
 } nr_ue_fuzz_hook_action_t;
 
@@ -137,8 +135,18 @@ typedef struct nr_ue_fuzz_hook_state_s {
   int last_hook_srb_id;
   nr_ue_fuzz_hook_msg_t last_dl_msg;
   int last_dl_txn;
+  bool seen_rrc_setup_complete;
+  bool seen_security_mode_complete;
+  bool seen_rrc_reconfiguration_complete;
+  bool seen_rrc_reestablishment_complete;
+  bool seen_ue_capability_information;
+  bool seen_ul_information_transfer;
+  bool seen_measurement_report;
   bool seen_reconfiguration;
   bool seen_security_mode_command;
+  bool seen_ue_capability_enquiry;
+  bool seen_rrc_reestablishment;
+  bool seen_rrc_release;
   nr_ue_fuzz_hook_msg_t last_ul_msg;
   int last_ul_srb_id;
   int last_ul_size;
@@ -230,10 +238,7 @@ typedef struct NR_UE_Timers_Constants_s {
   NR_UE_TimersAndConstants_t *sib1_TimersAndConstants;
 } NR_UE_Timers_Constants_t;
 
-typedef enum {
-  OUT_OF_SYNC = 0,
-  IN_SYNC = 1
-} nr_sync_msg_t;
+typedef enum { OUT_OF_SYNC = 0, IN_SYNC = 1 } nr_sync_msg_t;
 
 typedef enum { RB_NOT_PRESENT, RB_ESTABLISHED, RB_SUSPENDED } NR_RB_status_t;
 
@@ -291,9 +296,9 @@ typedef struct NR_UE_RRC_INST_s {
   /* KgNB as computed from parameters within USIM card */
   uint8_t kgnb[32];
   /* Used integrity/ciphering algorithms */
-  //RRC_LIST_TYPE(NR_SecurityAlgorithmConfig_t, NR_SecurityAlgorithmConfig) SecurityAlgorithmConfig_list;
-  NR_CipheringAlgorithm_t  cipheringAlgorithm;
-  e_NR_IntegrityProtAlgorithm  integrityProtAlgorithm;
+  // RRC_LIST_TYPE(NR_SecurityAlgorithmConfig_t, NR_SecurityAlgorithmConfig) SecurityAlgorithmConfig_list;
+  NR_CipheringAlgorithm_t cipheringAlgorithm;
+  e_NR_IntegrityProtAlgorithm integrityProtAlgorithm;
   long keyToUse;
   bool as_security_activated;
   /// Next Hop Chaining Count
@@ -313,7 +318,7 @@ typedef struct NR_UE_RRC_INST_s {
   int current_hfn;
   int current_frame;
   bool sched_reconfsync_sib1;
-  //Sidelink params
+  // Sidelink params
   NR_SL_PreconfigurationNR_r16_t *sl_preconfig;
   // NTN params
   bool is_NTN_UE;
