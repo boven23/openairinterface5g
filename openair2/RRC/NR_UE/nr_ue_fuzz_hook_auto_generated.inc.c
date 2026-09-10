@@ -2,22 +2,22 @@
 // Do not edit manually.
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measId__integer_transform
+ * adapter_id: a_7d63aed689d30406
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measId
  * message: MeasurementReport
  * field: measId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a98fd82bc1_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a98fd82bc1_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_7d63aed689d30406_3d9af4e215_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_7d63aed689d30406_3d9af4e215_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a98fd82bc1_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_7d63aed689d30406_3d9af4e215_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -39,6 +39,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -48,9 +58,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a98fd82bc1_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_7d63aed689d30406_3d9af4e215_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a98fd82bc1_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_7d63aed689d30406_3d9af4e215_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -61,20 +71,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "measId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a98fd82bc1_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_7d63aed689d30406_3d9af4e215_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__servCellId__integer_transform
+ * adapter_id: a_69421b43d0356c0b
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__servCellId
  * message: MeasurementReport
  * field: servCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->servCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ab1ac7b26e_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ab1ac7b26e_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_69421b43d0356c0b_28a5fbc13c_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_69421b43d0356c0b_28a5fbc13c_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -82,7 +92,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ab1ac7b26e_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_69421b43d0356c0b_28a5fbc13c_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -107,6 +117,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -118,9 +138,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ab1ac7b26e_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_69421b43d0356c0b_28a5fbc13c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ab1ac7b26e_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_69421b43d0356c0b_28a5fbc13c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -131,20 +151,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "servCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ab1ac7b26e_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_69421b43d0356c0b_28a5fbc13c_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__physCellId__integer_transform
+ * adapter_id: a_81bc5d05b35af954
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__physCellId
  * message: MeasurementReport
  * field: physCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.physCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_43eb37ad23_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_43eb37ad23_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_81bc5d05b35af954_098b4542fc_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_81bc5d05b35af954_098b4542fc_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -152,7 +172,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_43eb37ad23_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_81bc5d05b35af954_098b4542fc_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -177,6 +197,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -194,9 +224,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_43eb37ad23_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_81bc5d05b35af954_098b4542fc_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_43eb37ad23_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_81bc5d05b35af954_098b4542fc_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -207,20 +237,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "physCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_43eb37ad23_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_81bc5d05b35af954_098b4542fc_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__rsrp__integer_transform
+ * adapter_id: a_679c62de53f57551
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.cellResults.resultsSSB_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d381b71947_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d381b71947_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_679c62de53f57551_13d8c873ad_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_679c62de53f57551_13d8c873ad_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -228,7 +258,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d381b71947_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_679c62de53f57551_13d8c873ad_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -253,6 +283,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -272,9 +312,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d381b71947_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_679c62de53f57551_13d8c873ad_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d381b71947_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_679c62de53f57551_13d8c873ad_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -285,20 +325,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d381b71947_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_679c62de53f57551_13d8c873ad_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__rsrq__integer_transform
+ * adapter_id: a_b78bd1806ae3b370
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.cellResults.resultsSSB_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b22d7c2d19_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b22d7c2d19_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_b78bd1806ae3b370_71e6cc34e7_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b78bd1806ae3b370_71e6cc34e7_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -306,7 +346,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b22d7c2d19_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_b78bd1806ae3b370_71e6cc34e7_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -331,6 +371,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -350,9 +400,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b22d7c2d19_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_b78bd1806ae3b370_71e6cc34e7_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b22d7c2d19_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_b78bd1806ae3b370_71e6cc34e7_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -363,20 +413,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b22d7c2d19_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_b78bd1806ae3b370_71e6cc34e7_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__sinr__integer_transform
+ * adapter_id: a_4322bee58586b1f8
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.cellResults.resultsSSB_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5781bf6314_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5781bf6314_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4322bee58586b1f8_58db8ee04d_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4322bee58586b1f8_58db8ee04d_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -384,7 +434,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5781bf6314_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4322bee58586b1f8_58db8ee04d_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -409,6 +459,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -428,9 +488,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5781bf6314_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4322bee58586b1f8_58db8ee04d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5781bf6314_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4322bee58586b1f8_58db8ee04d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -441,20 +501,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5781bf6314_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4322bee58586b1f8_58db8ee04d_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__rsrp__integer_transform
+ * adapter_id: a_d2012596d4069f86
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.cellResults.resultsCSI_RS_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_68e90ef809_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_68e90ef809_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_d2012596d4069f86_e55b08d101_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_d2012596d4069f86_e55b08d101_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -462,7 +522,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_68e90ef809_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_d2012596d4069f86_e55b08d101_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -487,6 +547,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -506,9 +576,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_68e90ef809_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_d2012596d4069f86_e55b08d101_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_68e90ef809_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_d2012596d4069f86_e55b08d101_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -519,20 +589,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_68e90ef809_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_d2012596d4069f86_e55b08d101_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__rsrq__integer_transform
+ * adapter_id: a_79134d1231da9168
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.cellResults.resultsCSI_RS_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_1bb478385d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_1bb478385d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_79134d1231da9168_c75bb56d85_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_79134d1231da9168_c75bb56d85_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -540,7 +610,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_1bb478385d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_79134d1231da9168_c75bb56d85_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -565,6 +635,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -584,9 +664,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_1bb478385d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_79134d1231da9168_c75bb56d85_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_1bb478385d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_79134d1231da9168_c75bb56d85_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -597,20 +677,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_1bb478385d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_79134d1231da9168_c75bb56d85_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__sinr__integer_transform
+ * adapter_id: a_258d029f88399b06
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.cellResults.resultsCSI_RS_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ed6479ed09_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ed6479ed09_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_258d029f88399b06_2d4b5e79b2_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_258d029f88399b06_2d4b5e79b2_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -618,7 +698,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ed6479ed09_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_258d029f88399b06_2d4b5e79b2_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -643,6 +723,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -662,9 +752,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ed6479ed09_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_258d029f88399b06_2d4b5e79b2_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ed6479ed09_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_258d029f88399b06_2d4b5e79b2_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -675,20 +765,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ed6479ed09_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_258d029f88399b06_2d4b5e79b2_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index__integer_transform
+ * adapter_id: a_fea910d46abae047
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index
  * message: MeasurementReport
  * field: ssb-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_591e148fff_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_591e148fff_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_fea910d46abae047_47a8bf996f_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_fea910d46abae047_47a8bf996f_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -696,7 +786,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_591e148fff_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_fea910d46abae047_47a8bf996f_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -726,6 +816,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -743,9 +843,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_591e148fff_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_fea910d46abae047_47a8bf996f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_591e148fff_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_fea910d46abae047_47a8bf996f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -756,20 +856,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_591e148fff_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_fea910d46abae047_47a8bf996f_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp__integer_transform
+ * adapter_id: a_0a5d3c2f05514a45
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_011c2d1d83_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_011c2d1d83_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_0a5d3c2f05514a45_a073c0c990_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0a5d3c2f05514a45_a073c0c990_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -777,7 +877,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_011c2d1d83_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_0a5d3c2f05514a45_a073c0c990_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -807,6 +907,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -832,9 +942,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_011c2d1d83_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_0a5d3c2f05514a45_a073c0c990_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_011c2d1d83_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_0a5d3c2f05514a45_a073c0c990_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -845,20 +955,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_011c2d1d83_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_0a5d3c2f05514a45_a073c0c990_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq__integer_transform
+ * adapter_id: a_fdd6350eed768d13
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edbfd5f8d7_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edbfd5f8d7_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_fdd6350eed768d13_d77fb78a44_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_fdd6350eed768d13_d77fb78a44_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -866,7 +976,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edbfd5f8d7_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_fdd6350eed768d13_d77fb78a44_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -896,6 +1006,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -921,9 +1041,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edbfd5f8d7_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_fdd6350eed768d13_d77fb78a44_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edbfd5f8d7_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_fdd6350eed768d13_d77fb78a44_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -934,20 +1054,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edbfd5f8d7_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_fdd6350eed768d13_d77fb78a44_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr__integer_transform
+ * adapter_id: a_dbb7d9621187be1b
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_71e5b10a22_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_71e5b10a22_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_dbb7d9621187be1b_7c19c9ad29_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_dbb7d9621187be1b_7c19c9ad29_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -955,7 +1075,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_71e5b10a22_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_dbb7d9621187be1b_7c19c9ad29_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -985,6 +1105,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1010,9 +1140,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_71e5b10a22_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_dbb7d9621187be1b_7c19c9ad29_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_71e5b10a22_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_dbb7d9621187be1b_7c19c9ad29_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1023,20 +1153,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_71e5b10a22_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_dbb7d9621187be1b_7c19c9ad29_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index__integer_transform
+ * adapter_id: a_3550365085906f18
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index
  * message: MeasurementReport
  * field: csi-RS-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3ffc712be9_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3ffc712be9_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_3550365085906f18_e3c531e927_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3550365085906f18_e3c531e927_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1044,7 +1174,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3ffc712be9_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_3550365085906f18_e3c531e927_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1074,6 +1204,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1091,9 +1231,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3ffc712be9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_3550365085906f18_e3c531e927_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3ffc712be9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_3550365085906f18_e3c531e927_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1104,20 +1244,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "csi-RS-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3ffc712be9_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_3550365085906f18_e3c531e927_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp__integer_transform
+ * adapter_id: a_21c3ce2ee9c61336
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12a096e8eb_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12a096e8eb_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_21c3ce2ee9c61336_defb4c740a_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_21c3ce2ee9c61336_defb4c740a_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1125,7 +1265,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12a096e8eb_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_21c3ce2ee9c61336_defb4c740a_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1155,6 +1295,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1180,9 +1330,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12a096e8eb_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_21c3ce2ee9c61336_defb4c740a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12a096e8eb_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_21c3ce2ee9c61336_defb4c740a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1193,20 +1343,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12a096e8eb_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_21c3ce2ee9c61336_defb4c740a_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq__integer_transform
+ * adapter_id: a_098bf462b4759d01
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7ed01e270f_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7ed01e270f_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_098bf462b4759d01_34ba019e4d_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_098bf462b4759d01_34ba019e4d_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1214,7 +1364,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7ed01e270f_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_098bf462b4759d01_34ba019e4d_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1244,6 +1394,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1269,9 +1429,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7ed01e270f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_098bf462b4759d01_34ba019e4d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7ed01e270f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_098bf462b4759d01_34ba019e4d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1282,20 +1442,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7ed01e270f_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_098bf462b4759d01_34ba019e4d_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr__integer_transform
+ * adapter_id: a_f23cf909ac9cae58
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7a308f19d8_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7a308f19d8_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_f23cf909ac9cae58_abd258c2a1_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_f23cf909ac9cae58_abd258c2a1_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1303,7 +1463,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7a308f19d8_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_f23cf909ac9cae58_abd258c2a1_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1333,6 +1493,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1358,9 +1528,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7a308f19d8_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_f23cf909ac9cae58_abd258c2a1_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7a308f19d8_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_f23cf909ac9cae58_abd258c2a1_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1371,20 +1541,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7a308f19d8_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_f23cf909ac9cae58_abd258c2a1_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__cgi-Info__noSIB1__ssb-SubcarrierOffset__integer_transform
+ * adapter_id: a_5a7a8dfa6d9c544b
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__cgi-Info__noSIB1__ssb-SubcarrierOffset
  * message: MeasurementReport
  * field: ssb-SubcarrierOffset
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.ext1->cgi_Info->noSIB1->ssb_SubcarrierOffset
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c030e8b679_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c030e8b679_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_5a7a8dfa6d9c544b_ddd7bc807a_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5a7a8dfa6d9c544b_ddd7bc807a_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1392,7 +1562,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c030e8b679_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_5a7a8dfa6d9c544b_ddd7bc807a_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1417,6 +1587,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1434,9 +1614,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c030e8b679_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_5a7a8dfa6d9c544b_ddd7bc807a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c030e8b679_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_5a7a8dfa6d9c544b_ddd7bc807a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1447,20 +1627,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-SubcarrierOffset",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c030e8b679_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_5a7a8dfa6d9c544b_ddd7bc807a_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero__integer_transform
+ * adapter_id: a_b1e87f00ca076213
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero
  * message: MeasurementReport
  * field: controlResourceSetZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.controlResourceSetZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_cc234ae757_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_cc234ae757_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_b1e87f00ca076213_230cebdb21_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b1e87f00ca076213_230cebdb21_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1468,7 +1648,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_cc234ae757_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_b1e87f00ca076213_230cebdb21_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1493,6 +1673,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1510,9 +1700,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_cc234ae757_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_b1e87f00ca076213_230cebdb21_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_cc234ae757_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_b1e87f00ca076213_230cebdb21_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1523,20 +1713,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "controlResourceSetZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_cc234ae757_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_b1e87f00ca076213_230cebdb21_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero__integer_transform
+ * adapter_id: a_0854070aaa81f79f
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero
  * message: MeasurementReport
  * field: searchSpaceZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.searchSpaceZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91871cc904_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91871cc904_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_0854070aaa81f79f_fa6f38a551_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0854070aaa81f79f_fa6f38a551_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1544,7 +1734,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91871cc904_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_0854070aaa81f79f_fa6f38a551_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1569,6 +1759,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1586,9 +1786,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91871cc904_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_0854070aaa81f79f_fa6f38a551_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91871cc904_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_0854070aaa81f79f_fa6f38a551_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1599,20 +1799,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "searchSpaceZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91871cc904_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_0854070aaa81f79f_fa6f38a551_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__triggeredEvent-r17__timeBetweenEvents-r17__integer_transform
+ * adapter_id: a_dd7fce5fa9ff8b66
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultServingCell__triggeredEvent-r17__timeBetweenEvents-r17
  * message: MeasurementReport
  * field: timeBetweenEvents-r17
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultServingCell.ext2->triggeredEvent_r17->timeBetweenEvents_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37fbda1524_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37fbda1524_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_dd7fce5fa9ff8b66_3bde6f71c9_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_dd7fce5fa9ff8b66_3bde6f71c9_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1620,7 +1820,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37fbda1524_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_dd7fce5fa9ff8b66_3bde6f71c9_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1645,6 +1845,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1666,9 +1876,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37fbda1524_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_dd7fce5fa9ff8b66_3bde6f71c9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37fbda1524_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_dd7fce5fa9ff8b66_3bde6f71c9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1679,20 +1889,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "timeBetweenEvents-r17",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37fbda1524_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_dd7fce5fa9ff8b66_3bde6f71c9_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__physCellId__integer_transform
+ * adapter_id: a_1338ff2fb1d79ae1
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__physCellId
  * message: MeasurementReport
  * field: physCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->physCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_93cd704cd2_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_93cd704cd2_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_1338ff2fb1d79ae1_b02ea576b4_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_1338ff2fb1d79ae1_b02ea576b4_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1700,7 +1910,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_93cd704cd2_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_1338ff2fb1d79ae1_b02ea576b4_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1725,6 +1935,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1744,9 +1964,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_93cd704cd2_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_1338ff2fb1d79ae1_b02ea576b4_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_93cd704cd2_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_1338ff2fb1d79ae1_b02ea576b4_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1757,20 +1977,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "physCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_93cd704cd2_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_1338ff2fb1d79ae1_b02ea576b4_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsSSB-Cell__rsrp__integer_transform
+ * adapter_id: a_cf197c487112d9b8
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsSSB-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.cellResults.resultsSSB_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_498871f06d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_498871f06d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_cf197c487112d9b8_cc781ed687_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_cf197c487112d9b8_cc781ed687_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1778,7 +1998,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_498871f06d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_cf197c487112d9b8_cc781ed687_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1803,6 +2023,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1824,9 +2054,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_498871f06d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_cf197c487112d9b8_cc781ed687_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_498871f06d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_cf197c487112d9b8_cc781ed687_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1837,20 +2067,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_498871f06d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_cf197c487112d9b8_cc781ed687_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsSSB-Cell__rsrq__integer_transform
+ * adapter_id: a_73c5788f6dd6858b
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsSSB-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.cellResults.resultsSSB_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4abe320f9b_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4abe320f9b_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_73c5788f6dd6858b_1571629df1_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_73c5788f6dd6858b_1571629df1_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1858,7 +2088,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4abe320f9b_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_73c5788f6dd6858b_1571629df1_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1883,6 +2113,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1904,9 +2144,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4abe320f9b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_73c5788f6dd6858b_1571629df1_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4abe320f9b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_73c5788f6dd6858b_1571629df1_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1917,20 +2157,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4abe320f9b_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_73c5788f6dd6858b_1571629df1_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsSSB-Cell__sinr__integer_transform
+ * adapter_id: a_4f85a25035b5dd2c
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsSSB-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.cellResults.resultsSSB_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_587c4eb994_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_587c4eb994_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4f85a25035b5dd2c_7482999e0c_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4f85a25035b5dd2c_7482999e0c_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -1938,7 +2178,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_587c4eb994_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4f85a25035b5dd2c_7482999e0c_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -1963,6 +2203,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -1984,9 +2234,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_587c4eb994_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4f85a25035b5dd2c_7482999e0c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_587c4eb994_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4f85a25035b5dd2c_7482999e0c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -1997,20 +2247,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_587c4eb994_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4f85a25035b5dd2c_7482999e0c_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsCSI-RS-Cell__rsrp__integer_transform
+ * adapter_id: a_f44d2af74ccceb2e
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsCSI-RS-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.cellResults.resultsCSI_RS_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_275c9e260a_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_275c9e260a_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_f44d2af74ccceb2e_0e1967a3a0_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_f44d2af74ccceb2e_0e1967a3a0_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2018,7 +2268,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_275c9e260a_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_f44d2af74ccceb2e_0e1967a3a0_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2043,6 +2293,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2064,9 +2324,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_275c9e260a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_f44d2af74ccceb2e_0e1967a3a0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_275c9e260a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_f44d2af74ccceb2e_0e1967a3a0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2077,20 +2337,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_275c9e260a_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_f44d2af74ccceb2e_0e1967a3a0_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsCSI-RS-Cell__rsrq__integer_transform
+ * adapter_id: a_443e229e4a1ce7db
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsCSI-RS-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.cellResults.resultsCSI_RS_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3948b5e98c_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3948b5e98c_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_443e229e4a1ce7db_8b903d2878_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_443e229e4a1ce7db_8b903d2878_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2098,7 +2358,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3948b5e98c_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_443e229e4a1ce7db_8b903d2878_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2123,6 +2383,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2144,9 +2414,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3948b5e98c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_443e229e4a1ce7db_8b903d2878_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3948b5e98c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_443e229e4a1ce7db_8b903d2878_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2157,20 +2427,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3948b5e98c_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_443e229e4a1ce7db_8b903d2878_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsCSI-RS-Cell__sinr__integer_transform
+ * adapter_id: a_74075f35b1901c99
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__cellResults__resultsCSI-RS-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.cellResults.resultsCSI_RS_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_676e6c92f8_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_676e6c92f8_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_74075f35b1901c99_3e286ab89b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_74075f35b1901c99_3e286ab89b_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2178,7 +2448,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_676e6c92f8_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_74075f35b1901c99_3e286ab89b_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2203,6 +2473,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2224,9 +2504,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_676e6c92f8_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_74075f35b1901c99_3e286ab89b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_676e6c92f8_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_74075f35b1901c99_3e286ab89b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2237,20 +2517,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_676e6c92f8_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_74075f35b1901c99_3e286ab89b_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index__integer_transform
+ * adapter_id: a_e0121f4c95c4380c
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index
  * message: MeasurementReport
  * field: ssb-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_30186ef163_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_30186ef163_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_e0121f4c95c4380c_3839fa412d_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_e0121f4c95c4380c_3839fa412d_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2258,7 +2538,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_30186ef163_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_e0121f4c95c4380c_3839fa412d_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2289,6 +2569,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2308,9 +2598,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_30186ef163_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_e0121f4c95c4380c_3839fa412d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_30186ef163_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_e0121f4c95c4380c_3839fa412d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2321,20 +2611,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_30186ef163_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_e0121f4c95c4380c_3839fa412d_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp__integer_transform
+ * adapter_id: a_22bcabbe69c0a41a
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_427bbcfefe_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_427bbcfefe_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_22bcabbe69c0a41a_34f36eed5a_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_22bcabbe69c0a41a_34f36eed5a_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2342,7 +2632,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_427bbcfefe_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_22bcabbe69c0a41a_34f36eed5a_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2373,6 +2663,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2400,9 +2700,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_427bbcfefe_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_22bcabbe69c0a41a_34f36eed5a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_427bbcfefe_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_22bcabbe69c0a41a_34f36eed5a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2413,20 +2713,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_427bbcfefe_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_22bcabbe69c0a41a_34f36eed5a_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq__integer_transform
+ * adapter_id: a_424b7a77864c3fb7
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f49fc847c3_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f49fc847c3_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_424b7a77864c3fb7_736860099f_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_424b7a77864c3fb7_736860099f_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2434,7 +2734,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f49fc847c3_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_424b7a77864c3fb7_736860099f_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2465,6 +2765,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2492,9 +2802,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f49fc847c3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_424b7a77864c3fb7_736860099f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f49fc847c3_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_424b7a77864c3fb7_736860099f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2505,20 +2815,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f49fc847c3_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_424b7a77864c3fb7_736860099f_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr__integer_transform
+ * adapter_id: a_80b47d8ef94adac8
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7c16924d50_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7c16924d50_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_80b47d8ef94adac8_c63fc377e1_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_80b47d8ef94adac8_c63fc377e1_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2526,7 +2836,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7c16924d50_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_80b47d8ef94adac8_c63fc377e1_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2557,6 +2867,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2584,9 +2904,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7c16924d50_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_80b47d8ef94adac8_c63fc377e1_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7c16924d50_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_80b47d8ef94adac8_c63fc377e1_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2597,20 +2917,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7c16924d50_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_80b47d8ef94adac8_c63fc377e1_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index__integer_transform
+ * adapter_id: a_ff0f58bab2d241e4
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index
  * message: MeasurementReport
  * field: csi-RS-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_13c017a14c_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_13c017a14c_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_ff0f58bab2d241e4_5ce13996dc_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_ff0f58bab2d241e4_5ce13996dc_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2618,7 +2938,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_13c017a14c_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_ff0f58bab2d241e4_5ce13996dc_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2649,6 +2969,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2668,9 +2998,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_13c017a14c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_ff0f58bab2d241e4_5ce13996dc_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_13c017a14c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_ff0f58bab2d241e4_5ce13996dc_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2681,20 +3011,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "csi-RS-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_13c017a14c_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_ff0f58bab2d241e4_5ce13996dc_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp__integer_transform
+ * adapter_id: a_f8b5e9021474334b
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f48371175_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f48371175_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_f8b5e9021474334b_5fa1ab1d99_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_f8b5e9021474334b_5fa1ab1d99_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2702,7 +3032,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f48371175_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_f8b5e9021474334b_5fa1ab1d99_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2733,6 +3063,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2760,9 +3100,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f48371175_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_f8b5e9021474334b_5fa1ab1d99_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f48371175_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_f8b5e9021474334b_5fa1ab1d99_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2773,20 +3113,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f48371175_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_f8b5e9021474334b_5fa1ab1d99_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq__integer_transform
+ * adapter_id: a_c0245d229ffecbdc
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5bafc099f7_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5bafc099f7_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_c0245d229ffecbdc_fcd6c84efc_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_c0245d229ffecbdc_fcd6c84efc_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2794,7 +3134,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5bafc099f7_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_c0245d229ffecbdc_fcd6c84efc_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2825,6 +3165,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2852,9 +3202,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5bafc099f7_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_c0245d229ffecbdc_fcd6c84efc_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5bafc099f7_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_c0245d229ffecbdc_fcd6c84efc_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2865,20 +3215,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5bafc099f7_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_c0245d229ffecbdc_fcd6c84efc_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr__integer_transform
+ * adapter_id: a_375ef59bb5e00862
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b0979ba2e4_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b0979ba2e4_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_375ef59bb5e00862_28a97b440f_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_375ef59bb5e00862_28a97b440f_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2886,7 +3236,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b0979ba2e4_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_375ef59bb5e00862_28a97b440f_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -2917,6 +3267,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -2944,9 +3304,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b0979ba2e4_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_375ef59bb5e00862_28a97b440f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b0979ba2e4_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_375ef59bb5e00862_28a97b440f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -2957,20 +3317,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b0979ba2e4_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_375ef59bb5e00862_28a97b440f_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__cgi-Info__noSIB1__ssb-SubcarrierOffset__integer_transform
+ * adapter_id: a_4bae2b6d35613e8d
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__cgi-Info__noSIB1__ssb-SubcarrierOffset
  * message: MeasurementReport
  * field: ssb-SubcarrierOffset
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->ext1->cgi_Info->noSIB1->ssb_SubcarrierOffset
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5b27bb72f7_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5b27bb72f7_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4bae2b6d35613e8d_aba8a2c179_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4bae2b6d35613e8d_aba8a2c179_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -2978,7 +3338,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5b27bb72f7_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4bae2b6d35613e8d_aba8a2c179_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3003,6 +3363,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3022,9 +3392,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5b27bb72f7_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4bae2b6d35613e8d_aba8a2c179_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5b27bb72f7_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4bae2b6d35613e8d_aba8a2c179_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3035,20 +3405,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-SubcarrierOffset",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5b27bb72f7_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4bae2b6d35613e8d_aba8a2c179_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero__integer_transform
+ * adapter_id: a_a6253dfdb0c29af3
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero
  * message: MeasurementReport
  * field: controlResourceSetZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.controlResourceSetZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac92abc39a_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac92abc39a_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_a6253dfdb0c29af3_8633086e55_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_a6253dfdb0c29af3_8633086e55_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3056,7 +3426,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac92abc39a_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_a6253dfdb0c29af3_8633086e55_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3081,6 +3451,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3100,9 +3480,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac92abc39a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_a6253dfdb0c29af3_8633086e55_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac92abc39a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_a6253dfdb0c29af3_8633086e55_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3113,20 +3493,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "controlResourceSetZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac92abc39a_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_a6253dfdb0c29af3_8633086e55_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero__integer_transform
+ * adapter_id: a_7d607dd4fff7bc0e
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero
  * message: MeasurementReport
  * field: searchSpaceZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.searchSpaceZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f2d19dee67_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f2d19dee67_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_7d607dd4fff7bc0e_55ea15be27_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_7d607dd4fff7bc0e_55ea15be27_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3134,7 +3514,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f2d19dee67_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_7d607dd4fff7bc0e_55ea15be27_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3159,6 +3539,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3178,9 +3568,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f2d19dee67_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_7d607dd4fff7bc0e_55ea15be27_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f2d19dee67_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_7d607dd4fff7bc0e_55ea15be27_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3191,20 +3581,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "searchSpaceZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f2d19dee67_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_7d607dd4fff7bc0e_55ea15be27_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__triggeredEvent-r17__timeBetweenEvents-r17__integer_transform
+ * adapter_id: a_77c82d207afabaff
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServingMOList__item0__measResultBestNeighCell__triggeredEvent-r17__timeBetweenEvents-r17
  * message: MeasurementReport
  * field: timeBetweenEvents-r17
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultServingMOList.list.array[0]->measResultBestNeighCell->ext2->triggeredEvent_r17->timeBetweenEvents_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4484efe377_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4484efe377_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_77c82d207afabaff_1d78e68d99_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_77c82d207afabaff_1d78e68d99_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3212,7 +3602,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4484efe377_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_77c82d207afabaff_1d78e68d99_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3237,6 +3627,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3260,9 +3660,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4484efe377_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_77c82d207afabaff_1d78e68d99_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4484efe377_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_77c82d207afabaff_1d78e68d99_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3273,20 +3673,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "timeBetweenEvents-r17",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4484efe377_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_77c82d207afabaff_1d78e68d99_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__physCellId__integer_transform
+ * adapter_id: a_8761c10b76b8c520
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__physCellId
  * message: MeasurementReport
  * field: physCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->physCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12517ef9f8_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12517ef9f8_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_8761c10b76b8c520_5e6d362318_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_8761c10b76b8c520_5e6d362318_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3294,7 +3694,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12517ef9f8_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_8761c10b76b8c520_5e6d362318_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3322,6 +3722,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3341,9 +3751,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12517ef9f8_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_8761c10b76b8c520_5e6d362318_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12517ef9f8_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_8761c10b76b8c520_5e6d362318_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3354,20 +3764,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "physCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12517ef9f8_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_8761c10b76b8c520_5e6d362318_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsSSB-Cell__rsrp__integer_transform
+ * adapter_id: a_6a49afcd524dc639
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsSSB-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.cellResults.resultsSSB_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_61c72a4575_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_61c72a4575_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_6a49afcd524dc639_f4bb08ae3d_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_6a49afcd524dc639_f4bb08ae3d_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3375,7 +3785,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_61c72a4575_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_6a49afcd524dc639_f4bb08ae3d_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3403,6 +3813,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3424,9 +3844,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_61c72a4575_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_6a49afcd524dc639_f4bb08ae3d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_61c72a4575_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_6a49afcd524dc639_f4bb08ae3d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3437,20 +3857,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_61c72a4575_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_6a49afcd524dc639_f4bb08ae3d_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsSSB-Cell__rsrq__integer_transform
+ * adapter_id: a_b7c9da750039aec7
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsSSB-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.cellResults.resultsSSB_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_873417b9be_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_873417b9be_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_b7c9da750039aec7_8860b47b9b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b7c9da750039aec7_8860b47b9b_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3458,7 +3878,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_873417b9be_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_b7c9da750039aec7_8860b47b9b_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3486,6 +3906,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3507,9 +3937,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_873417b9be_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_b7c9da750039aec7_8860b47b9b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_873417b9be_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_b7c9da750039aec7_8860b47b9b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3520,20 +3950,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_873417b9be_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_b7c9da750039aec7_8860b47b9b_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsSSB-Cell__sinr__integer_transform
+ * adapter_id: a_b95d8a4e7cecff2d
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsSSB-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.cellResults.resultsSSB_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5da7569433_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5da7569433_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_b95d8a4e7cecff2d_e8ef2b08e6_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b95d8a4e7cecff2d_e8ef2b08e6_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3541,7 +3971,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5da7569433_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_b95d8a4e7cecff2d_e8ef2b08e6_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3569,6 +3999,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3590,9 +4030,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5da7569433_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_b95d8a4e7cecff2d_e8ef2b08e6_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5da7569433_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_b95d8a4e7cecff2d_e8ef2b08e6_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3603,20 +4043,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5da7569433_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_b95d8a4e7cecff2d_e8ef2b08e6_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__rsrp__integer_transform
+ * adapter_id: a_a0dd6a9fd78771b6
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.cellResults.resultsCSI_RS_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3d923f475_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3d923f475_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_a0dd6a9fd78771b6_96f10c4736_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_a0dd6a9fd78771b6_96f10c4736_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3624,7 +4064,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3d923f475_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_a0dd6a9fd78771b6_96f10c4736_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3652,6 +4092,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3673,9 +4123,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3d923f475_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_a0dd6a9fd78771b6_96f10c4736_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3d923f475_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_a0dd6a9fd78771b6_96f10c4736_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3686,20 +4136,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3d923f475_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_a0dd6a9fd78771b6_96f10c4736_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__rsrq__integer_transform
+ * adapter_id: a_58b2260838c2afe1
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.cellResults.resultsCSI_RS_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9f360c10ab_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9f360c10ab_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_58b2260838c2afe1_35fc7a1e5a_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_58b2260838c2afe1_35fc7a1e5a_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3707,7 +4157,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9f360c10ab_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_58b2260838c2afe1_35fc7a1e5a_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3735,6 +4185,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3756,9 +4216,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9f360c10ab_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_58b2260838c2afe1_35fc7a1e5a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9f360c10ab_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_58b2260838c2afe1_35fc7a1e5a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3769,20 +4229,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9f360c10ab_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_58b2260838c2afe1_35fc7a1e5a_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__sinr__integer_transform
+ * adapter_id: a_f01c5ee1842ae7b2
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.cellResults.resultsCSI_RS_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f74489d61b_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f74489d61b_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_f01c5ee1842ae7b2_f38416e1d3_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_f01c5ee1842ae7b2_f38416e1d3_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3790,7 +4250,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f74489d61b_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_f01c5ee1842ae7b2_f38416e1d3_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3818,6 +4278,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3839,9 +4309,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f74489d61b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_f01c5ee1842ae7b2_f38416e1d3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f74489d61b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_f01c5ee1842ae7b2_f38416e1d3_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3852,20 +4322,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f74489d61b_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_f01c5ee1842ae7b2_f38416e1d3_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index__integer_transform
+ * adapter_id: a_09871b606b75121a
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index
  * message: MeasurementReport
  * field: ssb-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d50a9fda99_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d50a9fda99_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_09871b606b75121a_4586efadb7_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_09871b606b75121a_4586efadb7_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3873,7 +4343,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d50a9fda99_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_09871b606b75121a_4586efadb7_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3906,6 +4376,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -3925,9 +4405,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d50a9fda99_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_09871b606b75121a_4586efadb7_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d50a9fda99_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_09871b606b75121a_4586efadb7_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -3938,20 +4418,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d50a9fda99_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_09871b606b75121a_4586efadb7_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp__integer_transform
+ * adapter_id: a_576686f6ff3f38ce
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f9fa156c00_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f9fa156c00_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_576686f6ff3f38ce_3eb86fc9f5_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_576686f6ff3f38ce_3eb86fc9f5_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -3959,7 +4439,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f9fa156c00_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_576686f6ff3f38ce_3eb86fc9f5_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -3992,6 +4472,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4019,9 +4509,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f9fa156c00_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_576686f6ff3f38ce_3eb86fc9f5_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f9fa156c00_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_576686f6ff3f38ce_3eb86fc9f5_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4032,20 +4522,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f9fa156c00_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_576686f6ff3f38ce_3eb86fc9f5_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq__integer_transform
+ * adapter_id: a_e970fea180e05558
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_261d5d7ed9_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_261d5d7ed9_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_e970fea180e05558_8aa8a7beef_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_e970fea180e05558_8aa8a7beef_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4053,7 +4543,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_261d5d7ed9_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_e970fea180e05558_8aa8a7beef_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4086,6 +4576,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4113,9 +4613,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_261d5d7ed9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_e970fea180e05558_8aa8a7beef_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_261d5d7ed9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_e970fea180e05558_8aa8a7beef_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4126,20 +4626,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_261d5d7ed9_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_e970fea180e05558_8aa8a7beef_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr__integer_transform
+ * adapter_id: a_8eefd153de6304bf
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5870ac814d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5870ac814d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_8eefd153de6304bf_fbe4d25295_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_8eefd153de6304bf_fbe4d25295_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4147,7 +4647,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5870ac814d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_8eefd153de6304bf_fbe4d25295_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4180,6 +4680,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4207,9 +4717,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5870ac814d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_8eefd153de6304bf_fbe4d25295_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5870ac814d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_8eefd153de6304bf_fbe4d25295_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4220,20 +4730,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5870ac814d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_8eefd153de6304bf_fbe4d25295_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index__integer_transform
+ * adapter_id: a_75fd586d55f911c4
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index
  * message: MeasurementReport
  * field: csi-RS-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2435c2788_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2435c2788_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_75fd586d55f911c4_59145df0bb_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_75fd586d55f911c4_59145df0bb_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4241,7 +4751,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2435c2788_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_75fd586d55f911c4_59145df0bb_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4274,6 +4784,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4293,9 +4813,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2435c2788_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_75fd586d55f911c4_59145df0bb_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2435c2788_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_75fd586d55f911c4_59145df0bb_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4306,20 +4826,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "csi-RS-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2435c2788_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_75fd586d55f911c4_59145df0bb_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp__integer_transform
+ * adapter_id: a_7f3afaf82767f3e2
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97f17b8227_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97f17b8227_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_7f3afaf82767f3e2_3991784a54_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_7f3afaf82767f3e2_3991784a54_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4327,7 +4847,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97f17b8227_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_7f3afaf82767f3e2_3991784a54_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4360,6 +4880,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4387,9 +4917,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97f17b8227_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_7f3afaf82767f3e2_3991784a54_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97f17b8227_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_7f3afaf82767f3e2_3991784a54_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4400,20 +4930,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97f17b8227_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_7f3afaf82767f3e2_3991784a54_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq__integer_transform
+ * adapter_id: a_50e923ad9c3e8b78
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_84362a2caf_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_84362a2caf_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_50e923ad9c3e8b78_696f773f3b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_50e923ad9c3e8b78_696f773f3b_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4421,7 +4951,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_84362a2caf_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_50e923ad9c3e8b78_696f773f3b_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4454,6 +4984,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4481,9 +5021,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_84362a2caf_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_50e923ad9c3e8b78_696f773f3b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_84362a2caf_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_50e923ad9c3e8b78_696f773f3b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4494,20 +5034,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_84362a2caf_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_50e923ad9c3e8b78_696f773f3b_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr__integer_transform
+ * adapter_id: a_bb9c5a3e5005b7d3
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4123d19ab_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4123d19ab_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_bb9c5a3e5005b7d3_a16a700d05_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_bb9c5a3e5005b7d3_a16a700d05_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4515,7 +5055,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4123d19ab_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_bb9c5a3e5005b7d3_a16a700d05_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4548,6 +5088,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4575,9 +5125,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4123d19ab_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_bb9c5a3e5005b7d3_a16a700d05_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4123d19ab_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_bb9c5a3e5005b7d3_a16a700d05_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4588,20 +5138,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4123d19ab_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_bb9c5a3e5005b7d3_a16a700d05_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__cgi-Info__noSIB1__ssb-SubcarrierOffset__integer_transform
+ * adapter_id: a_0b4e477fdca922f2
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__cgi-Info__noSIB1__ssb-SubcarrierOffset
  * message: MeasurementReport
  * field: ssb-SubcarrierOffset
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->ext1->cgi_Info->noSIB1->ssb_SubcarrierOffset
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9a746f8571_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9a746f8571_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_0b4e477fdca922f2_4145894502_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0b4e477fdca922f2_4145894502_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4609,7 +5159,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9a746f8571_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_0b4e477fdca922f2_4145894502_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4637,6 +5187,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4656,9 +5216,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9a746f8571_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_0b4e477fdca922f2_4145894502_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9a746f8571_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_0b4e477fdca922f2_4145894502_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4669,20 +5229,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-SubcarrierOffset",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9a746f8571_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_0b4e477fdca922f2_4145894502_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero__integer_transform
+ * adapter_id: a_88a009942fe8d7a2
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero
  * message: MeasurementReport
  * field: controlResourceSetZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.controlResourceSetZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e9bac2ff35_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e9bac2ff35_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_88a009942fe8d7a2_c663b934c0_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_88a009942fe8d7a2_c663b934c0_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4690,7 +5250,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e9bac2ff35_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_88a009942fe8d7a2_c663b934c0_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4718,6 +5278,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4737,9 +5307,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e9bac2ff35_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_88a009942fe8d7a2_c663b934c0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e9bac2ff35_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_88a009942fe8d7a2_c663b934c0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4750,20 +5320,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "controlResourceSetZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e9bac2ff35_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_88a009942fe8d7a2_c663b934c0_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero__integer_transform
+ * adapter_id: a_a93b76ed3129d156
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero
  * message: MeasurementReport
  * field: searchSpaceZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.searchSpaceZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6f74871668_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6f74871668_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_a93b76ed3129d156_e041869b77_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_a93b76ed3129d156_e041869b77_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4771,7 +5341,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6f74871668_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_a93b76ed3129d156_e041869b77_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4799,6 +5369,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4818,9 +5398,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6f74871668_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_a93b76ed3129d156_e041869b77_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6f74871668_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_a93b76ed3129d156_e041869b77_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4831,20 +5411,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "searchSpaceZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6f74871668_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_a93b76ed3129d156_e041869b77_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__triggeredEvent-r17__timeBetweenEvents-r17__integer_transform
+ * adapter_id: a_6e70e3766b8e9f2b
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListNR__item0__triggeredEvent-r17__timeBetweenEvents-r17
  * message: MeasurementReport
  * field: timeBetweenEvents-r17
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListNR->list.array[0]->ext2->triggeredEvent_r17->timeBetweenEvents_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_44a97e5cc1_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_44a97e5cc1_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_6e70e3766b8e9f2b_31f060078c_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_6e70e3766b8e9f2b_31f060078c_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4852,7 +5432,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_44a97e5cc1_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_6e70e3766b8e9f2b_31f060078c_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4880,6 +5460,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4903,9 +5493,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_44a97e5cc1_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_6e70e3766b8e9f2b_31f060078c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_44a97e5cc1_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_6e70e3766b8e9f2b_31f060078c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4916,20 +5506,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "timeBetweenEvents-r17",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_44a97e5cc1_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_6e70e3766b8e9f2b_31f060078c_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListEUTRA__item0__eutra-PhysCellId__integer_transform
+ * adapter_id: a_0b9153794641a5ef
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListEUTRA__item0__eutra-PhysCellId
  * message: MeasurementReport
  * field: eutra-PhysCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListEUTRA->list.array[0]->eutra_PhysCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8ba3296a61_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8ba3296a61_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_0b9153794641a5ef_9082dca25b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0b9153794641a5ef_9082dca25b_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -4937,7 +5527,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8ba3296a61_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_0b9153794641a5ef_9082dca25b_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -4965,6 +5555,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -4978,9 +5578,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8ba3296a61_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_0b9153794641a5ef_9082dca25b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8ba3296a61_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_0b9153794641a5ef_9082dca25b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -4991,20 +5591,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "eutra-PhysCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8ba3296a61_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_0b9153794641a5ef_9082dca25b_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListEUTRA__item0__measResult__rsrp__integer_transform
+ * adapter_id: a_4611355bf574c1f7
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListEUTRA__item0__measResult__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListEUTRA->list.array[0]->measResult.rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91e619c4d0_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91e619c4d0_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4611355bf574c1f7_84de08cda2_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4611355bf574c1f7_84de08cda2_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5012,7 +5612,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91e619c4d0_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4611355bf574c1f7_84de08cda2_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5040,6 +5640,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5059,9 +5669,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91e619c4d0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4611355bf574c1f7_84de08cda2_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91e619c4d0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4611355bf574c1f7_84de08cda2_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5072,20 +5682,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91e619c4d0_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4611355bf574c1f7_84de08cda2_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListEUTRA__item0__measResult__rsrq__integer_transform
+ * adapter_id: a_2cd4bc8ab90d2847
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListEUTRA__item0__measResult__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListEUTRA->list.array[0]->measResult.rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3be7d8d723_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3be7d8d723_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_2cd4bc8ab90d2847_9eeb3b1a70_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_2cd4bc8ab90d2847_9eeb3b1a70_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5093,7 +5703,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3be7d8d723_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_2cd4bc8ab90d2847_9eeb3b1a70_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5121,6 +5731,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5140,9 +5760,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3be7d8d723_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_2cd4bc8ab90d2847_9eeb3b1a70_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3be7d8d723_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_2cd4bc8ab90d2847_9eeb3b1a70_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5153,20 +5773,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3be7d8d723_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_2cd4bc8ab90d2847_9eeb3b1a70_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListEUTRA__item0__measResult__sinr__integer_transform
+ * adapter_id: a_0899faffa0e0eab5
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListEUTRA__item0__measResult__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListEUTRA->list.array[0]->measResult.sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5e65e94f07_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5e65e94f07_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_0899faffa0e0eab5_4444399a8b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0899faffa0e0eab5_4444399a8b_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5174,7 +5794,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5e65e94f07_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_0899faffa0e0eab5_4444399a8b_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5202,6 +5822,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5221,9 +5851,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5e65e94f07_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_0899faffa0e0eab5_4444399a8b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5e65e94f07_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_0899faffa0e0eab5_4444399a8b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5234,20 +5864,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5e65e94f07_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_0899faffa0e0eab5_4444399a8b_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListUTRA-FDD-r16__item0__physCellId-r16__integer_transform
+ * adapter_id: a_4872b5c3efd9beef
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListUTRA-FDD-r16__item0__physCellId-r16
  * message: MeasurementReport
  * field: physCellId-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListUTRA_FDD_r16->list.array[0]->physCellId_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3fe758fd63_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3fe758fd63_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4872b5c3efd9beef_c35ba79fd9_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4872b5c3efd9beef_c35ba79fd9_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5255,7 +5885,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3fe758fd63_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4872b5c3efd9beef_c35ba79fd9_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5283,6 +5913,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5296,9 +5936,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3fe758fd63_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4872b5c3efd9beef_c35ba79fd9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3fe758fd63_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4872b5c3efd9beef_c35ba79fd9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5309,20 +5949,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "physCellId-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3fe758fd63_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4872b5c3efd9beef_c35ba79fd9_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListUTRA-FDD-r16__item0__measResult-r16__utra-FDD-RSCP-r16__integer_transform
+ * adapter_id: a_4a340108f80ec252
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListUTRA-FDD-r16__item0__measResult-r16__utra-FDD-RSCP-r16
  * message: MeasurementReport
  * field: utra-FDD-RSCP-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListUTRA_FDD_r16->list.array[0]->measResult_r16.utra_FDD_RSCP_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7e1f079efc_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7e1f079efc_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4a340108f80ec252_3b5c59c688_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4a340108f80ec252_3b5c59c688_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5330,7 +5970,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7e1f079efc_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4a340108f80ec252_3b5c59c688_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5358,6 +5998,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5377,9 +6027,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7e1f079efc_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4a340108f80ec252_3b5c59c688_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7e1f079efc_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4a340108f80ec252_3b5c59c688_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5390,20 +6040,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "utra-FDD-RSCP-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7e1f079efc_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4a340108f80ec252_3b5c59c688_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListUTRA-FDD-r16__item0__measResult-r16__utra-FDD-EcN0-r16__integer_transform
+ * adapter_id: a_8058f13faf3711bf
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultNeighCells__measResultListUTRA-FDD-r16__item0__measResult-r16__utra-FDD-EcN0-r16
  * message: MeasurementReport
  * field: utra-FDD-EcN0-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.measResultNeighCells->choice.measResultListUTRA_FDD_r16->list.array[0]->measResult_r16.utra_FDD_EcN0_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d40c1937e_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d40c1937e_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_8058f13faf3711bf_32cf304a37_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_8058f13faf3711bf_32cf304a37_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5411,7 +6061,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d40c1937e_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_8058f13faf3711bf_32cf304a37_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5439,6 +6089,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5458,9 +6118,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d40c1937e_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_8058f13faf3711bf_32cf304a37_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d40c1937e_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_8058f13faf3711bf_32cf304a37_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5471,20 +6131,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "utra-FDD-EcN0-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d40c1937e_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_8058f13faf3711bf_32cf304a37_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__carrierFreq__integer_transform
+ * adapter_id: a_d40cf037bf723c9f
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__carrierFreq
  * message: MeasurementReport
  * field: carrierFreq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->carrierFreq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_af6a33dfcb_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_af6a33dfcb_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_d40cf037bf723c9f_6a002c3a51_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_d40cf037bf723c9f_6a002c3a51_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5492,7 +6152,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_af6a33dfcb_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_d40cf037bf723c9f_6a002c3a51_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5519,6 +6179,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5534,9 +6204,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_af6a33dfcb_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_d40cf037bf723c9f_6a002c3a51_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_af6a33dfcb_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_d40cf037bf723c9f_6a002c3a51_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5547,20 +6217,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "carrierFreq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_af6a33dfcb_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_d40cf037bf723c9f_6a002c3a51_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultServingCell__eutra-PhysCellId__integer_transform
+ * adapter_id: a_27a1699697dc8f99
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultServingCell__eutra-PhysCellId
  * message: MeasurementReport
  * field: eutra-PhysCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->measResultServingCell->eutra_PhysCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d44989ee4d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d44989ee4d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_27a1699697dc8f99_bbe357acdd_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_27a1699697dc8f99_bbe357acdd_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5568,7 +6238,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d44989ee4d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_27a1699697dc8f99_bbe357acdd_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5595,6 +6265,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5612,9 +6292,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d44989ee4d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_27a1699697dc8f99_bbe357acdd_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d44989ee4d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_27a1699697dc8f99_bbe357acdd_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5625,20 +6305,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "eutra-PhysCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d44989ee4d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_27a1699697dc8f99_bbe357acdd_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultServingCell__measResult__rsrp__integer_transform
+ * adapter_id: a_4f6adcf671631e42
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultServingCell__measResult__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->measResultServingCell->measResult.rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_81d7cd1d67_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_81d7cd1d67_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4f6adcf671631e42_19a8cebcd4_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4f6adcf671631e42_19a8cebcd4_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5646,7 +6326,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_81d7cd1d67_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4f6adcf671631e42_19a8cebcd4_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5673,6 +6353,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5696,9 +6386,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_81d7cd1d67_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4f6adcf671631e42_19a8cebcd4_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_81d7cd1d67_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4f6adcf671631e42_19a8cebcd4_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5709,20 +6399,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_81d7cd1d67_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4f6adcf671631e42_19a8cebcd4_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultServingCell__measResult__rsrq__integer_transform
+ * adapter_id: a_4924522b611a548e
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultServingCell__measResult__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->measResultServingCell->measResult.rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0b025e6e51_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0b025e6e51_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4924522b611a548e_0d246e30d2_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4924522b611a548e_0d246e30d2_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5730,7 +6420,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0b025e6e51_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4924522b611a548e_0d246e30d2_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5757,6 +6447,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5780,9 +6480,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0b025e6e51_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4924522b611a548e_0d246e30d2_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0b025e6e51_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4924522b611a548e_0d246e30d2_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5793,20 +6493,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0b025e6e51_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4924522b611a548e_0d246e30d2_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultServingCell__measResult__sinr__integer_transform
+ * adapter_id: a_88bdb3831054b828
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultServingCell__measResult__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->measResultServingCell->measResult.sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_00185026e4_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_00185026e4_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_88bdb3831054b828_e8a190bd95_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_88bdb3831054b828_e8a190bd95_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5814,7 +6514,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_00185026e4_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_88bdb3831054b828_e8a190bd95_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5841,6 +6541,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5864,9 +6574,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_00185026e4_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_88bdb3831054b828_e8a190bd95_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_00185026e4_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_88bdb3831054b828_e8a190bd95_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5877,20 +6587,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_00185026e4_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_88bdb3831054b828_e8a190bd95_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultBestNeighCell__eutra-PhysCellId__integer_transform
+ * adapter_id: a_5e4c8f388d107aad
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultBestNeighCell__eutra-PhysCellId
  * message: MeasurementReport
  * field: eutra-PhysCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->measResultBestNeighCell->eutra_PhysCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c39dfee5a3_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c39dfee5a3_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_5e4c8f388d107aad_3097bb50a5_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5e4c8f388d107aad_3097bb50a5_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5898,7 +6608,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c39dfee5a3_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_5e4c8f388d107aad_3097bb50a5_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -5925,6 +6635,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -5942,9 +6662,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c39dfee5a3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_5e4c8f388d107aad_3097bb50a5_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c39dfee5a3_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_5e4c8f388d107aad_3097bb50a5_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -5955,20 +6675,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "eutra-PhysCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c39dfee5a3_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_5e4c8f388d107aad_3097bb50a5_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultBestNeighCell__measResult__rsrp__integer_transform
+ * adapter_id: a_f066350cd32babf5
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultBestNeighCell__measResult__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->measResultBestNeighCell->measResult.rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97848c3858_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97848c3858_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_f066350cd32babf5_0d94767ec0_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_f066350cd32babf5_0d94767ec0_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -5976,7 +6696,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97848c3858_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_f066350cd32babf5_0d94767ec0_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6003,6 +6723,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6026,9 +6756,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97848c3858_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_f066350cd32babf5_0d94767ec0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97848c3858_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_f066350cd32babf5_0d94767ec0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6039,20 +6769,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97848c3858_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_f066350cd32babf5_0d94767ec0_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultBestNeighCell__measResult__rsrq__integer_transform
+ * adapter_id: a_ac35df4614a52e53
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultBestNeighCell__measResult__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->measResultBestNeighCell->measResult.rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5c1a940108_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5c1a940108_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_ac35df4614a52e53_901ff230ea_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_ac35df4614a52e53_901ff230ea_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6060,7 +6790,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5c1a940108_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_ac35df4614a52e53_901ff230ea_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6087,6 +6817,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6110,9 +6850,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5c1a940108_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_ac35df4614a52e53_901ff230ea_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5c1a940108_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_ac35df4614a52e53_901ff230ea_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6123,20 +6863,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5c1a940108_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_ac35df4614a52e53_901ff230ea_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultBestNeighCell__measResult__sinr__integer_transform
+ * adapter_id: a_53e9922902fff8cf
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListEUTRA-SCG__item0__measResultBestNeighCell__measResult__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListEUTRA_SCG->list.array[0]->measResultBestNeighCell->measResult.sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b369516ba4_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b369516ba4_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_53e9922902fff8cf_94114eda07_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_53e9922902fff8cf_94114eda07_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6144,7 +6884,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b369516ba4_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_53e9922902fff8cf_94114eda07_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6171,6 +6911,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6194,9 +6944,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b369516ba4_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_53e9922902fff8cf_94114eda07_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b369516ba4_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_53e9922902fff8cf_94114eda07_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6207,20 +6957,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b369516ba4_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_53e9922902fff8cf_94114eda07_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__ssbFrequency__integer_transform
+ * adapter_id: a_43b047d8920e8871
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__ssbFrequency
  * message: MeasurementReport
  * field: ssbFrequency
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->ssbFrequency
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b741fd8cb0_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b741fd8cb0_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_43b047d8920e8871_e0be867d00_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_43b047d8920e8871_e0be867d00_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6228,7 +6978,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b741fd8cb0_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_43b047d8920e8871_e0be867d00_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6255,6 +7005,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6276,9 +7036,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b741fd8cb0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_43b047d8920e8871_e0be867d00_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b741fd8cb0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_43b047d8920e8871_e0be867d00_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6289,20 +7049,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssbFrequency",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b741fd8cb0_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_43b047d8920e8871_e0be867d00_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__refFreqCSI-RS__integer_transform
+ * adapter_id: a_66f31d392ca91fa9
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__refFreqCSI-RS
  * message: MeasurementReport
  * field: refFreqCSI-RS
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->refFreqCSI_RS
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4ea654280_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4ea654280_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_66f31d392ca91fa9_9ca44c45e9_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_66f31d392ca91fa9_9ca44c45e9_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6310,7 +7070,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4ea654280_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_66f31d392ca91fa9_9ca44c45e9_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6337,6 +7097,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6358,9 +7128,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4ea654280_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_66f31d392ca91fa9_9ca44c45e9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4ea654280_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_66f31d392ca91fa9_9ca44c45e9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6371,20 +7141,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "refFreqCSI-RS",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4ea654280_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_66f31d392ca91fa9_9ca44c45e9_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__physCellId__integer_transform
+ * adapter_id: a_10bbd1f5b188a1d0
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__physCellId
  * message: MeasurementReport
  * field: physCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->physCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f14de00354_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f14de00354_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_10bbd1f5b188a1d0_63f91f7010_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_10bbd1f5b188a1d0_63f91f7010_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6392,7 +7162,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f14de00354_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_10bbd1f5b188a1d0_63f91f7010_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6419,6 +7189,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6442,9 +7222,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f14de00354_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_10bbd1f5b188a1d0_63f91f7010_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f14de00354_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_10bbd1f5b188a1d0_63f91f7010_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6455,20 +7235,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "physCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f14de00354_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_10bbd1f5b188a1d0_63f91f7010_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__rsrp__integer_transform
+ * adapter_id: a_8710f6503e627905
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.cellResults.resultsSSB_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9549d8ed43_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9549d8ed43_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_8710f6503e627905_657f4c2cfa_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_8710f6503e627905_657f4c2cfa_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6476,7 +7256,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9549d8ed43_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_8710f6503e627905_657f4c2cfa_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6503,6 +7283,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6528,9 +7318,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9549d8ed43_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_8710f6503e627905_657f4c2cfa_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9549d8ed43_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_8710f6503e627905_657f4c2cfa_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6541,20 +7331,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9549d8ed43_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_8710f6503e627905_657f4c2cfa_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__rsrq__integer_transform
+ * adapter_id: a_a674c619fbc0b6eb
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.cellResults.resultsSSB_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_75a3fa1b88_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_75a3fa1b88_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_a674c619fbc0b6eb_22ed936d8c_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_a674c619fbc0b6eb_22ed936d8c_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6562,7 +7352,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_75a3fa1b88_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_a674c619fbc0b6eb_22ed936d8c_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6589,6 +7379,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6614,9 +7414,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_75a3fa1b88_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_a674c619fbc0b6eb_22ed936d8c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_75a3fa1b88_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_a674c619fbc0b6eb_22ed936d8c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6627,20 +7427,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_75a3fa1b88_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_a674c619fbc0b6eb_22ed936d8c_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__sinr__integer_transform
+ * adapter_id: a_8d00a2364a8ac863
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsSSB-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.cellResults.resultsSSB_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_14726289f5_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_14726289f5_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_8d00a2364a8ac863_f10456cd7e_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_8d00a2364a8ac863_f10456cd7e_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6648,7 +7448,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_14726289f5_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_8d00a2364a8ac863_f10456cd7e_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6675,6 +7475,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6700,9 +7510,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_14726289f5_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_8d00a2364a8ac863_f10456cd7e_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_14726289f5_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_8d00a2364a8ac863_f10456cd7e_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6713,20 +7523,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_14726289f5_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_8d00a2364a8ac863_f10456cd7e_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__rsrp__integer_transform
+ * adapter_id: a_f5feabaccebcf2de
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.cellResults.resultsCSI_RS_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0431c4e5e0_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0431c4e5e0_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_f5feabaccebcf2de_336fe67ac0_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_f5feabaccebcf2de_336fe67ac0_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6734,7 +7544,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0431c4e5e0_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_f5feabaccebcf2de_336fe67ac0_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6761,6 +7571,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6786,9 +7606,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0431c4e5e0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_f5feabaccebcf2de_336fe67ac0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0431c4e5e0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_f5feabaccebcf2de_336fe67ac0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6799,20 +7619,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0431c4e5e0_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_f5feabaccebcf2de_336fe67ac0_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__rsrq__integer_transform
+ * adapter_id: a_3b50aad6650756c2
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.cellResults.resultsCSI_RS_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac38dc3357_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac38dc3357_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_3b50aad6650756c2_a53c800fd4_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3b50aad6650756c2_a53c800fd4_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6820,7 +7640,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac38dc3357_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_3b50aad6650756c2_a53c800fd4_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6847,6 +7667,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6872,9 +7702,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac38dc3357_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_3b50aad6650756c2_a53c800fd4_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac38dc3357_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_3b50aad6650756c2_a53c800fd4_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6885,20 +7715,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac38dc3357_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_3b50aad6650756c2_a53c800fd4_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__sinr__integer_transform
+ * adapter_id: a_6c79a67a7533eea6
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__cellResults__resultsCSI-RS-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.cellResults.resultsCSI_RS_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12d815174f_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12d815174f_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_6c79a67a7533eea6_a9edaa6eb4_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_6c79a67a7533eea6_a9edaa6eb4_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6906,7 +7736,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12d815174f_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_6c79a67a7533eea6_a9edaa6eb4_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -6933,6 +7763,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -6958,9 +7798,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12d815174f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_6c79a67a7533eea6_a9edaa6eb4_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12d815174f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_6c79a67a7533eea6_a9edaa6eb4_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -6971,20 +7811,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12d815174f_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_6c79a67a7533eea6_a9edaa6eb4_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index__integer_transform
+ * adapter_id: a_c1a9f87ce54beb6f
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index
  * message: MeasurementReport
  * field: ssb-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6664cfb66a_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6664cfb66a_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_c1a9f87ce54beb6f_7e3d9773e8_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_c1a9f87ce54beb6f_7e3d9773e8_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -6992,7 +7832,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6664cfb66a_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_c1a9f87ce54beb6f_7e3d9773e8_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7025,6 +7865,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7048,9 +7898,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6664cfb66a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_c1a9f87ce54beb6f_7e3d9773e8_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6664cfb66a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_c1a9f87ce54beb6f_7e3d9773e8_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7061,20 +7911,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6664cfb66a_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_c1a9f87ce54beb6f_7e3d9773e8_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp__integer_transform
+ * adapter_id: a_9cc6705e4d834ea1
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6bb15b6a53_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6bb15b6a53_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_9cc6705e4d834ea1_846dd06674_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_9cc6705e4d834ea1_846dd06674_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7082,7 +7932,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6bb15b6a53_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_9cc6705e4d834ea1_846dd06674_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7115,6 +7965,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7146,9 +8006,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6bb15b6a53_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_9cc6705e4d834ea1_846dd06674_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6bb15b6a53_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_9cc6705e4d834ea1_846dd06674_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7159,20 +8019,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6bb15b6a53_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_9cc6705e4d834ea1_846dd06674_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq__integer_transform
+ * adapter_id: a_cb4b2c33945c664a
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da7e116ed_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da7e116ed_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_cb4b2c33945c664a_ffbccab6d3_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_cb4b2c33945c664a_ffbccab6d3_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7180,7 +8040,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da7e116ed_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_cb4b2c33945c664a_ffbccab6d3_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7213,6 +8073,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7244,9 +8114,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da7e116ed_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_cb4b2c33945c664a_ffbccab6d3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da7e116ed_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_cb4b2c33945c664a_ffbccab6d3_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7257,20 +8127,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da7e116ed_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_cb4b2c33945c664a_ffbccab6d3_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr__integer_transform
+ * adapter_id: a_5d8326fdfdc01fbb
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_20992624d9_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_20992624d9_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_5d8326fdfdc01fbb_983239847d_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5d8326fdfdc01fbb_983239847d_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7278,7 +8148,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_20992624d9_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_5d8326fdfdc01fbb_983239847d_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7311,6 +8181,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7342,9 +8222,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_20992624d9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_5d8326fdfdc01fbb_983239847d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_20992624d9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_5d8326fdfdc01fbb_983239847d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7355,20 +8235,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_20992624d9_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_5d8326fdfdc01fbb_983239847d_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index__integer_transform
+ * adapter_id: a_2b16bd13f4a9e606
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index
  * message: MeasurementReport
  * field: csi-RS-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9611179703_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9611179703_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_2b16bd13f4a9e606_d63934bbe3_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_2b16bd13f4a9e606_d63934bbe3_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7376,7 +8256,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9611179703_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_2b16bd13f4a9e606_d63934bbe3_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7409,6 +8289,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7432,9 +8322,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9611179703_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_2b16bd13f4a9e606_d63934bbe3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9611179703_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_2b16bd13f4a9e606_d63934bbe3_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7445,20 +8335,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "csi-RS-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9611179703_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_2b16bd13f4a9e606_d63934bbe3_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp__integer_transform
+ * adapter_id: a_b1998fae0230c261
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ee4d52fb2f_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ee4d52fb2f_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_b1998fae0230c261_52aaaaa7e9_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b1998fae0230c261_52aaaaa7e9_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7466,7 +8356,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ee4d52fb2f_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_b1998fae0230c261_52aaaaa7e9_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7499,6 +8389,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7530,9 +8430,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ee4d52fb2f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_b1998fae0230c261_52aaaaa7e9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ee4d52fb2f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_b1998fae0230c261_52aaaaa7e9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7543,20 +8443,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ee4d52fb2f_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_b1998fae0230c261_52aaaaa7e9_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq__integer_transform
+ * adapter_id: a_5b98cf9b0e30a9de
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6d61a6391e_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6d61a6391e_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_5b98cf9b0e30a9de_559535e40b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5b98cf9b0e30a9de_559535e40b_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7564,7 +8464,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6d61a6391e_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_5b98cf9b0e30a9de_559535e40b_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7597,6 +8497,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7628,9 +8538,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6d61a6391e_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_5b98cf9b0e30a9de_559535e40b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6d61a6391e_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_5b98cf9b0e30a9de_559535e40b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7641,20 +8551,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6d61a6391e_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_5b98cf9b0e30a9de_559535e40b_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr__integer_transform
+ * adapter_id: a_be086a72d86bba80
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8f963486e7_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8f963486e7_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_be086a72d86bba80_0e5edf50b0_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_be086a72d86bba80_0e5edf50b0_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7662,7 +8572,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8f963486e7_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_be086a72d86bba80_0e5edf50b0_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7695,6 +8605,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7726,9 +8646,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8f963486e7_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_be086a72d86bba80_0e5edf50b0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8f963486e7_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_be086a72d86bba80_0e5edf50b0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7739,20 +8659,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8f963486e7_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_be086a72d86bba80_0e5edf50b0_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__cgi-Info__noSIB1__ssb-SubcarrierOffset__integer_transform
+ * adapter_id: a_83c349b5223d8189
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__cgi-Info__noSIB1__ssb-SubcarrierOffset
  * message: MeasurementReport
  * field: ssb-SubcarrierOffset
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->ext1->cgi_Info->noSIB1->ssb_SubcarrierOffset
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e53bc32c88_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e53bc32c88_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_83c349b5223d8189_18527f0595_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_83c349b5223d8189_18527f0595_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7760,7 +8680,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e53bc32c88_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_83c349b5223d8189_18527f0595_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7787,6 +8707,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7810,9 +8740,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e53bc32c88_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_83c349b5223d8189_18527f0595_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e53bc32c88_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_83c349b5223d8189_18527f0595_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7823,20 +8753,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-SubcarrierOffset",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e53bc32c88_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_83c349b5223d8189_18527f0595_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero__integer_transform
+ * adapter_id: a_39ecbf3ac31c1e81
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero
  * message: MeasurementReport
  * field: controlResourceSetZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.controlResourceSetZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c818b53d2_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c818b53d2_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_39ecbf3ac31c1e81_a3f31da80f_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_39ecbf3ac31c1e81_a3f31da80f_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7844,7 +8774,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c818b53d2_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_39ecbf3ac31c1e81_a3f31da80f_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7871,6 +8801,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7894,9 +8834,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c818b53d2_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_39ecbf3ac31c1e81_a3f31da80f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c818b53d2_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_39ecbf3ac31c1e81_a3f31da80f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7907,20 +8847,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "controlResourceSetZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c818b53d2_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_39ecbf3ac31c1e81_a3f31da80f_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero__integer_transform
+ * adapter_id: a_754c70389eeeddb8
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero
  * message: MeasurementReport
  * field: searchSpaceZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.searchSpaceZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_fe210ff3fe_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_fe210ff3fe_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_754c70389eeeddb8_26321995e1_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_754c70389eeeddb8_26321995e1_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -7928,7 +8868,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_fe210ff3fe_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_754c70389eeeddb8_26321995e1_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -7955,6 +8895,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -7978,9 +8928,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_fe210ff3fe_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_754c70389eeeddb8_26321995e1_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_fe210ff3fe_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_754c70389eeeddb8_26321995e1_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -7991,20 +8941,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "searchSpaceZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_fe210ff3fe_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_754c70389eeeddb8_26321995e1_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__triggeredEvent-r17__timeBetweenEvents-r17__integer_transform
+ * adapter_id: a_e7f29e09acf576a1
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultServingCell__triggeredEvent-r17__timeBetweenEvents-r17
  * message: MeasurementReport
  * field: timeBetweenEvents-r17
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultServingCell->ext2->triggeredEvent_r17->timeBetweenEvents_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3bf3afad15_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3bf3afad15_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_e7f29e09acf576a1_9a1502f650_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_e7f29e09acf576a1_9a1502f650_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8012,7 +8962,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3bf3afad15_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_e7f29e09acf576a1_9a1502f650_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8039,6 +8989,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8066,9 +9026,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3bf3afad15_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_e7f29e09acf576a1_9a1502f650_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3bf3afad15_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_e7f29e09acf576a1_9a1502f650_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8079,20 +9039,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "timeBetweenEvents-r17",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3bf3afad15_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_e7f29e09acf576a1_9a1502f650_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__physCellId__integer_transform
+ * adapter_id: a_3fbac38151ff3cae
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__physCellId
  * message: MeasurementReport
  * field: physCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->physCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a6c64575cc_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a6c64575cc_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_3fbac38151ff3cae_5e7f5443ac_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3fbac38151ff3cae_5e7f5443ac_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8100,7 +9060,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a6c64575cc_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_3fbac38151ff3cae_5e7f5443ac_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8131,6 +9091,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8156,9 +9126,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a6c64575cc_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_3fbac38151ff3cae_5e7f5443ac_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a6c64575cc_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_3fbac38151ff3cae_5e7f5443ac_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8169,20 +9139,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "physCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a6c64575cc_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_3fbac38151ff3cae_5e7f5443ac_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsSSB-Cell__rsrp__integer_transform
+ * adapter_id: a_83cb125a46c09d0d
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsSSB-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.cellResults.resultsSSB_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d25ddd9e6c_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d25ddd9e6c_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_83cb125a46c09d0d_48d050cb75_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_83cb125a46c09d0d_48d050cb75_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8190,7 +9160,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d25ddd9e6c_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_83cb125a46c09d0d_48d050cb75_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8221,6 +9191,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8248,9 +9228,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d25ddd9e6c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_83cb125a46c09d0d_48d050cb75_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d25ddd9e6c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_83cb125a46c09d0d_48d050cb75_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8261,20 +9241,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d25ddd9e6c_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_83cb125a46c09d0d_48d050cb75_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsSSB-Cell__rsrq__integer_transform
+ * adapter_id: a_5f000ed8d0dfa15c
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsSSB-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.cellResults.resultsSSB_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ce90e20a0e_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ce90e20a0e_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_5f000ed8d0dfa15c_2bf5866bed_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5f000ed8d0dfa15c_2bf5866bed_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8282,7 +9262,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ce90e20a0e_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_5f000ed8d0dfa15c_2bf5866bed_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8313,6 +9293,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8340,9 +9330,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ce90e20a0e_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_5f000ed8d0dfa15c_2bf5866bed_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ce90e20a0e_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_5f000ed8d0dfa15c_2bf5866bed_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8353,20 +9343,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ce90e20a0e_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_5f000ed8d0dfa15c_2bf5866bed_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsSSB-Cell__sinr__integer_transform
+ * adapter_id: a_2000c17a7eeb1249
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsSSB-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.cellResults.resultsSSB_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_76c68ec6db_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_76c68ec6db_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_2000c17a7eeb1249_b1b2ad10cc_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_2000c17a7eeb1249_b1b2ad10cc_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8374,7 +9364,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_76c68ec6db_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_2000c17a7eeb1249_b1b2ad10cc_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8405,6 +9395,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8432,9 +9432,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_76c68ec6db_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_2000c17a7eeb1249_b1b2ad10cc_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_76c68ec6db_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_2000c17a7eeb1249_b1b2ad10cc_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8445,20 +9445,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_76c68ec6db_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_2000c17a7eeb1249_b1b2ad10cc_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__rsrp__integer_transform
+ * adapter_id: a_894b9b04175db856
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.cellResults.resultsCSI_RS_Cell->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_78016b02fb_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_78016b02fb_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_894b9b04175db856_d918198f8a_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_894b9b04175db856_d918198f8a_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8466,7 +9466,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_78016b02fb_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_894b9b04175db856_d918198f8a_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8497,6 +9497,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8524,9 +9534,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_78016b02fb_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_894b9b04175db856_d918198f8a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_78016b02fb_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_894b9b04175db856_d918198f8a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8537,20 +9547,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_78016b02fb_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_894b9b04175db856_d918198f8a_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__rsrq__integer_transform
+ * adapter_id: a_910ae2fbf8b0eb65
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.cellResults.resultsCSI_RS_Cell->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5603cbfd72_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5603cbfd72_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_910ae2fbf8b0eb65_f294b64a63_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_910ae2fbf8b0eb65_f294b64a63_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8558,7 +9568,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5603cbfd72_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_910ae2fbf8b0eb65_f294b64a63_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8589,6 +9599,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8616,9 +9636,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5603cbfd72_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_910ae2fbf8b0eb65_f294b64a63_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5603cbfd72_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_910ae2fbf8b0eb65_f294b64a63_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8629,20 +9649,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5603cbfd72_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_910ae2fbf8b0eb65_f294b64a63_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__sinr__integer_transform
+ * adapter_id: a_e184a872fdf67042
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__cellResults__resultsCSI-RS-Cell__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.cellResults.resultsCSI_RS_Cell->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edf8f09135_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edf8f09135_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_e184a872fdf67042_eb7d759def_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_e184a872fdf67042_eb7d759def_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8650,7 +9670,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edf8f09135_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_e184a872fdf67042_eb7d759def_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8681,6 +9701,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8708,9 +9738,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edf8f09135_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_e184a872fdf67042_eb7d759def_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edf8f09135_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_e184a872fdf67042_eb7d759def_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8721,20 +9751,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edf8f09135_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_e184a872fdf67042_eb7d759def_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index__integer_transform
+ * adapter_id: a_6444fad577493a6e
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Index
  * message: MeasurementReport
  * field: ssb-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_395f41c50d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_395f41c50d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_6444fad577493a6e_687c9e9efc_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_6444fad577493a6e_687c9e9efc_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8742,7 +9772,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_395f41c50d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_6444fad577493a6e_687c9e9efc_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8778,6 +9808,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8803,9 +9843,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_395f41c50d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_6444fad577493a6e_687c9e9efc_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_395f41c50d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_6444fad577493a6e_687c9e9efc_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8816,20 +9856,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_395f41c50d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_6444fad577493a6e_687c9e9efc_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp__integer_transform
+ * adapter_id: a_505c749c04a60e85
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4856cbcd5b_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4856cbcd5b_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_505c749c04a60e85_8bb82d239a_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_505c749c04a60e85_8bb82d239a_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8837,7 +9877,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4856cbcd5b_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_505c749c04a60e85_8bb82d239a_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8873,6 +9913,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -8906,9 +9956,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4856cbcd5b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_505c749c04a60e85_8bb82d239a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4856cbcd5b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_505c749c04a60e85_8bb82d239a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -8919,20 +9969,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4856cbcd5b_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_505c749c04a60e85_8bb82d239a_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq__integer_transform
+ * adapter_id: a_3fa766362f9e83cc
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d4e560156_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d4e560156_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_3fa766362f9e83cc_78fe4306c0_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3fa766362f9e83cc_78fe4306c0_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -8940,7 +9990,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d4e560156_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_3fa766362f9e83cc_78fe4306c0_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -8976,6 +10026,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9009,9 +10069,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d4e560156_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_3fa766362f9e83cc_78fe4306c0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d4e560156_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_3fa766362f9e83cc_78fe4306c0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9022,20 +10082,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d4e560156_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_3fa766362f9e83cc_78fe4306c0_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr__integer_transform
+ * adapter_id: a_c22db71d69a3579c
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsSSB-Indexes__item0__ssb-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.rsIndexResults->resultsSSB_Indexes->list.array[0]->ssb_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2ddbdb1b6_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2ddbdb1b6_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_c22db71d69a3579c_4b69589a5f_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_c22db71d69a3579c_4b69589a5f_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9043,7 +10103,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2ddbdb1b6_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_c22db71d69a3579c_4b69589a5f_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9079,6 +10139,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9112,9 +10182,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2ddbdb1b6_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_c22db71d69a3579c_4b69589a5f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2ddbdb1b6_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_c22db71d69a3579c_4b69589a5f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9125,20 +10195,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2ddbdb1b6_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_c22db71d69a3579c_4b69589a5f_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index__integer_transform
+ * adapter_id: a_5dfee9b11be0c272
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Index
  * message: MeasurementReport
  * field: csi-RS-Index
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Index
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_25b767e279_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_25b767e279_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_5dfee9b11be0c272_013ab6f8a6_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5dfee9b11be0c272_013ab6f8a6_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9146,7 +10216,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_25b767e279_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_5dfee9b11be0c272_013ab6f8a6_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9182,6 +10252,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9207,9 +10287,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_25b767e279_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_5dfee9b11be0c272_013ab6f8a6_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_25b767e279_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_5dfee9b11be0c272_013ab6f8a6_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9220,20 +10300,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "csi-RS-Index",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_25b767e279_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_5dfee9b11be0c272_013ab6f8a6_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp__integer_transform
+ * adapter_id: a_31aa636473fe87ff
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrp
  * message: MeasurementReport
  * field: rsrp
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrp
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2b68640e70_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2b68640e70_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_31aa636473fe87ff_36f5abd2da_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_31aa636473fe87ff_36f5abd2da_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9241,7 +10321,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2b68640e70_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_31aa636473fe87ff_36f5abd2da_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9277,6 +10357,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9310,9 +10400,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2b68640e70_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_31aa636473fe87ff_36f5abd2da_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2b68640e70_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_31aa636473fe87ff_36f5abd2da_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9323,20 +10413,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2b68640e70_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_31aa636473fe87ff_36f5abd2da_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq__integer_transform
+ * adapter_id: a_c7418f39249a5118
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__rsrq
  * message: MeasurementReport
  * field: rsrq
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->rsrq
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4824069b6d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4824069b6d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_c7418f39249a5118_2ca5b05ab6_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_c7418f39249a5118_2ca5b05ab6_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9344,7 +10434,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4824069b6d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_c7418f39249a5118_2ca5b05ab6_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9380,6 +10470,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9413,9 +10513,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4824069b6d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_c7418f39249a5118_2ca5b05ab6_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4824069b6d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_c7418f39249a5118_2ca5b05ab6_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9426,20 +10526,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrq",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4824069b6d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_c7418f39249a5118_2ca5b05ab6_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr__integer_transform
+ * adapter_id: a_bb658083994b6470
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__measResult__rsIndexResults__resultsCSI-RS-Indexes__item0__csi-RS-Results__sinr
  * message: MeasurementReport
  * field: sinr
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->measResult.rsIndexResults->resultsCSI_RS_Indexes->list.array[0]->csi_RS_Results->sinr
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e6b4719a5d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e6b4719a5d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_bb658083994b6470_a328c17c74_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_bb658083994b6470_a328c17c74_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9447,7 +10547,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e6b4719a5d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_bb658083994b6470_a328c17c74_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9483,6 +10583,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9516,9 +10626,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e6b4719a5d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_bb658083994b6470_a328c17c74_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e6b4719a5d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_bb658083994b6470_a328c17c74_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9529,20 +10639,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sinr",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e6b4719a5d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_bb658083994b6470_a328c17c74_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__cgi-Info__noSIB1__ssb-SubcarrierOffset__integer_transform
+ * adapter_id: a_bf99b452ae028639
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__cgi-Info__noSIB1__ssb-SubcarrierOffset
  * message: MeasurementReport
  * field: ssb-SubcarrierOffset
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->ext1->cgi_Info->noSIB1->ssb_SubcarrierOffset
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2d829cb866_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2d829cb866_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_bf99b452ae028639_fcefd7e795_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_bf99b452ae028639_fcefd7e795_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9550,7 +10660,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2d829cb866_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_bf99b452ae028639_fcefd7e795_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9581,6 +10691,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9606,9 +10726,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2d829cb866_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_bf99b452ae028639_fcefd7e795_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2d829cb866_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_bf99b452ae028639_fcefd7e795_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9619,20 +10739,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssb-SubcarrierOffset",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2d829cb866_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_bf99b452ae028639_fcefd7e795_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero__integer_transform
+ * adapter_id: a_0fbf42c1e245bc64
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__cgi-Info__noSIB1__pdcch-ConfigSIB1__controlResourceSetZero
  * message: MeasurementReport
  * field: controlResourceSetZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.controlResourceSetZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f3b964abb9_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f3b964abb9_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_0fbf42c1e245bc64_fb59692926_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0fbf42c1e245bc64_fb59692926_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9640,7 +10760,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f3b964abb9_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_0fbf42c1e245bc64_fb59692926_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9671,6 +10791,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9696,9 +10826,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f3b964abb9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_0fbf42c1e245bc64_fb59692926_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f3b964abb9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_0fbf42c1e245bc64_fb59692926_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9709,20 +10839,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "controlResourceSetZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f3b964abb9_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_0fbf42c1e245bc64_fb59692926_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero__integer_transform
+ * adapter_id: a_83678773a4ce88e8
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__cgi-Info__noSIB1__pdcch-ConfigSIB1__searchSpaceZero
  * message: MeasurementReport
  * field: searchSpaceZero
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->ext1->cgi_Info->noSIB1->pdcch_ConfigSIB1.searchSpaceZero
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_19c6ac304a_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_19c6ac304a_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_83678773a4ce88e8_ccd432ecfa_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_83678773a4ce88e8_ccd432ecfa_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9730,7 +10860,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_19c6ac304a_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_83678773a4ce88e8_ccd432ecfa_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9761,6 +10891,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9786,9 +10926,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_19c6ac304a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_83678773a4ce88e8_ccd432ecfa_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_19c6ac304a_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_83678773a4ce88e8_ccd432ecfa_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9799,20 +10939,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "searchSpaceZero",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_19c6ac304a_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_83678773a4ce88e8_ccd432ecfa_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__triggeredEvent-r17__timeBetweenEvents-r17__integer_transform
+ * adapter_id: a_3515bc6c0cce5b4f
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultServFreqListNR-SCG__item0__measResultNeighCellListNR__item0__triggeredEvent-r17__timeBetweenEvents-r17
  * message: MeasurementReport
  * field: timeBetweenEvents-r17
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultServFreqListNR_SCG->list.array[0]->measResultNeighCellListNR->list.array[0]->ext2->triggeredEvent_r17->timeBetweenEvents_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f5b669f2ee_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f5b669f2ee_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_3515bc6c0cce5b4f_5e4f072b13_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3515bc6c0cce5b4f_5e4f072b13_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -9820,7 +10960,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f5b669f2ee_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_3515bc6c0cce5b4f_5e4f072b13_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9851,6 +10991,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9880,9 +11030,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f5b669f2ee_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_3515bc6c0cce5b4f_5e4f072b13_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f5b669f2ee_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_3515bc6c0cce5b4f_5e4f072b13_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9893,27 +11043,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "timeBetweenEvents-r17",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f5b669f2ee_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_3515bc6c0cce5b4f_5e4f072b13_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-EUTRA__eutra-PhysCellId__integer_transform
+ * adapter_id: a_65dc2a9714a4e117
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-EUTRA__eutra-PhysCellId
  * message: MeasurementReport
  * field: eutra-PhysCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->eutra_PhysCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_54e375e762_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_54e375e762_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_65dc2a9714a4e117_89902e8d21_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_65dc2a9714a4e117_89902e8d21_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_54e375e762_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_65dc2a9714a4e117_89902e8d21_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -9935,6 +11085,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -9948,9 +11108,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_54e375e762_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_65dc2a9714a4e117_89902e8d21_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_54e375e762_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_65dc2a9714a4e117_89902e8d21_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -9961,27 +11121,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "eutra-PhysCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_54e375e762_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_65dc2a9714a4e117_89902e8d21_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-EUTRA__sfn-OffsetResult__integer_transform
+ * adapter_id: a_b985119d13eb9f7c
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-EUTRA__sfn-OffsetResult
  * message: MeasurementReport
  * field: sfn-OffsetResult
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->sfn_OffsetResult
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3add8b8bfb_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3add8b8bfb_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_b985119d13eb9f7c_03b3cab33c_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b985119d13eb9f7c_03b3cab33c_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3add8b8bfb_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_b985119d13eb9f7c_03b3cab33c_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10003,6 +11163,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10016,9 +11186,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3add8b8bfb_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_b985119d13eb9f7c_03b3cab33c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3add8b8bfb_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_b985119d13eb9f7c_03b3cab33c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10029,27 +11199,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sfn-OffsetResult",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3add8b8bfb_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_b985119d13eb9f7c_03b3cab33c_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-EUTRA__frameBoundaryOffsetResult__integer_transform
+ * adapter_id: a_0d8b5c95506432db
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-EUTRA__frameBoundaryOffsetResult
  * message: MeasurementReport
  * field: frameBoundaryOffsetResult
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->frameBoundaryOffsetResult
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e2df154f2c_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e2df154f2c_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_0d8b5c95506432db_3e6bc0a395_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0d8b5c95506432db_3e6bc0a395_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e2df154f2c_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_0d8b5c95506432db_3e6bc0a395_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10071,6 +11241,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10084,9 +11264,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e2df154f2c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_0d8b5c95506432db_3e6bc0a395_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e2df154f2c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_0d8b5c95506432db_3e6bc0a395_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10097,27 +11277,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "frameBoundaryOffsetResult",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e2df154f2c_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_0d8b5c95506432db_3e6bc0a395_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-EUTRA__rsrp-Result__integer_transform
+ * adapter_id: a_4d992cf5a895fdc5
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-EUTRA__rsrp-Result
  * message: MeasurementReport
  * field: rsrp-Result
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_EUTRA->rsrp_Result
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_73a02ec969_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_73a02ec969_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4d992cf5a895fdc5_870e30d2d3_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4d992cf5a895fdc5_870e30d2d3_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_73a02ec969_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4d992cf5a895fdc5_870e30d2d3_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10139,6 +11319,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10158,9 +11348,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_73a02ec969_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4d992cf5a895fdc5_870e30d2d3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_73a02ec969_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4d992cf5a895fdc5_870e30d2d3_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10171,27 +11361,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp-Result",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_73a02ec969_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4d992cf5a895fdc5_870e30d2d3_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-NR__physCellId__integer_transform
+ * adapter_id: a_4fea28780b463a7f
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-NR__physCellId
  * message: MeasurementReport
  * field: physCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_NR->physCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c1886d86d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c1886d86d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_4fea28780b463a7f_1d148c76b0_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_4fea28780b463a7f_1d148c76b0_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c1886d86d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_4fea28780b463a7f_1d148c76b0_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10213,6 +11403,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10226,9 +11426,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c1886d86d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_4fea28780b463a7f_1d148c76b0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c1886d86d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_4fea28780b463a7f_1d148c76b0_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10239,27 +11439,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "physCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c1886d86d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_4fea28780b463a7f_1d148c76b0_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-NR__sfn-OffsetResult__integer_transform
+ * adapter_id: a_aefc23319d95eda2
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-NR__sfn-OffsetResult
  * message: MeasurementReport
  * field: sfn-OffsetResult
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_NR->sfn_OffsetResult
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f306cfbcb_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f306cfbcb_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_aefc23319d95eda2_c9bee85119_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_aefc23319d95eda2_c9bee85119_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f306cfbcb_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_aefc23319d95eda2_c9bee85119_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10281,6 +11481,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10294,9 +11504,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f306cfbcb_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_aefc23319d95eda2_c9bee85119_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f306cfbcb_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_aefc23319d95eda2_c9bee85119_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10307,27 +11517,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sfn-OffsetResult",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f306cfbcb_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_aefc23319d95eda2_c9bee85119_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-NR__frameBoundaryOffsetResult__integer_transform
+ * adapter_id: a_e655338b6fa86cb8
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-NR__frameBoundaryOffsetResult
  * message: MeasurementReport
  * field: frameBoundaryOffsetResult
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_NR->frameBoundaryOffsetResult
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d77571434c_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d77571434c_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_e655338b6fa86cb8_4ae403c35e_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_e655338b6fa86cb8_4ae403c35e_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d77571434c_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_e655338b6fa86cb8_4ae403c35e_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10349,6 +11559,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10362,9 +11582,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d77571434c_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_e655338b6fa86cb8_4ae403c35e_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d77571434c_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_e655338b6fa86cb8_4ae403c35e_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10375,27 +11595,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "frameBoundaryOffsetResult",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d77571434c_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_e655338b6fa86cb8_4ae403c35e_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-NR__rsrp-Result__integer_transform
+ * adapter_id: a_baf2e49f47c9c3cd
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultSFTD-NR__rsrp-Result
  * message: MeasurementReport
  * field: rsrp-Result
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext1->measResultSFTD_NR->rsrp_Result
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d918debd47_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d918debd47_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_baf2e49f47c9c3cd_b5205a4110_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_baf2e49f47c9c3cd_b5205a4110_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d918debd47_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_baf2e49f47c9c3cd_b5205a4110_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10417,6 +11637,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10436,9 +11666,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d918debd47_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_baf2e49f47c9c3cd_b5205a4110_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d918debd47_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_baf2e49f47c9c3cd_b5205a4110_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10449,20 +11679,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp-Result",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d918debd47_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_baf2e49f47c9c3cd_b5205a4110_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCellListSFTD-NR__item0__physCellId__integer_transform
+ * adapter_id: a_893e27ce5a667dfd
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCellListSFTD-NR__item0__physCellId
  * message: MeasurementReport
  * field: physCellId
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext2->measResultCellListSFTD_NR->list.array[0]->physCellId
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b229210a0d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b229210a0d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_893e27ce5a667dfd_f366d0bfd8_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_893e27ce5a667dfd_f366d0bfd8_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -10470,7 +11700,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b229210a0d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_893e27ce5a667dfd_f366d0bfd8_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10497,6 +11727,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10512,9 +11752,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b229210a0d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_893e27ce5a667dfd_f366d0bfd8_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b229210a0d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_893e27ce5a667dfd_f366d0bfd8_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10525,20 +11765,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "physCellId",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b229210a0d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_893e27ce5a667dfd_f366d0bfd8_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCellListSFTD-NR__item0__sfn-OffsetResult__integer_transform
+ * adapter_id: a_2c9c2eb684530db2
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCellListSFTD-NR__item0__sfn-OffsetResult
  * message: MeasurementReport
  * field: sfn-OffsetResult
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext2->measResultCellListSFTD_NR->list.array[0]->sfn_OffsetResult
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3adeca2f1_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3adeca2f1_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_2c9c2eb684530db2_ac470ed7e3_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_2c9c2eb684530db2_ac470ed7e3_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -10546,7 +11786,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3adeca2f1_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_2c9c2eb684530db2_ac470ed7e3_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10573,6 +11813,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10588,9 +11838,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3adeca2f1_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_2c9c2eb684530db2_ac470ed7e3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3adeca2f1_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_2c9c2eb684530db2_ac470ed7e3_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10601,20 +11851,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sfn-OffsetResult",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3adeca2f1_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_2c9c2eb684530db2_ac470ed7e3_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCellListSFTD-NR__item0__frameBoundaryOffsetResult__integer_transform
+ * adapter_id: a_9ce55986be54a9e7
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCellListSFTD-NR__item0__frameBoundaryOffsetResult
  * message: MeasurementReport
  * field: frameBoundaryOffsetResult
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext2->measResultCellListSFTD_NR->list.array[0]->frameBoundaryOffsetResult
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da14852ad_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da14852ad_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_9ce55986be54a9e7_4cd94c3a51_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_9ce55986be54a9e7_4cd94c3a51_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -10622,7 +11872,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da14852ad_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_9ce55986be54a9e7_4cd94c3a51_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10649,6 +11899,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10664,9 +11924,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da14852ad_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_9ce55986be54a9e7_4cd94c3a51_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da14852ad_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_9ce55986be54a9e7_4cd94c3a51_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10677,20 +11937,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "frameBoundaryOffsetResult",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da14852ad_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_9ce55986be54a9e7_4cd94c3a51_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCellListSFTD-NR__item0__rsrp-Result__integer_transform
+ * adapter_id: a_50544400b778b962
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCellListSFTD-NR__item0__rsrp-Result
  * message: MeasurementReport
  * field: rsrp-Result
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext2->measResultCellListSFTD_NR->list.array[0]->rsrp_Result
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7cc0c8738b_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7cc0c8738b_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_50544400b778b962_60e1a01e8b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_50544400b778b962_60e1a01e8b_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -10698,7 +11958,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7cc0c8738b_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_50544400b778b962_60e1a01e8b_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10725,6 +11985,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10746,9 +12016,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7cc0c8738b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_50544400b778b962_60e1a01e8b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7cc0c8738b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_50544400b778b962_60e1a01e8b_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10759,27 +12029,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rsrp-Result",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7cc0c8738b_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_50544400b778b962_60e1a01e8b_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultForRSSI-r16__rssi-Result-r16__integer_transform
+ * adapter_id: a_09b70a067dbcfc14
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultForRSSI-r16__rssi-Result-r16
  * message: MeasurementReport
  * field: rssi-Result-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->measResultForRSSI_r16->rssi_Result_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6a7349936d_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6a7349936d_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_09b70a067dbcfc14_f3e356e653_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_09b70a067dbcfc14_f3e356e653_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6a7349936d_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_09b70a067dbcfc14_f3e356e653_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10801,6 +12071,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10814,9 +12094,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6a7349936d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_09b70a067dbcfc14_f3e356e653_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6a7349936d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_09b70a067dbcfc14_f3e356e653_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10827,27 +12107,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rssi-Result-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6a7349936d_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_09b70a067dbcfc14_f3e356e653_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultForRSSI-r16__channelOccupancy-r16__integer_transform
+ * adapter_id: a_fd81d3c15f1ecda2
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultForRSSI-r16__channelOccupancy-r16
  * message: MeasurementReport
  * field: channelOccupancy-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->measResultForRSSI_r16->channelOccupancy_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7b10bff5f2_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7b10bff5f2_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_fd81d3c15f1ecda2_1decf06f8d_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_fd81d3c15f1ecda2_1decf06f8d_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7b10bff5f2_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_fd81d3c15f1ecda2_1decf06f8d_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10869,6 +12149,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -10882,9 +12172,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7b10bff5f2_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_fd81d3c15f1ecda2_1decf06f8d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7b10bff5f2_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_fd81d3c15f1ecda2_1decf06f8d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10895,27 +12185,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "channelOccupancy-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7b10bff5f2_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_fd81d3c15f1ecda2_1decf06f8d_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__gnss-TOD-msec-r16__optional_octet_string_assignment
+ * adapter_id: a_6d7c84fbf5685539
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__gnss-TOD-msec-r16
  * message: MeasurementReport
  * field: gnss-TOD-msec-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->gnss_TOD_msec_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_204b3be32f_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_204b3be32f_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_6d7c84fbf5685539_10638d679a_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_6d7c84fbf5685539_10638d679a_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_204b3be32f_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_6d7c84fbf5685539_10638d679a_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -10960,6 +12250,24 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->gnss_TOD_msec_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->gnss_TOD_msec_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->gnss_TOD_msec_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->gnss_TOD_msec_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set gnss-TOD-msec-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -10976,9 +12284,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_204b3be32f_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_6d7c84fbf5685539_10638d679a_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_204b3be32f_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_6d7c84fbf5685539_10638d679a_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -10989,27 +12297,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "gnss-TOD-msec-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_204b3be32f_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_6d7c84fbf5685539_10638d679a_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__locationTimestamp-r16__optional_octet_string_assignment
+ * adapter_id: a_07c6b360cb899942
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__locationTimestamp-r16
  * message: MeasurementReport
  * field: locationTimestamp-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationTimestamp_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_68c4246647_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_68c4246647_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_07c6b360cb899942_c834151698_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_07c6b360cb899942_c834151698_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_68c4246647_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_07c6b360cb899942_c834151698_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11054,6 +12362,24 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationTimestamp_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationTimestamp_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationTimestamp_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationTimestamp_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set locationTimestamp-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11070,9 +12396,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_68c4246647_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_07c6b360cb899942_c834151698_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_68c4246647_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_07c6b360cb899942_c834151698_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11083,27 +12409,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "locationTimestamp-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_68c4246647_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_07c6b360cb899942_c834151698_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__locationCoordinate-r16__optional_octet_string_assignment
+ * adapter_id: a_3c677889d89828ba
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__locationCoordinate-r16
  * message: MeasurementReport
  * field: locationCoordinate-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationCoordinate_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_1c6bbd5307_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_1c6bbd5307_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_3c677889d89828ba_91a7120130_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3c677889d89828ba_91a7120130_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_1c6bbd5307_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_3c677889d89828ba_91a7120130_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11148,6 +12474,24 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationCoordinate_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationCoordinate_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationCoordinate_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationCoordinate_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set locationCoordinate-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11164,9 +12508,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_1c6bbd5307_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_3c677889d89828ba_91a7120130_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_1c6bbd5307_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_3c677889d89828ba_91a7120130_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11177,27 +12521,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "locationCoordinate-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_1c6bbd5307_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_3c677889d89828ba_91a7120130_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__locationError-r16__optional_octet_string_assignment
+ * adapter_id: a_d28463c8bf68e812
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__locationError-r16
  * message: MeasurementReport
  * field: locationError-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationError_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2faa5f0b81_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2faa5f0b81_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_d28463c8bf68e812_13dea3061d_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_d28463c8bf68e812_13dea3061d_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2faa5f0b81_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_d28463c8bf68e812_13dea3061d_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11242,6 +12586,24 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationError_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationError_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationError_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationError_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set locationError-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11258,9 +12620,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2faa5f0b81_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_d28463c8bf68e812_13dea3061d_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2faa5f0b81_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_d28463c8bf68e812_13dea3061d_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11271,27 +12633,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "locationError-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2faa5f0b81_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_d28463c8bf68e812_13dea3061d_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__locationSource-r16__optional_octet_string_assignment
+ * adapter_id: a_771454a17cef8fef
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__locationSource-r16
  * message: MeasurementReport
  * field: locationSource-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationSource_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_a3a47190b8_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_a3a47190b8_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_771454a17cef8fef_96ad3b1258_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_771454a17cef8fef_96ad3b1258_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_a3a47190b8_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_771454a17cef8fef_96ad3b1258_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11336,6 +12698,24 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationSource_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationSource_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationSource_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->locationSource_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set locationSource-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11352,9 +12732,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_a3a47190b8_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_771454a17cef8fef_96ad3b1258_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_a3a47190b8_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_771454a17cef8fef_96ad3b1258_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11365,27 +12745,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "locationSource-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_a3a47190b8_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_771454a17cef8fef_96ad3b1258_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__velocityEstimate-r16__optional_octet_string_assignment
+ * adapter_id: a_ca0481049ead717d
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__commonLocationInfo-r16__velocityEstimate-r16
  * message: MeasurementReport
  * field: velocityEstimate-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->velocityEstimate_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_f8b7dc38bd_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_f8b7dc38bd_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_ca0481049ead717d_018df47077_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_ca0481049ead717d_018df47077_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_f8b7dc38bd_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_ca0481049ead717d_018df47077_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11430,6 +12810,24 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->velocityEstimate_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->velocityEstimate_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->velocityEstimate_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->commonLocationInfo_r16->velocityEstimate_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set velocityEstimate-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11446,9 +12844,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_f8b7dc38bd_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_ca0481049ead717d_018df47077_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_f8b7dc38bd_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_ca0481049ead717d_018df47077_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11459,20 +12857,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "velocityEstimate-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_f8b7dc38bd_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_ca0481049ead717d_018df47077_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__wlan-LocationInfo-r16__item0__wlan-Identifiers-r16__ssid-r16__optional_octet_string_assignment
+ * adapter_id: a_eacbeea6d75fd891
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__wlan-LocationInfo-r16__item0__wlan-Identifiers-r16__ssid-r16
  * message: MeasurementReport
  * field: ssid-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.ssid_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_655696e3d2_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_655696e3d2_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_eacbeea6d75fd891_4d23bc0a71_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_eacbeea6d75fd891_4d23bc0a71_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -11480,7 +12878,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_655696e3d2_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_eacbeea6d75fd891_4d23bc0a71_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11535,6 +12933,26 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0])
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.ssid_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.ssid_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.ssid_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.ssid_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set ssid-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11552,9 +12970,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_655696e3d2_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_eacbeea6d75fd891_4d23bc0a71_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_655696e3d2_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_eacbeea6d75fd891_4d23bc0a71_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11565,20 +12983,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "ssid-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_655696e3d2_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_eacbeea6d75fd891_4d23bc0a71_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__wlan-LocationInfo-r16__item0__wlan-Identifiers-r16__bssid-r16__optional_octet_string_assignment
+ * adapter_id: a_44c7e9bd8760ca4e
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__wlan-LocationInfo-r16__item0__wlan-Identifiers-r16__bssid-r16
  * message: MeasurementReport
  * field: bssid-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.bssid_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_bd533a3c08_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_bd533a3c08_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_44c7e9bd8760ca4e_e70327605b_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_44c7e9bd8760ca4e_e70327605b_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -11586,7 +13004,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_bd533a3c08_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_44c7e9bd8760ca4e_e70327605b_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11641,6 +13059,26 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0])
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.bssid_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.bssid_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.bssid_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.bssid_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set bssid-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11658,9 +13096,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_bd533a3c08_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_44c7e9bd8760ca4e_e70327605b_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_bd533a3c08_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_44c7e9bd8760ca4e_e70327605b_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11671,20 +13109,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "bssid-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_bd533a3c08_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_44c7e9bd8760ca4e_e70327605b_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__wlan-LocationInfo-r16__item0__wlan-Identifiers-r16__hessid-r16__optional_octet_string_assignment
+ * adapter_id: a_ed5f97063dbf8180
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__wlan-LocationInfo-r16__item0__wlan-Identifiers-r16__hessid-r16
  * message: MeasurementReport
  * field: hessid-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.hessid_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_902305cec5_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_902305cec5_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_ed5f97063dbf8180_0720e59983_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_ed5f97063dbf8180_0720e59983_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -11692,7 +13130,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_902305cec5_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_ed5f97063dbf8180_0720e59983_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11747,6 +13185,26 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0])
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.hessid_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.hessid_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.hessid_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->wlan_Identifiers_r16.hessid_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set hessid-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11764,9 +13222,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_902305cec5_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_ed5f97063dbf8180_0720e59983_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_902305cec5_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_ed5f97063dbf8180_0720e59983_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11777,20 +13235,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "hessid-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_902305cec5_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_ed5f97063dbf8180_0720e59983_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__wlan-LocationInfo-r16__item0__rssiWLAN-r16__integer_transform
+ * adapter_id: a_c22fad729f9b5b4c
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__wlan-LocationInfo-r16__item0__rssiWLAN-r16
  * message: MeasurementReport
  * field: rssiWLAN-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->wlan_LocationInfo_r16->list.array[0]->rssiWLAN_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_3a7f4268a3_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_3a7f4268a3_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_c22fad729f9b5b4c_fb5f7c78b8_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_c22fad729f9b5b4c_fb5f7c78b8_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -11798,7 +13256,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_3a7f4268a3_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_c22fad729f9b5b4c_fb5f7c78b8_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11826,6 +13284,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -11849,9 +13317,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_3a7f4268a3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_c22fad729f9b5b4c_fb5f7c78b8_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_3a7f4268a3_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_c22fad729f9b5b4c_fb5f7c78b8_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11862,27 +13330,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rssiWLAN-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_3a7f4268a3_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_c22fad729f9b5b4c_fb5f7c78b8_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__sensor-LocationInfo-r16__sensor-MeasurementInformation-r16__optional_octet_string_assignment
+ * adapter_id: a_8e88c370c456468e
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__sensor-LocationInfo-r16__sensor-MeasurementInformation-r16
  * message: MeasurementReport
  * field: sensor-MeasurementInformation-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MeasurementInformation_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2e6083703c_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2e6083703c_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_8e88c370c456468e_ce5c60ce47_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_8e88c370c456468e_ce5c60ce47_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2e6083703c_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_8e88c370c456468e_ce5c60ce47_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -11927,6 +13395,24 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MeasurementInformation_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MeasurementInformation_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MeasurementInformation_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MeasurementInformation_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set sensor-MeasurementInformation-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -11943,9 +13429,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2e6083703c_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_8e88c370c456468e_ce5c60ce47_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2e6083703c_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_8e88c370c456468e_ce5c60ce47_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -11956,27 +13442,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sensor-MeasurementInformation-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2e6083703c_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_8e88c370c456468e_ce5c60ce47_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__sensor-LocationInfo-r16__sensor-MotionInformation-r16__optional_octet_string_assignment
+ * adapter_id: a_1e9b94b33f18f51d
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__locationInfo-r16__sensor-LocationInfo-r16__sensor-MotionInformation-r16
  * message: MeasurementReport
  * field: sensor-MotionInformation-r16
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MotionInformation_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_88f91d7c18_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_88f91d7c18_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_1e9b94b33f18f51d_faabb63905_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_1e9b94b33f18f51d_faabb63905_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_88f91d7c18_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_1e9b94b33f18f51d_faabb63905_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12021,6 +13507,24 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MotionInformation_r16)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MotionInformation_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MotionInformation_r16));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext3->locationInfo_r16->sensor_LocationInfo_r16->sensor_MotionInformation_r16, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set sensor-MotionInformation-r16 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext3
@@ -12037,9 +13541,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_88f91d7c18_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_1e9b94b33f18f51d_faabb63905_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_88f91d7c18_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_1e9b94b33f18f51d_faabb63905_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12050,20 +13554,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sensor-MotionInformation-r16",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_88f91d7c18_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_1e9b94b33f18f51d_faabb63905_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__ul-PDCP-DelayValueResultList-r16__item0__drb-Id-r16__integer_transform
+ * adapter_id: a_ac92a59fd8fadd92
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__ul-PDCP-DelayValueResultList-r16__item0__drb-Id-r16
  * message: MeasurementReport
  * field: drb-Id-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->ul_PDCP_DelayValueResultList_r16->list.array[0]->drb_Id_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_8002246976_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_8002246976_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_ac92a59fd8fadd92_e8c3c3a0ce_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_ac92a59fd8fadd92_e8c3c3a0ce_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12071,7 +13575,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_8002246976_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_ac92a59fd8fadd92_e8c3c3a0ce_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12098,6 +13602,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12113,9 +13627,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_8002246976_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_ac92a59fd8fadd92_e8c3c3a0ce_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_8002246976_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_ac92a59fd8fadd92_e8c3c3a0ce_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12126,20 +13640,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "drb-Id-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_8002246976_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_ac92a59fd8fadd92_e8c3c3a0ce_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__ul-PDCP-DelayValueResultList-r16__item0__averageDelay-r16__integer_transform
+ * adapter_id: a_158df01af7bc4d26
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__ul-PDCP-DelayValueResultList-r16__item0__averageDelay-r16
  * message: MeasurementReport
  * field: averageDelay-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->ul_PDCP_DelayValueResultList_r16->list.array[0]->averageDelay_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_f561a86ad9_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_f561a86ad9_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_158df01af7bc4d26_04ee04771f_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_158df01af7bc4d26_04ee04771f_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12147,7 +13661,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_f561a86ad9_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_158df01af7bc4d26_04ee04771f_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12174,6 +13688,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12189,9 +13713,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_f561a86ad9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_158df01af7bc4d26_04ee04771f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_f561a86ad9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_158df01af7bc4d26_04ee04771f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12202,20 +13726,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "averageDelay-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_f561a86ad9_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_158df01af7bc4d26_04ee04771f_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultsSL-r16__measResultsListSL-r16__measResultNR-SL-r16__measResultListCBR-NR-r16__item0__sl-poolReportIdentity-r16__integer_transform
+ * adapter_id: a_c3c48abd93330866
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultsSL-r16__measResultsListSL-r16__measResultNR-SL-r16__measResultListCBR-NR-r16__item0__sl-poolReportIdentity-r16
  * message: MeasurementReport
  * field: sl-poolReportIdentity-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->measResultsSL_r16->measResultsListSL_r16.choice.measResultNR_SL_r16->measResultListCBR_NR_r16.list.array[0]->sl_poolReportIdentity_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b7d26e3e8f_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b7d26e3e8f_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_c3c48abd93330866_d3bdd4bf56_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_c3c48abd93330866_d3bdd4bf56_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12223,7 +13747,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b7d26e3e8f_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_c3c48abd93330866_d3bdd4bf56_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12252,6 +13776,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12267,9 +13801,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b7d26e3e8f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_c3c48abd93330866_d3bdd4bf56_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b7d26e3e8f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_c3c48abd93330866_d3bdd4bf56_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12280,20 +13814,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sl-poolReportIdentity-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b7d26e3e8f_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_c3c48abd93330866_d3bdd4bf56_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultsSL-r16__measResultsListSL-r16__measResultNR-SL-r16__measResultListCBR-NR-r16__item0__sl-CBR-ResultsNR-r16__integer_transform
+ * adapter_id: a_9c675192aba66ba9
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultsSL-r16__measResultsListSL-r16__measResultNR-SL-r16__measResultListCBR-NR-r16__item0__sl-CBR-ResultsNR-r16
  * message: MeasurementReport
  * field: sl-CBR-ResultsNR-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->measResultsSL_r16->measResultsListSL_r16.choice.measResultNR_SL_r16->measResultListCBR_NR_r16.list.array[0]->sl_CBR_ResultsNR_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_280dd049e1_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_280dd049e1_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_9c675192aba66ba9_fab2ba8003_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_9c675192aba66ba9_fab2ba8003_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12301,7 +13835,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_280dd049e1_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_9c675192aba66ba9_fab2ba8003_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12330,6 +13864,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12345,9 +13889,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_280dd049e1_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_9c675192aba66ba9_fab2ba8003_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_280dd049e1_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_9c675192aba66ba9_fab2ba8003_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12358,20 +13902,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sl-CBR-ResultsNR-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_280dd049e1_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_9c675192aba66ba9_fab2ba8003_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCLI-r16__measResultListSRS-RSRP-r16__item0__srs-ResourceId-r16__integer_transform
+ * adapter_id: a_1733a279a5762311
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCLI-r16__measResultListSRS-RSRP-r16__item0__srs-ResourceId-r16
  * message: MeasurementReport
  * field: srs-ResourceId-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->measResultCLI_r16->measResultListSRS_RSRP_r16->list.array[0]->srs_ResourceId_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3a811e4a48_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3a811e4a48_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_1733a279a5762311_2eb7c360fe_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_1733a279a5762311_2eb7c360fe_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12379,7 +13923,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3a811e4a48_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_1733a279a5762311_2eb7c360fe_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12407,6 +13951,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12424,9 +13978,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3a811e4a48_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_1733a279a5762311_2eb7c360fe_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3a811e4a48_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_1733a279a5762311_2eb7c360fe_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12437,20 +13991,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "srs-ResourceId-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3a811e4a48_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_1733a279a5762311_2eb7c360fe_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCLI-r16__measResultListSRS-RSRP-r16__item0__srs-RSRP-Result-r16__integer_transform
+ * adapter_id: a_037e9c8ca5cb1062
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCLI-r16__measResultListSRS-RSRP-r16__item0__srs-RSRP-Result-r16
  * message: MeasurementReport
  * field: srs-RSRP-Result-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->measResultCLI_r16->measResultListSRS_RSRP_r16->list.array[0]->srs_RSRP_Result_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac45f04f89_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac45f04f89_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_037e9c8ca5cb1062_e1a8878197_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_037e9c8ca5cb1062_e1a8878197_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12458,7 +14012,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac45f04f89_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_037e9c8ca5cb1062_e1a8878197_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12486,6 +14040,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12503,9 +14067,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac45f04f89_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_037e9c8ca5cb1062_e1a8878197_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac45f04f89_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_037e9c8ca5cb1062_e1a8878197_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12516,20 +14080,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "srs-RSRP-Result-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac45f04f89_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_037e9c8ca5cb1062_e1a8878197_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCLI-r16__measResultListCLI-RSSI-r16__item0__rssi-ResourceId-r16__integer_transform
+ * adapter_id: a_b7fec8c0a0696a52
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCLI-r16__measResultListCLI-RSSI-r16__item0__rssi-ResourceId-r16
  * message: MeasurementReport
  * field: rssi-ResourceId-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->measResultCLI_r16->measResultListCLI_RSSI_r16->list.array[0]->rssi_ResourceId_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9dba353d96_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9dba353d96_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_b7fec8c0a0696a52_3b88729959_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b7fec8c0a0696a52_3b88729959_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12537,7 +14101,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9dba353d96_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_b7fec8c0a0696a52_3b88729959_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12565,6 +14129,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12582,9 +14156,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9dba353d96_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_b7fec8c0a0696a52_3b88729959_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9dba353d96_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_b7fec8c0a0696a52_3b88729959_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12595,20 +14169,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "rssi-ResourceId-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9dba353d96_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_b7fec8c0a0696a52_3b88729959_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCLI-r16__measResultListCLI-RSSI-r16__item0__cli-RSSI-Result-r16__integer_transform
+ * adapter_id: a_fc4b14e69ecc2335
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultCLI-r16__measResultListCLI-RSSI-r16__item0__cli-RSSI-Result-r16
  * message: MeasurementReport
  * field: cli-RSSI-Result-r16
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext3->measResultCLI_r16->measResultListCLI_RSSI_r16->list.array[0]->cli_RSSI_Result_r16
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37558b43f6_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37558b43f6_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_fc4b14e69ecc2335_f3320dce45_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_fc4b14e69ecc2335_f3320dce45_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12616,7 +14190,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37558b43f6_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_fc4b14e69ecc2335_f3320dce45_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12644,6 +14218,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12661,9 +14245,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37558b43f6_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_fc4b14e69ecc2335_f3320dce45_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37558b43f6_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_fc4b14e69ecc2335_f3320dce45_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12674,27 +14258,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "cli-RSSI-Result-r16",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37558b43f6_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_fc4b14e69ecc2335_f3320dce45_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultRxTxTimeDiff-r17__rxTxTimeDiff-ue-r17__result-k5-r17__integer_transform
+ * adapter_id: a_b1ef3e3ed8c5b529
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__measResultRxTxTimeDiff-r17__rxTxTimeDiff-ue-r17__result-k5-r17
  * message: MeasurementReport
  * field: result-k5-r17
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext4->measResultRxTxTimeDiff_r17->rxTxTimeDiff_ue_r17->result_k5_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_bd0de2ddad_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_bd0de2ddad_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_b1ef3e3ed8c5b529_2e50c14453_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b1ef3e3ed8c5b529_2e50c14453_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_bd0de2ddad_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_b1ef3e3ed8c5b529_2e50c14453_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12716,6 +14300,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12737,9 +14331,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_bd0de2ddad_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_b1ef3e3ed8c5b529_2e50c14453_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_bd0de2ddad_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_b1ef3e3ed8c5b529_2e50c14453_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12750,27 +14344,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "result-k5-r17",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_bd0de2ddad_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_b1ef3e3ed8c5b529_2e50c14453_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__sl-MeasResultServingRelay-r17__optional_octet_string_assignment
+ * adapter_id: a_225643faf5fa5274
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__sl-MeasResultServingRelay-r17
  * message: MeasurementReport
  * field: sl-MeasResultServingRelay-r17
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext4->sl_MeasResultServingRelay_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__s_f41a954ff2_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__s_f41a954ff2_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_225643faf5fa5274_360196964e_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_225643faf5fa5274_360196964e_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__s_f41a954ff2_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_225643faf5fa5274_360196964e_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12807,6 +14401,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext4)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext4 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext4));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext4->sl_MeasResultServingRelay_r17)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext4->sl_MeasResultServingRelay_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext4->sl_MeasResultServingRelay_r17));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext4->sl_MeasResultServingRelay_r17, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set sl-MeasResultServingRelay-r17 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext4
@@ -12821,9 +14429,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__s_f41a954ff2_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_225643faf5fa5274_360196964e_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__s_f41a954ff2_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_225643faf5fa5274_360196964e_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12834,20 +14442,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "sl-MeasResultServingRelay-r17",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__s_f41a954ff2_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_225643faf5fa5274_360196964e_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__ul-PDCP-ExcessDelayResultList-r17__item0__drb-Id-r17__integer_transform
+ * adapter_id: a_78ee5845e090c54c
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__ul-PDCP-ExcessDelayResultList-r17__item0__drb-Id-r17
  * message: MeasurementReport
  * field: drb-Id-r17
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext4->ul_PDCP_ExcessDelayResultList_r17->list.array[0]->drb_Id_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_66204202d9_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_66204202d9_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_78ee5845e090c54c_52c49ace1d_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_78ee5845e090c54c_52c49ace1d_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12855,7 +14463,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_66204202d9_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_78ee5845e090c54c_52c49ace1d_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12882,6 +14490,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12897,9 +14515,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_66204202d9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_78ee5845e090c54c_52c49ace1d_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_66204202d9_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_78ee5845e090c54c_52c49ace1d_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12910,20 +14528,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "drb-Id-r17",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_66204202d9_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_78ee5845e090c54c_52c49ace1d_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__ul-PDCP-ExcessDelayResultList-r17__item0__excessDelay-r17__integer_transform
+ * adapter_id: a_589e393000bcc3c7
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__ul-PDCP-ExcessDelayResultList-r17__item0__excessDelay-r17
  * message: MeasurementReport
  * field: excessDelay-r17
  * operator_family: integer_transform
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext4->ul_PDCP_ExcessDelayResultList_r17->list.array[0]->excessDelay_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_e5ee85cff4_integer_transform
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_e5ee85cff4_integer_transform_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_589e393000bcc3c7_7c097ad23f_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_589e393000bcc3c7_7c097ad23f_integer_transform_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
@@ -12931,7 +14549,7 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
  *   - derived_generic_message_field_profile
  *   - sequence_index_policy=first_present_element
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_e5ee85cff4_integer_transform(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_589e393000bcc3c7_7c097ad23f_integer_transform(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -12958,6 +14576,16 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     chosen_value = max_value;
   } else if (!strcasecmp(mode, "mismatch_in_range")) {
     chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
   } else {
     return false;
   }
@@ -12973,9 +14601,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return true;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_e5ee85cff4_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_589e393000bcc3c7_7c097ad23f_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_e5ee85cff4_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_589e393000bcc3c7_7c097ad23f_integer_transform(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -12986,27 +14614,27 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "excessDelay-r17",
     .operator_family = "integer_transform",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_e5ee85cff4_integer_transform_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_589e393000bcc3c7_7c097ad23f_integer_transform_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__measResults__coarseLocationInfo-r17__optional_octet_string_assignment
+ * adapter_id: a_099799a26c73b8da
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__measResults__coarseLocationInfo-r17
  * message: MeasurementReport
  * field: coarseLocationInfo-r17
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->measResults.ext4->coarseLocationInfo_r17
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__c_e4440ae52e_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__c_e4440ae52e_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_099799a26c73b8da_388bc28341_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_099799a26c73b8da_388bc28341_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  *   - derived_generic_message_field_profile
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__c_e4440ae52e_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_099799a26c73b8da_388bc28341_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -13043,6 +14671,20 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext4)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext4 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext4));
+    if (!payload->criticalExtensions.choice.measurementReport->measResults.ext4->coarseLocationInfo_r17)
+      payload->criticalExtensions.choice.measurementReport->measResults.ext4->coarseLocationInfo_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->measResults.ext4->coarseLocationInfo_r17));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->measResults.ext4->coarseLocationInfo_r17, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set coarseLocationInfo-r17 from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->measResults.ext4
@@ -13057,9 +14699,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__c_e4440ae52e_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_099799a26c73b8da_388bc28341_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__c_e4440ae52e_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_099799a26c73b8da_388bc28341_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -13070,26 +14712,26 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "coarseLocationInfo-r17",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__c_e4440ae52e_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_099799a26c73b8da_388bc28341_optional_octet_string_assignment_adapter,
 },
 */
 
 /* AUTO-GENERATED REVIEW STUB
- * adapter_id: MeasurementReport__criticalExtensions__measurementReport__lateNonCriticalExtension__optional_octet_string_assignment
+ * adapter_id: a_5dc3b01b66fb4b84
  * domain_id: MeasurementReport__criticalExtensions__measurementReport__lateNonCriticalExtension
  * message: MeasurementReport
  * field: lateNonCriticalExtension
  * operator_family: optional_octet_string_assignment
  * candidate_chain: criticalExtensions.choice.measurementReport->lateNonCriticalExtension
  * compile_validation: compile_verified
- * helper_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__latenoncritica_a91df065b1_optional_octet_string_assignment
- * adapter_function: nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__latenoncritica_a91df065b1_optional_octet_string_assignment_adapter
+ * helper_function: nr_ue_fuzz_hook_apply_a_5dc3b01b66fb4b84_133a052bc0_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5dc3b01b66fb4b84_133a052bc0_optional_octet_string_assignment_adapter
  * payload_type: NR_MeasurementReport_t
  * review points:
  *   - confirm_oai_struct_member_path
  *   - confirm_optional_branch_and_release_extension
  */
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__latenoncritica_a91df065b1_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+static bool nr_ue_fuzz_hook_apply_a_5dc3b01b66fb4b84_133a052bc0_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
                               NR_MeasurementReport_t *payload,
                               const char *mode)
 {
@@ -13122,6 +14764,18 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set lateNonCriticalExtension from override in MeasurementReport\n", rrc->ue_id);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     if (!payload->criticalExtensions.choice.measurementReport
         || !payload->criticalExtensions.choice.measurementReport->lateNonCriticalExtension)
@@ -13135,9 +14789,9 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
   return false;
 }
 
-static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__latenoncritica_a91df065b1_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+static bool nr_ue_fuzz_hook_apply_a_5dc3b01b66fb4b84_133a052bc0_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
-  return nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__latenoncritica_a91df065b1_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
+  return nr_ue_fuzz_hook_apply_a_5dc3b01b66fb4b84_133a052bc0_optional_octet_string_assignment(rrc, (NR_MeasurementReport_t *)payload, mode);
 }
 
 /* registry entry
@@ -13148,7 +14802,2687 @@ static bool nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measure
     .message_name = "MeasurementReport",
     .field_name = "lateNonCriticalExtension",
     .operator_family = "optional_octet_string_assignment",
-    .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__latenoncritica_a91df065b1_optional_octet_string_assignment_adapter,
+    .apply = nr_ue_fuzz_hook_apply_a_5dc3b01b66fb4b84_133a052bc0_optional_octet_string_assignment_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_d58c35d57f1ced97
+ * domain_id: SecurityModeComplete__rrc-TransactionIdentifier
+ * message: SecurityModeComplete
+ * field: rrc-TransactionIdentifier
+ * operator_family: integer_transform
+ * candidate_chain: rrc_TransactionIdentifier
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_d58c35d57f1ced97_6a1d72baa3_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_d58c35d57f1ced97_6a1d72baa3_integer_transform_adapter
+ * payload_type: NR_SecurityModeComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_d58c35d57f1ced97_6a1d72baa3_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_SecurityModeComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 3;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+  payload->rrc_TransactionIdentifier = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate rrc-TransactionIdentifier in SecurityModeComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_d58c35d57f1ced97_6a1d72baa3_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_d58c35d57f1ced97_6a1d72baa3_integer_transform(rrc, (NR_SecurityModeComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
+    .adapter_key = "d58c35d57f1ced97",
+    .domain_id = "SecurityModeComplete__rrc-TransactionIdentifier",
+    .message_name = "SecurityModeComplete",
+    .field_name = "rrc-TransactionIdentifier",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_d58c35d57f1ced97_6a1d72baa3_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_25723471764e4ba8
+ * domain_id: SecurityModeComplete__criticalExtensions__securityModeComplete__lateNonCriticalExtension
+ * message: SecurityModeComplete
+ * field: lateNonCriticalExtension
+ * operator_family: optional_octet_string_assignment
+ * candidate_chain: criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_25723471764e4ba8_18efe778e5_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_25723471764e4ba8_18efe778e5_optional_octet_string_assignment_adapter
+ * payload_type: NR_SecurityModeComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_25723471764e4ba8_18efe778e5_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+                              NR_SecurityModeComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_SecurityModeComplete__criticalExtensions_PR_securityModeComplete
+      || !payload->criticalExtensions.choice.securityModeComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_zero";
+
+  static const unsigned char zero_value[] = {0x00};
+  static const unsigned char ff_value[] = {0xff};
+
+  if (!strcasecmp(mode, "force_zero")) {
+    if (!payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension, (const char *)zero_value, sizeof(zero_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force lateNonCriticalExtension=0x00 in SecurityModeComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "force_ff")) {
+    if (!payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension, (const char *)ff_value, sizeof(ff_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force lateNonCriticalExtension=0xff in SecurityModeComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set lateNonCriticalExtension from override in SecurityModeComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.securityModeComplete
+        || !payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension)
+      return false;
+    ASN_STRUCT_FREE(asn_DEF_OCTET_STRING, payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension);
+    payload->criticalExtensions.choice.securityModeComplete->lateNonCriticalExtension = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit lateNonCriticalExtension in SecurityModeComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_25723471764e4ba8_18efe778e5_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_25723471764e4ba8_18efe778e5_optional_octet_string_assignment(rrc, (NR_SecurityModeComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
+    .adapter_key = "25723471764e4ba8",
+    .domain_id = "SecurityModeComplete__criticalExtensions__securityModeComplete__lateNonCriticalExtension",
+    .message_name = "SecurityModeComplete",
+    .field_name = "lateNonCriticalExtension",
+    .operator_family = "optional_octet_string_assignment",
+    .apply = nr_ue_fuzz_hook_apply_a_25723471764e4ba8_18efe778e5_optional_octet_string_assignment_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_58d31961e0a844e3
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailable-r16
+ * message: RRCReconfigurationComplete
+ * field: logMeasAvailable-r16
+ * operator_family: optional_presence_toggle
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_58d31961e0a844e3_75d83fe32e_optional_presence_toggle
+ * adapter_function: nr_ue_fuzz_hook_apply_a_58d31961e0a844e3_75d83fe32e_optional_presence_toggle_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_58d31961e0a844e3_75d83fe32e_optional_presence_toggle(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_present_true";
+
+  if (!strcasecmp(mode, "force_present_true")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = NR_UE_MeasurementsAvailable_r16__logMeasAvailable_r16_true;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force logMeasAvailable-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16)
+      return false;
+    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailable_r16 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit logMeasAvailable-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_58d31961e0a844e3_75d83fe32e_optional_presence_toggle_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_58d31961e0a844e3_75d83fe32e_optional_presence_toggle(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "58d31961e0a844e3",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailable-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "logMeasAvailable-r16",
+    .operator_family = "optional_presence_toggle",
+    .apply = nr_ue_fuzz_hook_apply_a_58d31961e0a844e3_75d83fe32e_optional_presence_toggle_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_3c997241553fc1a3
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailableBT-r16
+ * message: RRCReconfigurationComplete
+ * field: logMeasAvailableBT-r16
+ * operator_family: optional_presence_toggle
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableBT_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_3c997241553fc1a3_0ba22d97eb_optional_presence_toggle
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3c997241553fc1a3_0ba22d97eb_optional_presence_toggle_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_3c997241553fc1a3_0ba22d97eb_optional_presence_toggle(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_present_true";
+
+  if (!strcasecmp(mode, "force_present_true")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableBT_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableBT_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableBT_r16));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableBT_r16 = NR_UE_MeasurementsAvailable_r16__logMeasAvailableBT_r16_true;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force logMeasAvailableBT-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableBT_r16)
+      return false;
+    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableBT_r16);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableBT_r16 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit logMeasAvailableBT-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_3c997241553fc1a3_0ba22d97eb_optional_presence_toggle_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_3c997241553fc1a3_0ba22d97eb_optional_presence_toggle(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "3c997241553fc1a3",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailableBT-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "logMeasAvailableBT-r16",
+    .operator_family = "optional_presence_toggle",
+    .apply = nr_ue_fuzz_hook_apply_a_3c997241553fc1a3_0ba22d97eb_optional_presence_toggle_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_af2092524cec8cbd
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailableWLAN-r16
+ * message: RRCReconfigurationComplete
+ * field: logMeasAvailableWLAN-r16
+ * operator_family: optional_presence_toggle
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableWLAN_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_af2092524cec8cbd_de240796f6_optional_presence_toggle
+ * adapter_function: nr_ue_fuzz_hook_apply_a_af2092524cec8cbd_de240796f6_optional_presence_toggle_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_af2092524cec8cbd_de240796f6_optional_presence_toggle(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_present_true";
+
+  if (!strcasecmp(mode, "force_present_true")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableWLAN_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableWLAN_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableWLAN_r16));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableWLAN_r16 = NR_UE_MeasurementsAvailable_r16__logMeasAvailableWLAN_r16_true;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force logMeasAvailableWLAN-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableWLAN_r16)
+      return false;
+    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableWLAN_r16);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->logMeasAvailableWLAN_r16 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit logMeasAvailableWLAN-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_af2092524cec8cbd_de240796f6_optional_presence_toggle_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_af2092524cec8cbd_de240796f6_optional_presence_toggle(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "af2092524cec8cbd",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailableWLAN-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "logMeasAvailableWLAN-r16",
+    .operator_family = "optional_presence_toggle",
+    .apply = nr_ue_fuzz_hook_apply_a_af2092524cec8cbd_de240796f6_optional_presence_toggle_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_062d9ad5c8efd151
+ * domain_id: RRCReconfigurationComplete__rrc-TransactionIdentifier
+ * message: RRCReconfigurationComplete
+ * field: rrc-TransactionIdentifier
+ * operator_family: integer_transform
+ * candidate_chain: rrc_TransactionIdentifier
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_062d9ad5c8efd151_6d72ed2943_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_062d9ad5c8efd151_6d72ed2943_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_062d9ad5c8efd151_6d72ed2943_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 3;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+  payload->rrc_TransactionIdentifier = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate rrc-TransactionIdentifier in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_062d9ad5c8efd151_6d72ed2943_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_062d9ad5c8efd151_6d72ed2943_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "062d9ad5c8efd151",
+    .domain_id = "RRCReconfigurationComplete__rrc-TransactionIdentifier",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "rrc-TransactionIdentifier",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_062d9ad5c8efd151_6d72ed2943_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_028a8e529341bbd7
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__lateNonCriticalExtension
+ * message: RRCReconfigurationComplete
+ * field: lateNonCriticalExtension
+ * operator_family: optional_octet_string_assignment
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_028a8e529341bbd7_de1cc7059c_optional_octet_string_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_028a8e529341bbd7_de1cc7059c_optional_octet_string_assignment_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ */
+static bool nr_ue_fuzz_hook_apply_a_028a8e529341bbd7_de1cc7059c_optional_octet_string_assignment(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_zero";
+
+  static const unsigned char zero_value[] = {0x00};
+  static const unsigned char ff_value[] = {0xff};
+
+  if (!strcasecmp(mode, "force_zero")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension, (const char *)zero_value, sizeof(zero_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force lateNonCriticalExtension=0x00 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "force_ff")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension, (const char *)ff_value, sizeof(ff_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force lateNonCriticalExtension=0xff in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension));
+    if (OCTET_STRING_fromBuf(payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension, override_value, strlen(override_value)) < 0)
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set lateNonCriticalExtension from override in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension)
+      return false;
+    ASN_STRUCT_FREE(asn_DEF_OCTET_STRING, payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit lateNonCriticalExtension in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_028a8e529341bbd7_de1cc7059c_optional_octet_string_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_028a8e529341bbd7_de1cc7059c_optional_octet_string_assignment(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "028a8e529341bbd7",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__lateNonCriticalExtension",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "lateNonCriticalExtension",
+    .operator_family = "optional_octet_string_assignment",
+    .apply = nr_ue_fuzz_hook_apply_a_028a8e529341bbd7_de1cc7059c_optional_octet_string_assignment_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_5887d4abcb733b7d
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__connEstFailInfoAvailable-r16
+ * message: RRCReconfigurationComplete
+ * field: connEstFailInfoAvailable-r16
+ * operator_family: optional_presence_toggle
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->connEstFailInfoAvailable_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_5887d4abcb733b7d_e6d70f3e9a_optional_presence_toggle
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5887d4abcb733b7d_e6d70f3e9a_optional_presence_toggle_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_5887d4abcb733b7d_e6d70f3e9a_optional_presence_toggle(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_present_true";
+
+  if (!strcasecmp(mode, "force_present_true")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->connEstFailInfoAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->connEstFailInfoAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->connEstFailInfoAvailable_r16));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->connEstFailInfoAvailable_r16 = NR_UE_MeasurementsAvailable_r16__connEstFailInfoAvailable_r16_true;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force connEstFailInfoAvailable-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->connEstFailInfoAvailable_r16)
+      return false;
+    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->connEstFailInfoAvailable_r16);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->connEstFailInfoAvailable_r16 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit connEstFailInfoAvailable-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_5887d4abcb733b7d_e6d70f3e9a_optional_presence_toggle_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_5887d4abcb733b7d_e6d70f3e9a_optional_presence_toggle(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "5887d4abcb733b7d",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__connEstFailInfoAvailable-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "connEstFailInfoAvailable-r16",
+    .operator_family = "optional_presence_toggle",
+    .apply = nr_ue_fuzz_hook_apply_a_5887d4abcb733b7d_e6d70f3e9a_optional_presence_toggle_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_fbdc552a325280ae
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__rlf-InfoAvailable-r16
+ * message: RRCReconfigurationComplete
+ * field: rlf-InfoAvailable-r16
+ * operator_family: optional_presence_toggle
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->rlf_InfoAvailable_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_fbdc552a325280ae_53e1eee836_optional_presence_toggle
+ * adapter_function: nr_ue_fuzz_hook_apply_a_fbdc552a325280ae_53e1eee836_optional_presence_toggle_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_fbdc552a325280ae_53e1eee836_optional_presence_toggle(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_present_true";
+
+  if (!strcasecmp(mode, "force_present_true")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->rlf_InfoAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->rlf_InfoAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->rlf_InfoAvailable_r16));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->rlf_InfoAvailable_r16 = NR_UE_MeasurementsAvailable_r16__rlf_InfoAvailable_r16_true;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force rlf-InfoAvailable-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->rlf_InfoAvailable_r16)
+      return false;
+    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->rlf_InfoAvailable_r16);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->rlf_InfoAvailable_r16 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit rlf-InfoAvailable-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_fbdc552a325280ae_53e1eee836_optional_presence_toggle_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_fbdc552a325280ae_53e1eee836_optional_presence_toggle(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "fbdc552a325280ae",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__rlf-InfoAvailable-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "rlf-InfoAvailable-r16",
+    .operator_family = "optional_presence_toggle",
+    .apply = nr_ue_fuzz_hook_apply_a_fbdc552a325280ae_53e1eee836_optional_presence_toggle_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_132db9fc2d33da63
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__successHO-InfoAvailable-r17
+ * message: RRCReconfigurationComplete
+ * field: successHO-InfoAvailable-r17
+ * operator_family: optional_presence_toggle
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->successHO_InfoAvailable_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_132db9fc2d33da63_c5040113e6_optional_presence_toggle
+ * adapter_function: nr_ue_fuzz_hook_apply_a_132db9fc2d33da63_c5040113e6_optional_presence_toggle_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_132db9fc2d33da63_c5040113e6_optional_presence_toggle(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_present_true";
+
+  if (!strcasecmp(mode, "force_present_true")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->successHO_InfoAvailable_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->successHO_InfoAvailable_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->successHO_InfoAvailable_r17));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->successHO_InfoAvailable_r17 = NR_UE_MeasurementsAvailable_r16__ext1__successHO_InfoAvailable_r17_true;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force successHO-InfoAvailable-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->successHO_InfoAvailable_r17)
+      return false;
+    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->successHO_InfoAvailable_r17);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->successHO_InfoAvailable_r17 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit successHO-InfoAvailable-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_132db9fc2d33da63_c5040113e6_optional_presence_toggle_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_132db9fc2d33da63_c5040113e6_optional_presence_toggle(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "132db9fc2d33da63",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__successHO-InfoAvailable-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "successHO-InfoAvailable-r17",
+    .operator_family = "optional_presence_toggle",
+    .apply = nr_ue_fuzz_hook_apply_a_132db9fc2d33da63_c5040113e6_optional_presence_toggle_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_0e00fde24fb8e3f2
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__sigLogMeasConfigAvailable-r17
+ * message: RRCReconfigurationComplete
+ * field: sigLogMeasConfigAvailable-r17
+ * operator_family: optional_boolean_assignment
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_0e00fde24fb8e3f2_aba3e142e8_optional_boolean_assignment
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0e00fde24fb8e3f2_aba3e142e8_optional_boolean_assignment_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_0e00fde24fb8e3f2_aba3e142e8_optional_boolean_assignment(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "force_true";
+
+  if (!strcasecmp(mode, "force_true")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17 = 1;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force sigLogMeasConfigAvailable-r17=true in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "force_false")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17));
+    *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17 = 0;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] force sigLogMeasConfigAvailable-r17=false in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17));
+    if (!strcasecmp(override_value, "true") || !strcmp(override_value, "1"))
+      *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17 = 1;
+    else if (!strcasecmp(override_value, "false") || !strcmp(override_value, "0"))
+      *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17 = 0;
+    else
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set sigLogMeasConfigAvailable-r17 from override in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  if (!strcasecmp(mode, "omit")) {
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1
+        || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17)
+      return false;
+    free(payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17);
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->ue_MeasurementsAvailable_r16->ext1->sigLogMeasConfigAvailable_r17 = NULL;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] omit sigLogMeasConfigAvailable-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+    return true;
+  }
+
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_0e00fde24fb8e3f2_aba3e142e8_optional_boolean_assignment_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_0e00fde24fb8e3f2_aba3e142e8_optional_boolean_assignment(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "0e00fde24fb8e3f2",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__sigLogMeasConfigAvailable-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "sigLogMeasConfigAvailable-r17",
+    .operator_family = "optional_boolean_assignment",
+    .apply = nr_ue_fuzz_hook_apply_a_0e00fde24fb8e3f2_aba3e142e8_optional_boolean_assignment_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_3ba2bf1da79ae914
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapsInfoNR-r16__intraFreq-needForGap-r16__item0__servCellId-r16
+ * message: RRCReconfigurationComplete
+ * field: servCellId-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->intraFreq_needForGap_r16.list.array[0]->servCellId_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_3ba2bf1da79ae914_db6b9bfa05_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3ba2bf1da79ae914_db6b9bfa05_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_3ba2bf1da79ae914_db6b9bfa05_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->intraFreq_needForGap_r16.list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->intraFreq_needForGap_r16.list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->intraFreq_needForGap_r16.list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 31;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->intraFreq_needForGap_r16.list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->intraFreq_needForGap_r16.list.array[0]->servCellId_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate servCellId-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_3ba2bf1da79ae914_db6b9bfa05_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_3ba2bf1da79ae914_db6b9bfa05_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "3ba2bf1da79ae914",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapsInfoNR-r16__intraFreq-needForGap-r16__item0__servCellId-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "servCellId-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_3ba2bf1da79ae914_db6b9bfa05_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_0e4153c87d4561c2
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapsInfoNR-r16__interFreq-needForGap-r16__item0__bandNR-r16
+ * message: RRCReconfigurationComplete
+ * field: bandNR-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->interFreq_needForGap_r16.list.array[0]->bandNR_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_0e4153c87d4561c2_338c6ed159_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_0e4153c87d4561c2_338c6ed159_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_0e4153c87d4561c2_338c6ed159_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->interFreq_needForGap_r16.list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->interFreq_needForGap_r16.list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->interFreq_needForGap_r16.list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 1;
+  long max_value = 1024;
+  long chosen_value = 2;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->interFreq_needForGap_r16.list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapsInfoNR_r16->interFreq_needForGap_r16.list.array[0]->bandNR_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate bandNR-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_0e4153c87d4561c2_338c6ed159_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_0e4153c87d4561c2_338c6ed159_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "0e4153c87d4561c2",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapsInfoNR-r16__interFreq-needForGap-r16__item0__bandNR-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "bandNR-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_0e4153c87d4561c2_338c6ed159_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_3481f00142f873d9
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierOneInfo-r16__servCellIndex-r16
+ * message: RRCReconfigurationComplete
+ * field: servCellIndex-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierOneInfo_r16.servCellIndex_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_3481f00142f873d9_52fcc01ed2_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_3481f00142f873d9_52fcc01ed2_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_3481f00142f873d9_52fcc01ed2_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 31;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierOneInfo_r16.servCellIndex_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate servCellIndex-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_3481f00142f873d9_52fcc01ed2_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_3481f00142f873d9_52fcc01ed2_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "3481f00142f873d9",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierOneInfo-r16__servCellIndex-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "servCellIndex-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_3481f00142f873d9_52fcc01ed2_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_5ef8ed5e5737228b
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierOneInfo-r16__servCellInfo-r16__bwp-Id-r16
+ * message: RRCReconfigurationComplete
+ * field: bwp-Id-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierOneInfo_r16.servCellInfo_r16.choice.bwp_Id_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_5ef8ed5e5737228b_329bc8f79b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_5ef8ed5e5737228b_329bc8f79b_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_5ef8ed5e5737228b_329bc8f79b_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierOneInfo_r16.servCellInfo_r16.present != NR_UplinkTxDirectCurrentCarrierInfo_r16__servCellInfo_r16_PR_bwp_Id_r16
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 4;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierOneInfo_r16.servCellInfo_r16.choice.bwp_Id_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate bwp-Id-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_5ef8ed5e5737228b_329bc8f79b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_5ef8ed5e5737228b_329bc8f79b_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "5ef8ed5e5737228b",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierOneInfo-r16__servCellInfo-r16__bwp-Id-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "bwp-Id-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_5ef8ed5e5737228b_329bc8f79b_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_985b5df068aae3fe
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierTwoInfo-r16__servCellIndex-r16
+ * message: RRCReconfigurationComplete
+ * field: servCellIndex-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierTwoInfo_r16.servCellIndex_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_985b5df068aae3fe_e9840b19e0_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_985b5df068aae3fe_e9840b19e0_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_985b5df068aae3fe_e9840b19e0_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 31;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierTwoInfo_r16.servCellIndex_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate servCellIndex-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_985b5df068aae3fe_e9840b19e0_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_985b5df068aae3fe_e9840b19e0_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "985b5df068aae3fe",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierTwoInfo-r16__servCellIndex-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "servCellIndex-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_985b5df068aae3fe_e9840b19e0_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_b3ce594f8293af21
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierTwoInfo-r16__servCellInfo-r16__bwp-Id-r16
+ * message: RRCReconfigurationComplete
+ * field: bwp-Id-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierTwoInfo_r16.servCellInfo_r16.choice.bwp_Id_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_b3ce594f8293af21_5c7559be3b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_b3ce594f8293af21_5c7559be3b_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_b3ce594f8293af21_5c7559be3b_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierTwoInfo_r16.servCellInfo_r16.present != NR_UplinkTxDirectCurrentCarrierInfo_r16__servCellInfo_r16_PR_bwp_Id_r16
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 4;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->carrierTwoInfo_r16.servCellInfo_r16.choice.bwp_Id_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate bwp-Id-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_b3ce594f8293af21_5c7559be3b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_b3ce594f8293af21_5c7559be3b_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "b3ce594f8293af21",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierTwoInfo-r16__servCellInfo-r16__bwp-Id-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "bwp-Id-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_b3ce594f8293af21_5c7559be3b_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_81945a86a6e2e06e
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__singlePA-TxDirectCurrent-r16__referenceCarrierIndex-r16
+ * message: RRCReconfigurationComplete
+ * field: referenceCarrierIndex-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->singlePA_TxDirectCurrent_r16.referenceCarrierIndex_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_81945a86a6e2e06e_2ae893b246_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_81945a86a6e2e06e_2ae893b246_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_81945a86a6e2e06e_2ae893b246_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 31;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->singlePA_TxDirectCurrent_r16.referenceCarrierIndex_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate referenceCarrierIndex-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_81945a86a6e2e06e_2ae893b246_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_81945a86a6e2e06e_2ae893b246_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "81945a86a6e2e06e",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__singlePA-TxDirectCurrent-r16__referenceCarrierIndex-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "referenceCarrierIndex-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_81945a86a6e2e06e_2ae893b246_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_7e897d9cf5ceb7c1
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__singlePA-TxDirectCurrent-r16__txDirectCurrentLocation-r16
+ * message: RRCReconfigurationComplete
+ * field: txDirectCurrentLocation-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->singlePA_TxDirectCurrent_r16.txDirectCurrentLocation_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_7e897d9cf5ceb7c1_e046376f33_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_7e897d9cf5ceb7c1_e046376f33_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_7e897d9cf5ceb7c1_e046376f33_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 3301;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->singlePA_TxDirectCurrent_r16.txDirectCurrentLocation_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate txDirectCurrentLocation-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_7e897d9cf5ceb7c1_e046376f33_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_7e897d9cf5ceb7c1_e046376f33_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "7e897d9cf5ceb7c1",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__singlePA-TxDirectCurrent-r16__txDirectCurrentLocation-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "txDirectCurrentLocation-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_7e897d9cf5ceb7c1_e046376f33_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_88c5f64bf8b245f3
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__secondPA-TxDirectCurrent-r16__referenceCarrierIndex-r16
+ * message: RRCReconfigurationComplete
+ * field: referenceCarrierIndex-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16->referenceCarrierIndex_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_88c5f64bf8b245f3_95e9e6c8e9_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_88c5f64bf8b245f3_95e9e6c8e9_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_88c5f64bf8b245f3_95e9e6c8e9_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 31;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+      return false;
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16));
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16->referenceCarrierIndex_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate referenceCarrierIndex-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_88c5f64bf8b245f3_95e9e6c8e9_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_88c5f64bf8b245f3_95e9e6c8e9_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "88c5f64bf8b245f3",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__secondPA-TxDirectCurrent-r16__referenceCarrierIndex-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "referenceCarrierIndex-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_88c5f64bf8b245f3_95e9e6c8e9_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_d63a039c16c9150a
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__secondPA-TxDirectCurrent-r16__txDirectCurrentLocation-r16
+ * message: RRCReconfigurationComplete
+ * field: txDirectCurrentLocation-r16
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16->txDirectCurrentLocation_r16
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_d63a039c16c9150a_c5a9f55046_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_d63a039c16c9150a_c5a9f55046_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_d63a039c16c9150a_c5a9f55046_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 3301;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0])
+      return false;
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16));
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentTwoCarrierList_r16->list.array[0]->secondPA_TxDirectCurrent_r16->txDirectCurrentLocation_r16 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate txDirectCurrentLocation-r16 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_d63a039c16c9150a_c5a9f55046_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_d63a039c16c9150a_c5a9f55046_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "d63a039c16c9150a",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__secondPA-TxDirectCurrent-r16__txDirectCurrentLocation-r16",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "txDirectCurrentLocation-r16",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_d63a039c16c9150a_c5a9f55046_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_ef6a993d736d1492
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoNR-r17__intraFreq-needForNCSG-r17__item0__servCellId-r17
+ * message: RRCReconfigurationComplete
+ * field: servCellId-r17
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->intraFreq_needForNCSG_r17.list.array[0]->servCellId_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_ef6a993d736d1492_9fb8548baf_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_ef6a993d736d1492_9fb8548baf_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_ef6a993d736d1492_9fb8548baf_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->intraFreq_needForNCSG_r17.list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->intraFreq_needForNCSG_r17.list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->intraFreq_needForNCSG_r17.list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 31;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->intraFreq_needForNCSG_r17.list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->intraFreq_needForNCSG_r17.list.array[0]->servCellId_r17 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate servCellId-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_ef6a993d736d1492_9fb8548baf_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_ef6a993d736d1492_9fb8548baf_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "ef6a993d736d1492",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoNR-r17__intraFreq-needForNCSG-r17__item0__servCellId-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "servCellId-r17",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_ef6a993d736d1492_9fb8548baf_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_03e12b0027002a9d
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoNR-r17__interFreq-needForNCSG-r17__item0__bandNR-r17
+ * message: RRCReconfigurationComplete
+ * field: bandNR-r17
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->interFreq_needForNCSG_r17.list.array[0]->bandNR_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_03e12b0027002a9d_10c0b30a84_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_03e12b0027002a9d_10c0b30a84_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_03e12b0027002a9d_10c0b30a84_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->interFreq_needForNCSG_r17.list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->interFreq_needForNCSG_r17.list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->interFreq_needForNCSG_r17.list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 1;
+  long max_value = 1024;
+  long chosen_value = 2;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->interFreq_needForNCSG_r17.list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoNR_r17->interFreq_needForNCSG_r17.list.array[0]->bandNR_r17 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate bandNR-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_03e12b0027002a9d_10c0b30a84_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_03e12b0027002a9d_10c0b30a84_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "03e12b0027002a9d",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoNR-r17__interFreq-needForNCSG-r17__item0__bandNR-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "bandNR-r17",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_03e12b0027002a9d_10c0b30a84_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_fdfc6d6793a83caf
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoEUTRA-r17__needForNCSG-EUTRA-r17__item0__bandEUTRA-r17
+ * message: RRCReconfigurationComplete
+ * field: bandEUTRA-r17
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17->needForNCSG_EUTRA_r17.list.array[0]->bandEUTRA_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_fdfc6d6793a83caf_9a22c1a622_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_fdfc6d6793a83caf_9a22c1a622_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_fdfc6d6793a83caf_9a22c1a622_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17->needForNCSG_EUTRA_r17.list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17->needForNCSG_EUTRA_r17.list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17->needForNCSG_EUTRA_r17.list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 1;
+  long max_value = 256;
+  long chosen_value = 2;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17->needForNCSG_EUTRA_r17.list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->needForGapNCSG_InfoEUTRA_r17->needForNCSG_EUTRA_r17.list.array[0]->bandEUTRA_r17 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate bandEUTRA-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_fdfc6d6793a83caf_9a22c1a622_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_fdfc6d6793a83caf_9a22c1a622_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "fdfc6d6793a83caf",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoEUTRA-r17__needForNCSG-EUTRA-r17__item0__bandEUTRA-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "bandEUTRA-r17",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_fdfc6d6793a83caf_9a22c1a622_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_010147eb99044a8b
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__selectedCondRRCReconfig-r17
+ * message: RRCReconfigurationComplete
+ * field: selectedCondRRCReconfig-r17
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_010147eb99044a8b_f6c9d17b16_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_010147eb99044a8b_f6c9d17b16_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ */
+static bool nr_ue_fuzz_hook_apply_a_010147eb99044a8b_f6c9d17b16_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete)
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 1;
+  long max_value = 8;
+  long chosen_value = 2;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17));
+  if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17)
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17));
+  if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17)
+    return false;
+  *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->selectedCondRRCReconfig_r17 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate selectedCondRRCReconfig-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_010147eb99044a8b_f6c9d17b16_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_010147eb99044a8b_f6c9d17b16_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "010147eb99044a8b",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__selectedCondRRCReconfig-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "selectedCondRRCReconfig-r17",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_010147eb99044a8b_f6c9d17b16_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_acebf88f63adfe10
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__servCellIndexLower-r17
+ * message: RRCReconfigurationComplete
+ * field: servCellIndexLower-r17
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexLower_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_acebf88f63adfe10_3801ed34b6_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_acebf88f63adfe10_3801ed34b6_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_acebf88f63adfe10_3801ed34b6_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 31;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexLower_r17 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate servCellIndexLower-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_acebf88f63adfe10_3801ed34b6_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_acebf88f63adfe10_3801ed34b6_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "acebf88f63adfe10",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__servCellIndexLower-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "servCellIndexLower-r17",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_acebf88f63adfe10_3801ed34b6_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_54b4b939744fa850
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__servCellIndexHigher-r17
+ * message: RRCReconfigurationComplete
+ * field: servCellIndexHigher-r17
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_54b4b939744fa850_88961a261b_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_54b4b939744fa850_88961a261b_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_54b4b939744fa850_88961a261b_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = 0;
+  long max_value = 31;
+  long chosen_value = 1;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0])
+      return false;
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17));
+  if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17)
+    payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17));
+  if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17)
+    return false;
+  *payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->servCellIndexHigher_r17 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate servCellIndexHigher-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_54b4b939744fa850_88961a261b_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_54b4b939744fa850_88961a261b_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "54b4b939744fa850",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__servCellIndexHigher-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "servCellIndexHigher-r17",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_54b4b939744fa850_88961a261b_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_ace1995de61e740b
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__offsetToDefault-r17__offsetValue__offsetValue-r17
+ * message: RRCReconfigurationComplete
+ * field: offsetValue-r17
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetValue->offsetValue_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_ace1995de61e740b_ee95630efb_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_ace1995de61e740b_ee95630efb_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_ace1995de61e740b_ee95630efb_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->present != NR_CC_Group_r17__offsetToDefault_r17_PR_offsetValue
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetValue
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = -20000;
+  long max_value = 20000;
+  long chosen_value = -19999;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0])
+      return false;
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17));
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetValue->offsetValue_r17 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate offsetValue-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_ace1995de61e740b_ee95630efb_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_ace1995de61e740b_ee95630efb_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "ace1995de61e740b",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__offsetToDefault-r17__offsetValue__offsetValue-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "offsetValue-r17",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_ace1995de61e740b_ee95630efb_integer_transform_adapter,
+},
+*/
+
+/* AUTO-GENERATED REVIEW STUB
+ * adapter_id: a_caf594f38cdbecc6
+ * domain_id: RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__offsetToDefault-r17__offsetlist__item0__offsetValue-r17
+ * message: RRCReconfigurationComplete
+ * field: offsetValue-r17
+ * operator_family: integer_transform
+ * candidate_chain: criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetlist->list.array[0]->offsetValue_r17
+ * compile_validation: compile_verified
+ * helper_function: nr_ue_fuzz_hook_apply_a_caf594f38cdbecc6_2d8ab68a2a_integer_transform
+ * adapter_function: nr_ue_fuzz_hook_apply_a_caf594f38cdbecc6_2d8ab68a2a_integer_transform_adapter
+ * payload_type: NR_RRCReconfigurationComplete_t
+ * review points:
+ *   - confirm_oai_struct_member_path
+ *   - confirm_optional_branch_and_release_extension
+ *   - derived_generic_message_field_profile
+ *   - sequence_index_policy=first_present_element
+ */
+static bool nr_ue_fuzz_hook_apply_a_caf594f38cdbecc6_2d8ab68a2a_integer_transform(NR_UE_RRC_INST_t *rrc,
+                              NR_RRCReconfigurationComplete_t *payload,
+                              const char *mode)
+{
+  if (!payload
+      || payload->criticalExtensions.present != NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->present != NR_CC_Group_r17__offsetToDefault_r17_PR_offsetlist
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetlist
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]
+      || payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetlist->list.count <= 0
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetlist->list.array
+      || !payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetlist->list.array[0])
+    return false;
+
+  if (!mode || !*mode)
+    mode = "mismatch_in_range";
+
+  long min_value = -20000;
+  long max_value = 20000;
+  long chosen_value = -19999;
+
+  if (!strcasecmp(mode, "boundary_min")) {
+    chosen_value = min_value;
+  } else if (!strcasecmp(mode, "boundary_max")) {
+    chosen_value = max_value;
+  } else if (!strcasecmp(mode, "mismatch_in_range")) {
+    chosen_value = (min_value < max_value) ? (min_value + 1) : max_value;
+  } else if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    char *end = NULL;
+    chosen_value = strtol(override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen_value < min_value || chosen_value > max_value)
+      return false;
+  } else {
+    return false;
+  }
+
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0])
+      return false;
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17)
+      payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17 = CALLOC(1, sizeof(*payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17));
+    if (!payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetlist->list.array[0])
+      return false;
+  payload->criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->nonCriticalExtension->uplinkTxDirectCurrentMoreCarrierList_r17->list.array[0]->offsetToDefault_r17->choice.offsetlist->list.array[0]->offsetValue_r17 = chosen_value;
+  LOG_W(NR_RRC, "[UE %ld][HOOK] mutate offsetValue-r17 in RRCReconfigurationComplete\n", rrc->ue_id);
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_a_caf594f38cdbecc6_2d8ab68a2a_integer_transform_adapter(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  return nr_ue_fuzz_hook_apply_a_caf594f38cdbecc6_2d8ab68a2a_integer_transform(rrc, (NR_RRCReconfigurationComplete_t *)payload, mode);
+}
+
+/* registry entry
+{
+    .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+    .adapter_key = "caf594f38cdbecc6",
+    .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__offsetToDefault-r17__offsetlist__item0__offsetValue-r17",
+    .message_name = "RRCReconfigurationComplete",
+    .field_name = "offsetValue-r17",
+    .operator_family = "integer_transform",
+    .apply = nr_ue_fuzz_hook_apply_a_caf594f38cdbecc6_2d8ab68a2a_integer_transform_adapter,
 },
 */
 
@@ -13160,7 +17494,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "measId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a98fd82bc1_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_7d63aed689d30406_3d9af4e215_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13169,7 +17503,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "servCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ab1ac7b26e_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_69421b43d0356c0b_28a5fbc13c_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13178,7 +17512,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "physCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_43eb37ad23_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_81bc5d05b35af954_098b4542fc_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13187,7 +17521,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d381b71947_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_679c62de53f57551_13d8c873ad_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13196,7 +17530,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b22d7c2d19_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_b78bd1806ae3b370_71e6cc34e7_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13205,7 +17539,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5781bf6314_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4322bee58586b1f8_58db8ee04d_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13214,7 +17548,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_68e90ef809_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_d2012596d4069f86_e55b08d101_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13223,7 +17557,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_1bb478385d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_79134d1231da9168_c75bb56d85_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13232,7 +17566,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ed6479ed09_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_258d029f88399b06_2d4b5e79b2_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13241,7 +17575,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_591e148fff_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_fea910d46abae047_47a8bf996f_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13250,7 +17584,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_011c2d1d83_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_0a5d3c2f05514a45_a073c0c990_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13259,7 +17593,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edbfd5f8d7_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_fdd6350eed768d13_d77fb78a44_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13268,7 +17602,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_71e5b10a22_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_dbb7d9621187be1b_7c19c9ad29_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13277,7 +17611,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "csi-RS-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3ffc712be9_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_3550365085906f18_e3c531e927_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13286,7 +17620,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12a096e8eb_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_21c3ce2ee9c61336_defb4c740a_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13295,7 +17629,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7ed01e270f_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_098bf462b4759d01_34ba019e4d_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13304,7 +17638,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7a308f19d8_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_f23cf909ac9cae58_abd258c2a1_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13313,7 +17647,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-SubcarrierOffset",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c030e8b679_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_5a7a8dfa6d9c544b_ddd7bc807a_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13322,7 +17656,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "controlResourceSetZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_cc234ae757_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_b1e87f00ca076213_230cebdb21_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13331,7 +17665,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "searchSpaceZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91871cc904_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_0854070aaa81f79f_fa6f38a551_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13340,7 +17674,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "timeBetweenEvents-r17",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37fbda1524_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_dd7fce5fa9ff8b66_3bde6f71c9_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13349,7 +17683,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "physCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_93cd704cd2_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_1338ff2fb1d79ae1_b02ea576b4_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13358,7 +17692,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_498871f06d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_cf197c487112d9b8_cc781ed687_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13367,7 +17701,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4abe320f9b_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_73c5788f6dd6858b_1571629df1_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13376,7 +17710,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_587c4eb994_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4f85a25035b5dd2c_7482999e0c_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13385,7 +17719,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_275c9e260a_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_f44d2af74ccceb2e_0e1967a3a0_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13394,7 +17728,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3948b5e98c_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_443e229e4a1ce7db_8b903d2878_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13403,7 +17737,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_676e6c92f8_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_74075f35b1901c99_3e286ab89b_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13412,7 +17746,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_30186ef163_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_e0121f4c95c4380c_3839fa412d_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13421,7 +17755,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_427bbcfefe_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_22bcabbe69c0a41a_34f36eed5a_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13430,7 +17764,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f49fc847c3_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_424b7a77864c3fb7_736860099f_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13439,7 +17773,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7c16924d50_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_80b47d8ef94adac8_c63fc377e1_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13448,7 +17782,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "csi-RS-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_13c017a14c_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_ff0f58bab2d241e4_5ce13996dc_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13457,7 +17791,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f48371175_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_f8b5e9021474334b_5fa1ab1d99_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13466,7 +17800,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5bafc099f7_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_c0245d229ffecbdc_fcd6c84efc_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13475,7 +17809,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b0979ba2e4_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_375ef59bb5e00862_28a97b440f_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13484,7 +17818,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-SubcarrierOffset",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5b27bb72f7_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4bae2b6d35613e8d_aba8a2c179_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13493,7 +17827,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "controlResourceSetZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac92abc39a_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_a6253dfdb0c29af3_8633086e55_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13502,7 +17836,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "searchSpaceZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f2d19dee67_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_7d607dd4fff7bc0e_55ea15be27_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13511,7 +17845,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "timeBetweenEvents-r17",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4484efe377_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_77c82d207afabaff_1d78e68d99_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13520,7 +17854,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "physCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12517ef9f8_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_8761c10b76b8c520_5e6d362318_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13529,7 +17863,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_61c72a4575_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_6a49afcd524dc639_f4bb08ae3d_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13538,7 +17872,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_873417b9be_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_b7c9da750039aec7_8860b47b9b_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13547,7 +17881,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5da7569433_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_b95d8a4e7cecff2d_e8ef2b08e6_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13556,7 +17890,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3d923f475_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_a0dd6a9fd78771b6_96f10c4736_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13565,7 +17899,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9f360c10ab_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_58b2260838c2afe1_35fc7a1e5a_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13574,7 +17908,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f74489d61b_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_f01c5ee1842ae7b2_f38416e1d3_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13583,7 +17917,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d50a9fda99_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_09871b606b75121a_4586efadb7_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13592,7 +17926,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f9fa156c00_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_576686f6ff3f38ce_3eb86fc9f5_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13601,7 +17935,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_261d5d7ed9_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_e970fea180e05558_8aa8a7beef_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13610,7 +17944,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5870ac814d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_8eefd153de6304bf_fbe4d25295_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13619,7 +17953,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "csi-RS-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2435c2788_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_75fd586d55f911c4_59145df0bb_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13628,7 +17962,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97f17b8227_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_7f3afaf82767f3e2_3991784a54_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13637,7 +17971,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_84362a2caf_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_50e923ad9c3e8b78_696f773f3b_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13646,7 +17980,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4123d19ab_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_bb9c5a3e5005b7d3_a16a700d05_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13655,7 +17989,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-SubcarrierOffset",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9a746f8571_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_0b4e477fdca922f2_4145894502_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13664,7 +17998,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "controlResourceSetZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e9bac2ff35_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_88a009942fe8d7a2_c663b934c0_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13673,7 +18007,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "searchSpaceZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6f74871668_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_a93b76ed3129d156_e041869b77_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13682,7 +18016,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "timeBetweenEvents-r17",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_44a97e5cc1_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_6e70e3766b8e9f2b_31f060078c_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13691,7 +18025,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "eutra-PhysCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8ba3296a61_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_0b9153794641a5ef_9082dca25b_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13700,7 +18034,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_91e619c4d0_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4611355bf574c1f7_84de08cda2_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13709,7 +18043,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3be7d8d723_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_2cd4bc8ab90d2847_9eeb3b1a70_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13718,7 +18052,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5e65e94f07_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_0899faffa0e0eab5_4444399a8b_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13727,7 +18061,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "physCellId-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3fe758fd63_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4872b5c3efd9beef_c35ba79fd9_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13736,7 +18070,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "utra-FDD-RSCP-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7e1f079efc_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4a340108f80ec252_3b5c59c688_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13745,7 +18079,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "utra-FDD-EcN0-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d40c1937e_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_8058f13faf3711bf_32cf304a37_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13754,7 +18088,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "carrierFreq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_af6a33dfcb_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_d40cf037bf723c9f_6a002c3a51_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13763,7 +18097,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "eutra-PhysCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d44989ee4d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_27a1699697dc8f99_bbe357acdd_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13772,7 +18106,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_81d7cd1d67_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4f6adcf671631e42_19a8cebcd4_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13781,7 +18115,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0b025e6e51_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4924522b611a548e_0d246e30d2_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13790,7 +18124,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_00185026e4_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_88bdb3831054b828_e8a190bd95_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13799,7 +18133,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "eutra-PhysCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_c39dfee5a3_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_5e4c8f388d107aad_3097bb50a5_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13808,7 +18142,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_97848c3858_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_f066350cd32babf5_0d94767ec0_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13817,7 +18151,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5c1a940108_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_ac35df4614a52e53_901ff230ea_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13826,7 +18160,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b369516ba4_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_53e9922902fff8cf_94114eda07_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13835,7 +18169,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssbFrequency",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b741fd8cb0_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_43b047d8920e8871_e0be867d00_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13844,7 +18178,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "refFreqCSI-RS",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a4ea654280_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_66f31d392ca91fa9_9ca44c45e9_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13853,7 +18187,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "physCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f14de00354_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_10bbd1f5b188a1d0_63f91f7010_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13862,7 +18196,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9549d8ed43_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_8710f6503e627905_657f4c2cfa_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13871,7 +18205,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_75a3fa1b88_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_a674c619fbc0b6eb_22ed936d8c_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13880,7 +18214,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_14726289f5_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_8d00a2364a8ac863_f10456cd7e_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13889,7 +18223,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0431c4e5e0_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_f5feabaccebcf2de_336fe67ac0_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13898,7 +18232,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac38dc3357_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_3b50aad6650756c2_a53c800fd4_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13907,7 +18241,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_12d815174f_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_6c79a67a7533eea6_a9edaa6eb4_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13916,7 +18250,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6664cfb66a_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_c1a9f87ce54beb6f_7e3d9773e8_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13925,7 +18259,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6bb15b6a53_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_9cc6705e4d834ea1_846dd06674_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13934,7 +18268,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da7e116ed_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_cb4b2c33945c664a_ffbccab6d3_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13943,7 +18277,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_20992624d9_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_5d8326fdfdc01fbb_983239847d_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13952,7 +18286,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "csi-RS-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9611179703_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_2b16bd13f4a9e606_d63934bbe3_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13961,7 +18295,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ee4d52fb2f_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_b1998fae0230c261_52aaaaa7e9_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13970,7 +18304,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6d61a6391e_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_5b98cf9b0e30a9de_559535e40b_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13979,7 +18313,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_8f963486e7_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_be086a72d86bba80_0e5edf50b0_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13988,7 +18322,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-SubcarrierOffset",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e53bc32c88_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_83c349b5223d8189_18527f0595_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -13997,7 +18331,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "controlResourceSetZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c818b53d2_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_39ecbf3ac31c1e81_a3f31da80f_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14006,7 +18340,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "searchSpaceZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_fe210ff3fe_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_754c70389eeeddb8_26321995e1_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14015,7 +18349,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "timeBetweenEvents-r17",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3bf3afad15_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_e7f29e09acf576a1_9a1502f650_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14024,7 +18358,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "physCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a6c64575cc_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_3fbac38151ff3cae_5e7f5443ac_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14033,7 +18367,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d25ddd9e6c_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_83cb125a46c09d0d_48d050cb75_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14042,7 +18376,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ce90e20a0e_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_5f000ed8d0dfa15c_2bf5866bed_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14051,7 +18385,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_76c68ec6db_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_2000c17a7eeb1249_b1b2ad10cc_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14060,7 +18394,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_78016b02fb_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_894b9b04175db856_d918198f8a_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14069,7 +18403,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5603cbfd72_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_910ae2fbf8b0eb65_f294b64a63_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14078,7 +18412,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_edf8f09135_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_e184a872fdf67042_eb7d759def_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14087,7 +18421,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_395f41c50d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_6444fad577493a6e_687c9e9efc_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14096,7 +18430,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4856cbcd5b_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_505c749c04a60e85_8bb82d239a_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14105,7 +18439,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_5d4e560156_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_3fa766362f9e83cc_78fe4306c0_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14114,7 +18448,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_a2ddbdb1b6_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_c22db71d69a3579c_4b69589a5f_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14123,7 +18457,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "csi-RS-Index",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_25b767e279_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_5dfee9b11be0c272_013ab6f8a6_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14132,7 +18466,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2b68640e70_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_31aa636473fe87ff_36f5abd2da_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14141,7 +18475,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrq",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4824069b6d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_c7418f39249a5118_2ca5b05ab6_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14150,7 +18484,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sinr",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e6b4719a5d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_bb658083994b6470_a328c17c74_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14159,7 +18493,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssb-SubcarrierOffset",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2d829cb866_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_bf99b452ae028639_fcefd7e795_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14168,7 +18502,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "controlResourceSetZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f3b964abb9_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_0fbf42c1e245bc64_fb59692926_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14177,7 +18511,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "searchSpaceZero",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_19c6ac304a_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_83678773a4ce88e8_ccd432ecfa_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14186,7 +18520,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "timeBetweenEvents-r17",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_f5b669f2ee_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_3515bc6c0cce5b4f_5e4f072b13_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14195,7 +18529,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "eutra-PhysCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_54e375e762_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_65dc2a9714a4e117_89902e8d21_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14204,7 +18538,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sfn-OffsetResult",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3add8b8bfb_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_b985119d13eb9f7c_03b3cab33c_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14213,7 +18547,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "frameBoundaryOffsetResult",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_e2df154f2c_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_0d8b5c95506432db_3e6bc0a395_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14222,7 +18556,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp-Result",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_73a02ec969_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4d992cf5a895fdc5_870e30d2d3_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14231,7 +18565,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "physCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_2c1886d86d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_4fea28780b463a7f_1d148c76b0_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14240,7 +18574,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sfn-OffsetResult",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_4f306cfbcb_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_aefc23319d95eda2_c9bee85119_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14249,7 +18583,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "frameBoundaryOffsetResult",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d77571434c_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_e655338b6fa86cb8_4ae403c35e_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14258,7 +18592,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp-Result",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_d918debd47_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_baf2e49f47c9c3cd_b5205a4110_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14267,7 +18601,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "physCellId",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b229210a0d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_893e27ce5a667dfd_f366d0bfd8_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14276,7 +18610,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sfn-OffsetResult",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b3adeca2f1_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_2c9c2eb684530db2_ac470ed7e3_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14285,7 +18619,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "frameBoundaryOffsetResult",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_0da14852ad_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_9ce55986be54a9e7_4cd94c3a51_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14294,7 +18628,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rsrp-Result",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7cc0c8738b_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_50544400b778b962_60e1a01e8b_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14303,7 +18637,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rssi-Result-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_6a7349936d_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_09b70a067dbcfc14_f3e356e653_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14312,7 +18646,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "channelOccupancy-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_7b10bff5f2_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_fd81d3c15f1ecda2_1decf06f8d_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14321,7 +18655,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "gnss-TOD-msec-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_204b3be32f_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_6d7c84fbf5685539_10638d679a_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14330,7 +18664,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "locationTimestamp-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_68c4246647_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_07c6b360cb899942_c834151698_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14339,7 +18673,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "locationCoordinate-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_1c6bbd5307_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_3c677889d89828ba_91a7120130_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14348,7 +18682,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "locationError-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2faa5f0b81_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_d28463c8bf68e812_13dea3061d_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14357,7 +18691,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "locationSource-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_a3a47190b8_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_771454a17cef8fef_96ad3b1258_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14366,7 +18700,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "velocityEstimate-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_f8b7dc38bd_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_ca0481049ead717d_018df47077_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14375,7 +18709,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "ssid-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_655696e3d2_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_eacbeea6d75fd891_4d23bc0a71_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14384,7 +18718,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "bssid-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_bd533a3c08_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_44c7e9bd8760ca4e_e70327605b_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14393,7 +18727,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "hessid-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_902305cec5_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_ed5f97063dbf8180_0720e59983_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14402,7 +18736,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rssiWLAN-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_3a7f4268a3_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_c22fad729f9b5b4c_fb5f7c78b8_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14411,7 +18745,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sensor-MeasurementInformation-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_2e6083703c_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_8e88c370c456468e_ce5c60ce47_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14420,7 +18754,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sensor-MotionInformation-r16",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__l_88f91d7c18_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_1e9b94b33f18f51d_faabb63905_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14429,7 +18763,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "drb-Id-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_8002246976_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_ac92a59fd8fadd92_e8c3c3a0ce_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14438,7 +18772,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "averageDelay-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_f561a86ad9_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_158df01af7bc4d26_04ee04771f_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14447,7 +18781,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sl-poolReportIdentity-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_b7d26e3e8f_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_c3c48abd93330866_d3bdd4bf56_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14456,7 +18790,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sl-CBR-ResultsNR-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_280dd049e1_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_9c675192aba66ba9_fab2ba8003_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14465,7 +18799,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "srs-ResourceId-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_3a811e4a48_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_1733a279a5762311_2eb7c360fe_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14474,7 +18808,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "srs-RSRP-Result-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_ac45f04f89_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_037e9c8ca5cb1062_e1a8878197_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14483,7 +18817,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "rssi-ResourceId-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_9dba353d96_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_b7fec8c0a0696a52_3b88729959_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14492,7 +18826,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "cli-RSSI-Result-r16",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_37558b43f6_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_fc4b14e69ecc2335_f3320dce45_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14501,7 +18835,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "result-k5-r17",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__m_bd0de2ddad_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_b1ef3e3ed8c5b529_2e50c14453_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14510,7 +18844,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "sl-MeasResultServingRelay-r17",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__s_f41a954ff2_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_225643faf5fa5274_360196964e_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14519,7 +18853,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "drb-Id-r17",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_66204202d9_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_78ee5845e090c54c_52c49ace1d_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14528,7 +18862,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "excessDelay-r17",
         .operator_family = "integer_transform",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__u_e5ee85cff4_integer_transform_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_589e393000bcc3c7_7c097ad23f_integer_transform_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14537,7 +18871,7 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "coarseLocationInfo-r17",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__measresults__c_e4440ae52e_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_099799a26c73b8da_388bc28341_optional_octet_string_assignment_adapter,
     },
     {
         .target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
@@ -14546,6 +18880,267 @@ static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[] = {
         .message_name = "MeasurementReport",
         .field_name = "lateNonCriticalExtension",
         .operator_family = "optional_octet_string_assignment",
-        .apply = nr_ue_fuzz_hook_apply_measurementreport__criticalextensions__measurementreport__latenoncritica_a91df065b1_optional_octet_string_assignment_adapter,
+        .apply = nr_ue_fuzz_hook_apply_a_5dc3b01b66fb4b84_133a052bc0_optional_octet_string_assignment_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
+        .adapter_key = "d58c35d57f1ced97",
+        .domain_id = "SecurityModeComplete__rrc-TransactionIdentifier",
+        .message_name = "SecurityModeComplete",
+        .field_name = "rrc-TransactionIdentifier",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_d58c35d57f1ced97_6a1d72baa3_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
+        .adapter_key = "25723471764e4ba8",
+        .domain_id = "SecurityModeComplete__criticalExtensions__securityModeComplete__lateNonCriticalExtension",
+        .message_name = "SecurityModeComplete",
+        .field_name = "lateNonCriticalExtension",
+        .operator_family = "optional_octet_string_assignment",
+        .apply = nr_ue_fuzz_hook_apply_a_25723471764e4ba8_18efe778e5_optional_octet_string_assignment_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "58d31961e0a844e3",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailable-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "logMeasAvailable-r16",
+        .operator_family = "optional_presence_toggle",
+        .apply = nr_ue_fuzz_hook_apply_a_58d31961e0a844e3_75d83fe32e_optional_presence_toggle_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "3c997241553fc1a3",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailableBT-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "logMeasAvailableBT-r16",
+        .operator_family = "optional_presence_toggle",
+        .apply = nr_ue_fuzz_hook_apply_a_3c997241553fc1a3_0ba22d97eb_optional_presence_toggle_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "af2092524cec8cbd",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__logMeasAvailableWLAN-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "logMeasAvailableWLAN-r16",
+        .operator_family = "optional_presence_toggle",
+        .apply = nr_ue_fuzz_hook_apply_a_af2092524cec8cbd_de240796f6_optional_presence_toggle_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "062d9ad5c8efd151",
+        .domain_id = "RRCReconfigurationComplete__rrc-TransactionIdentifier",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "rrc-TransactionIdentifier",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_062d9ad5c8efd151_6d72ed2943_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "028a8e529341bbd7",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__lateNonCriticalExtension",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "lateNonCriticalExtension",
+        .operator_family = "optional_octet_string_assignment",
+        .apply = nr_ue_fuzz_hook_apply_a_028a8e529341bbd7_de1cc7059c_optional_octet_string_assignment_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "5887d4abcb733b7d",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__connEstFailInfoAvailable-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "connEstFailInfoAvailable-r16",
+        .operator_family = "optional_presence_toggle",
+        .apply = nr_ue_fuzz_hook_apply_a_5887d4abcb733b7d_e6d70f3e9a_optional_presence_toggle_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "fbdc552a325280ae",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__rlf-InfoAvailable-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "rlf-InfoAvailable-r16",
+        .operator_family = "optional_presence_toggle",
+        .apply = nr_ue_fuzz_hook_apply_a_fbdc552a325280ae_53e1eee836_optional_presence_toggle_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "132db9fc2d33da63",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__successHO-InfoAvailable-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "successHO-InfoAvailable-r17",
+        .operator_family = "optional_presence_toggle",
+        .apply = nr_ue_fuzz_hook_apply_a_132db9fc2d33da63_c5040113e6_optional_presence_toggle_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "0e00fde24fb8e3f2",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__ue-MeasurementsAvailable-r16__sigLogMeasConfigAvailable-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "sigLogMeasConfigAvailable-r17",
+        .operator_family = "optional_boolean_assignment",
+        .apply = nr_ue_fuzz_hook_apply_a_0e00fde24fb8e3f2_aba3e142e8_optional_boolean_assignment_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "3ba2bf1da79ae914",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapsInfoNR-r16__intraFreq-needForGap-r16__item0__servCellId-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "servCellId-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_3ba2bf1da79ae914_db6b9bfa05_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "0e4153c87d4561c2",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapsInfoNR-r16__interFreq-needForGap-r16__item0__bandNR-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "bandNR-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_0e4153c87d4561c2_338c6ed159_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "3481f00142f873d9",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierOneInfo-r16__servCellIndex-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "servCellIndex-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_3481f00142f873d9_52fcc01ed2_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "5ef8ed5e5737228b",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierOneInfo-r16__servCellInfo-r16__bwp-Id-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "bwp-Id-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_5ef8ed5e5737228b_329bc8f79b_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "985b5df068aae3fe",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierTwoInfo-r16__servCellIndex-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "servCellIndex-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_985b5df068aae3fe_e9840b19e0_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "b3ce594f8293af21",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__carrierTwoInfo-r16__servCellInfo-r16__bwp-Id-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "bwp-Id-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_b3ce594f8293af21_5c7559be3b_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "81945a86a6e2e06e",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__singlePA-TxDirectCurrent-r16__referenceCarrierIndex-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "referenceCarrierIndex-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_81945a86a6e2e06e_2ae893b246_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "7e897d9cf5ceb7c1",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__singlePA-TxDirectCurrent-r16__txDirectCurrentLocation-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "txDirectCurrentLocation-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_7e897d9cf5ceb7c1_e046376f33_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "88c5f64bf8b245f3",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__secondPA-TxDirectCurrent-r16__referenceCarrierIndex-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "referenceCarrierIndex-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_88c5f64bf8b245f3_95e9e6c8e9_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "d63a039c16c9150a",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentTwoCarrierList-r16__item0__secondPA-TxDirectCurrent-r16__txDirectCurrentLocation-r16",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "txDirectCurrentLocation-r16",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_d63a039c16c9150a_c5a9f55046_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "ef6a993d736d1492",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoNR-r17__intraFreq-needForNCSG-r17__item0__servCellId-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "servCellId-r17",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_ef6a993d736d1492_9fb8548baf_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "03e12b0027002a9d",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoNR-r17__interFreq-needForNCSG-r17__item0__bandNR-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "bandNR-r17",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_03e12b0027002a9d_10c0b30a84_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "fdfc6d6793a83caf",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__needForGapNCSG-InfoEUTRA-r17__needForNCSG-EUTRA-r17__item0__bandEUTRA-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "bandEUTRA-r17",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_fdfc6d6793a83caf_9a22c1a622_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "010147eb99044a8b",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__selectedCondRRCReconfig-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "selectedCondRRCReconfig-r17",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_010147eb99044a8b_f6c9d17b16_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "acebf88f63adfe10",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__servCellIndexLower-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "servCellIndexLower-r17",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_acebf88f63adfe10_3801ed34b6_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "54b4b939744fa850",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__servCellIndexHigher-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "servCellIndexHigher-r17",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_54b4b939744fa850_88961a261b_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "ace1995de61e740b",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__offsetToDefault-r17__offsetValue__offsetValue-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "offsetValue-r17",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_ace1995de61e740b_ee95630efb_integer_transform_adapter,
+    },
+    {
+        .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+        .adapter_key = "caf594f38cdbecc6",
+        .domain_id = "RRCReconfigurationComplete__criticalExtensions__rrcReconfigurationComplete__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__nonCriticalExtension__uplinkTxDirectCurrentMoreCarrierList-r17__item0__offsetToDefault-r17__offsetlist__item0__offsetValue-r17",
+        .message_name = "RRCReconfigurationComplete",
+        .field_name = "offsetValue-r17",
+        .operator_family = "integer_transform",
+        .apply = nr_ue_fuzz_hook_apply_a_caf594f38cdbecc6_2d8ab68a2a_integer_transform_adapter,
     },
 };

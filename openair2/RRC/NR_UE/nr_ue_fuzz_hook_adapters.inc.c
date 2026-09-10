@@ -170,6 +170,25 @@ static bool nr_ue_fuzz_hook_apply_optional_boolean_assignment(NR_UE_RRC_INST_t *
     return true;
   }
 
+  if (!strcasecmp(mode, "set_to_value")) {
+    const char *override_value = rrc->fuzz_hook.field_mutation.override_value;
+    if (!override_value || !*override_value)
+      return false;
+    BOOLEAN_t **slot = locate_slot(reconfComplete, true);
+    if (!slot)
+      return false;
+    if (!*slot)
+      *slot = CALLOC(1, sizeof(**slot));
+    if (!strcasecmp(override_value, "true") || !strcmp(override_value, "1"))
+      **slot = 1;
+    else if (!strcasecmp(override_value, "false") || !strcmp(override_value, "0"))
+      **slot = 0;
+    else
+      return false;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] set %s from override in RRCReconfigurationComplete\n", rrc->ue_id, field_name);
+    return true;
+  }
+
   if (!strcasecmp(mode, "omit")) {
     BOOLEAN_t **slot = locate_slot(reconfComplete, false);
     if (!slot || !*slot)
@@ -235,6 +254,15 @@ static bool nr_ue_fuzz_hook_apply_txn_value(NR_UE_RRC_INST_t *rrc, long *value, 
     chosen = min_value + (((int64_t)reference - min_value + offset) % span + span) % span;
     if (echoed && chosen == reference && span > 1)
       chosen = min_value + (chosen - min_value + 1) % span;
+  } else if (nr_ue_fuzz_hook_text_eq(mode, "set_to_value")) {
+    if (!mutation->override_value[0])
+      return false;
+    char *end = NULL;
+    chosen = strtol(mutation->override_value, &end, 0);
+    if (!end || *end)
+      return false;
+    if (chosen < min_value || chosen > max_value)
+      return false;
   } else {
     return false;
   }

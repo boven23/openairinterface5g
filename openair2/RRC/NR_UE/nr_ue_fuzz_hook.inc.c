@@ -104,6 +104,7 @@ static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
   hook->field_mutation.operator_family[0] = '\0';
   hook->field_mutation.transform_name[0] = '\0';
   hook->field_mutation.selected_mode[0] = '\0';
+  hook->field_mutation.override_value[0] = '\0';
   hook->field_mutation.has_range_min = false;
   hook->field_mutation.range_min = 0;
   hook->field_mutation.has_range_max = false;
@@ -200,6 +201,7 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "field_mutation_operator_family=%s\n", hook->field_mutation.operator_family);
   fprintf(fp, "field_mutation_transform=%s\n", hook->field_mutation.transform_name);
   fprintf(fp, "field_mutation_selected_mode=%s\n", hook->field_mutation.selected_mode);
+  fprintf(fp, "field_mutation_override_value=%s\n", hook->field_mutation.override_value);
   fprintf(fp, "field_mutation_value_space_minimum=%d\n", hook->field_mutation.has_range_min ? hook->field_mutation.range_min : 0);
   fprintf(fp, "field_mutation_value_space_maximum=%d\n", hook->field_mutation.has_range_max ? hook->field_mutation.range_max : 0);
   fclose(fp);
@@ -314,6 +316,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.transform_name, sizeof(hook->field_mutation.transform_name), value);
     else if (!strcasecmp(key, "field_mutation_selected_mode"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.selected_mode, sizeof(hook->field_mutation.selected_mode), value);
+    else if (!strcasecmp(key, "field_mutation_override_value"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.override_value, sizeof(hook->field_mutation.override_value), value);
     else if (!strcasecmp(key, "field_mutation_value_space_minimum")) {
       hook->field_mutation.range_min = atoi(value);
       hook->field_mutation.has_range_min = true;
@@ -326,7 +330,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   fclose(fp);
 
   LOG_I(NR_RRC,
-        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d adapter_key=%s operator_family=%s transform=%s field=%s mode=%s range=[%d,%d]\n",
+        "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d adapter_key=%s operator_family=%s transform=%s field=%s mode=%s override=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->target_msg),
@@ -343,6 +347,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
         hook->field_mutation.transform_name,
         hook->field_mutation.field,
         hook->field_mutation.selected_mode,
+        hook->field_mutation.override_value,
         hook->field_mutation.has_range_min ? hook->field_mutation.range_min : 0,
         hook->field_mutation.has_range_max ? hook->field_mutation.range_max : 0);
   nr_ue_fuzz_hook_write_state(rrc);
