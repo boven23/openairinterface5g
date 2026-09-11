@@ -43,3 +43,4 @@ CMakeCache.txt
 compile_commands.json
 Debug/
 debug/
+!/openair2/RRC/NR_UE/nr_ue_fuzz_hook_auto_generated.inc.c

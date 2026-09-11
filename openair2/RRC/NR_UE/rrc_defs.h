@@ -42,17 +42,14 @@
 #include "notified_fifo.h"
 #include "RRC/NR_UE/nr_mac_rrc_types.h"
 
-#define NB_CNX_UE 2//MAX_MANAGED_RG_PER_MOBILE
+#define NB_CNX_UE 2 // MAX_MANAGED_RG_PER_MOBILE
 #define MAX_MEAS_OBJ 64
 #define MAX_MEAS_CONFIG 64
 #define MAX_MEAS_ID 64
 #define MAX_QUANTITY_CONFIG 2
 #define NUMBER_OF_NEIGHBORING_CELLS_MAX 1
 
-typedef enum {
-  nr_SecondaryCellGroupConfig_r15=0,
-  nr_RadioBearerConfigX_r15=1
-} nsa_message_t;
+typedef enum { nr_SecondaryCellGroupConfig_r15 = 0, nr_RadioBearerConfigX_r15 = 1 } nsa_message_t;
 
 #define MAX_UE_NR_CAPABILITY_SIZE 2048
 typedef struct OAI_NR_UECapability_s {
@@ -104,6 +101,7 @@ typedef enum nr_ue_fuzz_hook_action_e {
   NR_UE_HOOK_ACTION_DUPLICATE,
   NR_UE_HOOK_ACTION_REPLAY,
   NR_UE_HOOK_ACTION_DELAY,
+  NR_UE_HOOK_ACTION_MUTATE_TXN,
   NR_UE_HOOK_ACTION_MUTATE_FIELD,
 } nr_ue_fuzz_hook_action_t;
 
@@ -134,14 +132,32 @@ typedef struct nr_ue_fuzz_hook_state_s {
   char replay_mode[64];
   bool measurement_bootstrap_enabled;
   bool measurement_bootstrap_done;
+  bool require_security;
+  bool require_reconfiguration_complete;
+  int context_gnb;
+  unsigned long submitted[NR_UE_HOOK_MSG_DL_RRC_RELEASE + 1];
+  char context_result[64];
+  unsigned long mutation_generation;
+  int original_meas_id;
+  int mutated_meas_id;
   unsigned long hook_fire_count;
   nr_ue_fuzz_hook_msg_t last_hook_msg;
   nr_ue_fuzz_hook_action_t last_hook_action;
   int last_hook_srb_id;
   nr_ue_fuzz_hook_msg_t last_dl_msg;
   int last_dl_txn;
+  bool seen_rrc_setup_complete;
+  bool seen_security_mode_complete;
+  bool seen_rrc_reconfiguration_complete;
+  bool seen_rrc_reestablishment_complete;
+  bool seen_ue_capability_information;
+  bool seen_ul_information_transfer;
+  bool seen_measurement_report;
   bool seen_reconfiguration;
   bool seen_security_mode_command;
+  bool seen_ue_capability_enquiry;
+  bool seen_rrc_reestablishment;
+  bool seen_rrc_release;
   nr_ue_fuzz_hook_msg_t last_ul_msg;
   int last_ul_srb_id;
   int last_ul_size;
@@ -151,6 +167,35 @@ typedef struct nr_ue_fuzz_hook_state_s {
   char state_path[128];
   nr_ue_fuzz_hook_field_mutation_t field_mutation;
 } nr_ue_fuzz_hook_state_t;
+
+/* Snapshots describe the configuration actually installed by the UE, not a
+ * received delta. Slot zero is unused: ASN.1 measurement IDs are 1..64. */
+typedef struct {
+  bool configured;
+  bool supported;
+  int object_id;
+  int report_id;
+  int rs_type;
+  unsigned quantities; // RSRP=1, RSRQ=2, SINR=4
+} nr_ue_hook_meas_binding_t;
+
+typedef struct {
+  int size;
+  int meas_id;
+  unsigned long generation;
+  nr_ue_hook_meas_binding_t binding;
+  uint8_t bytes[NR_RRC_BUF_SIZE];
+} nr_ue_hook_report_cache_t;
+
+typedef struct {
+  bool valid;
+  unsigned long generation;
+  unsigned long completion_submitted_generation;
+  nr_ue_hook_meas_binding_t binding[MAX_MEAS_ID + 1];
+  bool removed[MAX_MEAS_ID + 1];
+  nr_ue_hook_report_cache_t current_report;
+  nr_ue_hook_report_cache_t previous_report;
+} nr_ue_hook_meas_context_t;
 
 typedef struct UE_RRC_SI_INFO_NR_r17_s {
   bool sib15_validity;
@@ -233,10 +278,7 @@ typedef struct NR_UE_Timers_Constants_s {
   NR_UE_TimersAndConstants_t *sib1_TimersAndConstants;
 } NR_UE_Timers_Constants_t;
 
-typedef enum {
-  OUT_OF_SYNC = 0,
-  IN_SYNC = 1
-} nr_sync_msg_t;
+typedef enum { OUT_OF_SYNC = 0, IN_SYNC = 1 } nr_sync_msg_t;
 
 typedef enum { RB_NOT_PRESENT, RB_ESTABLISHED, RB_SUSPENDED } NR_RB_status_t;
 
@@ -258,11 +300,15 @@ typedef struct l3_measurements_s {
 } l3_measurements_t;
 
 typedef struct rrcPerNB {
-  NR_MeasObjectToAddMod_t *MeasObj[MAX_MEAS_OBJ];
-  NR_ReportConfigToAddMod_t *ReportConfig[MAX_MEAS_CONFIG];
+  NR_MeasObjectToAddMod_t *MeasObj[MAX_MEAS_OBJ + 1];
+  NR_ReportConfigToAddMod_t *ReportConfig[MAX_MEAS_CONFIG + 1];
   NR_QuantityConfigNR_t *QuantityConfig[MAX_QUANTITY_CONFIG];
-  NR_MeasIdToAddMod_t *MeasId[MAX_MEAS_ID];
-  NR_VarMeasReport_t *MeasReport[MAX_MEAS_ID];
+  NR_MeasIdToAddMod_t *MeasId[MAX_MEAS_ID + 1];
+  NR_VarMeasReport_t *MeasReport[MAX_MEAS_ID + 1];
+  nr_ue_hook_meas_context_t hook_meas;
+  int hook_plmn_count;
+  bool hook_capability_enquiry_valid;
+  unsigned hook_requested_rats;
   NR_MeasGapConfig_t *measGapConfig;
   NR_UE_RRC_SI_INFO SInfo;
   NR_RSRP_Range_t s_measure;
@@ -294,9 +340,9 @@ typedef struct NR_UE_RRC_INST_s {
   /* KgNB as computed from parameters within USIM card */
   uint8_t kgnb[32];
   /* Used integrity/ciphering algorithms */
-  //RRC_LIST_TYPE(NR_SecurityAlgorithmConfig_t, NR_SecurityAlgorithmConfig) SecurityAlgorithmConfig_list;
-  NR_CipheringAlgorithm_t  cipheringAlgorithm;
-  e_NR_IntegrityProtAlgorithm  integrityProtAlgorithm;
+  // RRC_LIST_TYPE(NR_SecurityAlgorithmConfig_t, NR_SecurityAlgorithmConfig) SecurityAlgorithmConfig_list;
+  NR_CipheringAlgorithm_t cipheringAlgorithm;
+  e_NR_IntegrityProtAlgorithm integrityProtAlgorithm;
   long keyToUse;
   bool as_security_activated;
   /// Next Hop Chaining Count
@@ -316,7 +362,7 @@ typedef struct NR_UE_RRC_INST_s {
   int current_hfn;
   int current_frame;
   bool sched_reconfsync_sib1;
-  //Sidelink params
+  // Sidelink params
   NR_SL_PreconfigurationNR_r16_t *sl_preconfig;
   // NTN params
   bool is_NTN_UE;
