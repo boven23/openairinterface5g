@@ -5,6 +5,8 @@ typedef bool (*nr_ue_fuzz_hook_field_adapter_fn_t)(NR_UE_RRC_INST_t *rrc, void *
 
 typedef struct nr_ue_fuzz_hook_field_adapter_s {
   nr_ue_fuzz_hook_msg_t target_msg;
+  const char *adapter_key;
+  const char *domain_id;
   const char *message_name;
   const char *field_name;
   const char *operator_family;
@@ -288,53 +290,61 @@ static bool nr_ue_fuzz_hook_apply_nas_payload(NR_UE_RRC_INST_t *rrc, void *paylo
 }
 
 static const nr_ue_fuzz_hook_field_adapter_t builtin_field_adapters[] = {
-    {NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION,
-     "DL_RRCReconfiguration",
-     "transactionIdentifier",
-     "integer_transform",
-     nr_ue_txn_dl_reconfiguration},
-    {NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND,
-     "DL_SecurityModeCommand",
-     "transactionIdentifier",
-     "integer_transform",
-     nr_ue_txn_dl_security},
-    {NR_UE_HOOK_MSG_DL_UE_CAPABILITY_ENQUIRY,
-     "DL_UECapabilityEnquiry",
-     "transactionIdentifier",
-     "integer_transform",
-     nr_ue_txn_dl_capability},
-    {NR_UE_HOOK_MSG_DL_RRC_REESTABLISHMENT,
-     "DL_RRCReestablishment",
-     "transactionIdentifier",
-     "integer_transform",
-     nr_ue_txn_dl_reestablishment},
-    {NR_UE_HOOK_MSG_DL_RRC_RELEASE, "DL_RRCRelease", "transactionIdentifier", "integer_transform", nr_ue_txn_dl_release},
-    {NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER,
-     "ULInformationTransfer",
-     "dedicatedNAS-Message",
-     "optional_octet_string_assignment",
-     nr_ue_fuzz_hook_apply_nas_payload},
-    {NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, "RRCSetupComplete", "transactionIdentifier", "integer_transform", nr_ue_txn_setup},
-    {NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
-     "SecurityModeComplete",
-     "transactionIdentifier",
-     "integer_transform",
-     nr_ue_txn_security},
-    {NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
-     "RRCReconfigurationComplete",
-     "transactionIdentifier",
-     "integer_transform",
-     nr_ue_txn_reconfiguration},
-    {NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE,
-     "RRCReestablishmentComplete",
-     "transactionIdentifier",
-     "integer_transform",
-     nr_ue_txn_reestablishment},
-    {NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION,
-     "UECapabilityInformation",
-     "transactionIdentifier",
-     "integer_transform",
-     nr_ue_txn_capability},
+    {.target_msg = NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION,
+     .message_name = "DL_RRCReconfiguration",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_dl_reconfiguration},
+    {.target_msg = NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND,
+     .message_name = "DL_SecurityModeCommand",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_dl_security},
+    {.target_msg = NR_UE_HOOK_MSG_DL_UE_CAPABILITY_ENQUIRY,
+     .message_name = "DL_UECapabilityEnquiry",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_dl_capability},
+    {.target_msg = NR_UE_HOOK_MSG_DL_RRC_REESTABLISHMENT,
+     .message_name = "DL_RRCReestablishment",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_dl_reestablishment},
+    {.target_msg = NR_UE_HOOK_MSG_DL_RRC_RELEASE,
+     .message_name = "DL_RRCRelease",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_dl_release},
+    {.target_msg = NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER,
+     .message_name = "ULInformationTransfer",
+     .field_name = "dedicatedNAS-Message",
+     .operator_family = "optional_octet_string_assignment",
+     .apply = nr_ue_fuzz_hook_apply_nas_payload},
+    {.target_msg = NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE,
+     .message_name = "RRCSetupComplete",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_setup},
+    {.target_msg = NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
+     .message_name = "SecurityModeComplete",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_security},
+    {.target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
+     .message_name = "RRCReconfigurationComplete",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_reconfiguration},
+    {.target_msg = NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE,
+     .message_name = "RRCReestablishmentComplete",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_reestablishment},
+    {.target_msg = NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION,
+     .message_name = "UECapabilityInformation",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_txn_capability},
     {
         .target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
         .message_name = "RRCReconfigurationComplete",
@@ -356,14 +366,26 @@ static const nr_ue_fuzz_hook_field_adapter_t builtin_field_adapters[] = {
 /* A distinct transform namespace keeps context adapters separate from generated
  * domain-selection adapters with the same field identity. */
 static const nr_ue_fuzz_hook_field_adapter_t context_field_adapters[] = {
-    {NR_UE_HOOK_MSG_MEASUREMENT_REPORT, "MeasurementReport", "measId", "integer_transform", nr_ue_hook_mutate_meas_context},
-    {NR_UE_HOOK_MSG_MEASUREMENT_REPORT, "MeasurementReport", "measResults", "field_assignment", nr_ue_hook_mutate_meas_context},
-    {NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, "RRCSetupComplete", "selectedPLMN-Identity", "integer_transform", nr_ue_hook_mutate_plmn},
-    {NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION,
-     "UECapabilityInformation",
-     "ue-CapabilityRAT-ContainerList",
-     "field_assignment",
-     nr_ue_hook_mutate_rat},
+    {.target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
+     .message_name = "MeasurementReport",
+     .field_name = "measId",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_hook_mutate_meas_context},
+    {.target_msg = NR_UE_HOOK_MSG_MEASUREMENT_REPORT,
+     .message_name = "MeasurementReport",
+     .field_name = "measResults",
+     .operator_family = "field_assignment",
+     .apply = nr_ue_hook_mutate_meas_context},
+    {.target_msg = NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE,
+     .message_name = "RRCSetupComplete",
+     .field_name = "selectedPLMN-Identity",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_hook_mutate_plmn},
+    {.target_msg = NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION,
+     .message_name = "UECapabilityInformation",
+     .field_name = "ue-CapabilityRAT-ContainerList",
+     .operator_family = "field_assignment",
+     .apply = nr_ue_hook_mutate_rat},
 };
 
 /* Resolve one adapter identity across both catalogs; do not silently shadow a path. */
@@ -372,6 +394,8 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
   if (!hook || !hook->field_mutation.enabled)
     return NULL;
   const nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
+  const bool has_adapter_key = mutation->adapter_key[0] != '\0';
+  const bool has_domain_id = mutation->domain_id[0] != '\0';
 
   if (nr_ue_fuzz_hook_text_eq(mutation->transform_name, "runtime_context")) {
     for (size_t i = 0; i < sizeof(context_field_adapters) / sizeof(*context_field_adapters); i++) {
@@ -395,7 +419,23 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
   for (size_t c = 0; c < sizeof(catalogs) / sizeof(catalogs[0]); ++c) {
     for (size_t i = 0; i < catalogs[c].count; ++i) {
       const nr_ue_fuzz_hook_field_adapter_t *adapter = &catalogs[c].entries[i];
-      if (adapter->target_msg != hook->target_msg || !nr_ue_fuzz_hook_text_eq(mutation->message, adapter->message_name)
+      if (adapter->target_msg != hook->target_msg)
+        continue;
+
+      if (has_adapter_key) {
+        if (nr_ue_fuzz_hook_text_eq(mutation->adapter_key, adapter->adapter_key))
+          return adapter;
+        continue;
+      }
+
+      if (has_domain_id) {
+        if (nr_ue_fuzz_hook_text_eq(mutation->domain_id, adapter->domain_id)
+            && nr_ue_fuzz_hook_text_eq(mutation->operator_family, adapter->operator_family))
+          return adapter;
+        continue;
+      }
+
+      if (!nr_ue_fuzz_hook_text_eq(mutation->message, adapter->message_name)
           || !nr_ue_fuzz_hook_text_eq(mutation->field, adapter->field_name)
           || !nr_ue_fuzz_hook_text_eq(mutation->operator_family, adapter->operator_family))
         continue;
@@ -481,8 +521,9 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
   const nr_ue_fuzz_hook_field_adapter_t *adapter = nr_ue_fuzz_hook_find_field_adapter(hook);
   if (!adapter) {
     LOG_W(NR_RRC,
-          "[UE %ld][HOOK] no unique adapter for %s.%s:%s\n",
+          "[UE %ld][HOOK] no unique adapter for key=%s %s.%s:%s\n",
           rrc->ue_id,
+          hook->field_mutation.adapter_key,
           hook->field_mutation.message,
           hook->field_mutation.field,
           hook->field_mutation.operator_family);

@@ -252,6 +252,35 @@ static void test_nas_and_measurement_fields(void)
   CHECK(ies.measResults.measId == 64);
 }
 
+/* Preserve remote exact-path selection alongside local native adapters. */
+static void test_adapter_identity_selection(void)
+{
+  NR_UE_RRC_INST_t rrc;
+  for (int by_domain = 0; by_domain < 2; by_domain++) {
+    reset(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, NR_UE_HOOK_ACTION_MUTATE_FIELD, false);
+    field_contract(&rrc, "measId", "integer_transform", "boundary_max");
+    nr_ue_fuzz_hook_field_mutation_t *m = &rrc.fuzz_hook.field_mutation;
+    if (by_domain)
+      nr_ue_fuzz_hook_copy_text(m->domain_id,
+                                sizeof(m->domain_id),
+                                "MeasurementReport__criticalExtensions__measurementReport__measResults__measId");
+    else
+      nr_ue_fuzz_hook_copy_text(m->adapter_key, sizeof(m->adapter_key), "7d63aed689d30406");
+    NR_MeasurementReport_t report = {0};
+    NR_MeasurementReport_IEs_t ies = {0};
+    report.criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
+    report.criticalExtensions.choice.measurementReport = &ies;
+    ies.measResults.measId = 1;
+    CHECK(nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, &report));
+    CHECK(ies.measResults.measId == 64);
+    ies.measResults.measId = 1;
+    nr_ue_fuzz_hook_copy_text(m->adapter_key, sizeof(m->adapter_key), "unknown-adapter");
+    CHECK(!nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, &report));
+    CHECK(ies.measResults.measId == 1);
+    CHECK(rrc.fuzz_hook.hook_fire_count == 1);
+  }
+}
+
 #include "nr_ue_fuzz_hook_context_test.inc.c"
 
 int main(void)
@@ -264,6 +293,7 @@ int main(void)
   test_legacy_control_and_ul_callback();
   test_nas_and_measurement_fields();
   test_review_regressions();
+  test_adapter_identity_selection();
   test_context_modes();
   test_context_lifecycle_and_removal();
   test_context_gates();
