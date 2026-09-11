@@ -129,6 +129,14 @@ typedef struct nr_ue_fuzz_hook_state_s {
   char replay_mode[64];
   bool measurement_bootstrap_enabled;
   bool measurement_bootstrap_done;
+  bool require_security;
+  bool require_reconfiguration_complete;
+  int context_gnb;
+  unsigned long submitted[NR_UE_HOOK_MSG_DL_RRC_RELEASE + 1];
+  char context_result[64];
+  unsigned long mutation_generation;
+  int original_meas_id;
+  int mutated_meas_id;
   unsigned long hook_fire_count;
   nr_ue_fuzz_hook_msg_t last_hook_msg;
   nr_ue_fuzz_hook_action_t last_hook_action;
@@ -156,6 +164,35 @@ typedef struct nr_ue_fuzz_hook_state_s {
   char state_path[128];
   nr_ue_fuzz_hook_field_mutation_t field_mutation;
 } nr_ue_fuzz_hook_state_t;
+
+/* Snapshots describe the configuration actually installed by the UE, not a
+ * received delta. Slot zero is unused: ASN.1 measurement IDs are 1..64. */
+typedef struct {
+  bool configured;
+  bool supported;
+  int object_id;
+  int report_id;
+  int rs_type;
+  unsigned quantities; // RSRP=1, RSRQ=2, SINR=4
+} nr_ue_hook_meas_binding_t;
+
+typedef struct {
+  int size;
+  int meas_id;
+  unsigned long generation;
+  nr_ue_hook_meas_binding_t binding;
+  uint8_t bytes[NR_RRC_BUF_SIZE];
+} nr_ue_hook_report_cache_t;
+
+typedef struct {
+  bool valid;
+  unsigned long generation;
+  unsigned long completion_submitted_generation;
+  nr_ue_hook_meas_binding_t binding[MAX_MEAS_ID + 1];
+  bool removed[MAX_MEAS_ID + 1];
+  nr_ue_hook_report_cache_t current_report;
+  nr_ue_hook_report_cache_t previous_report;
+} nr_ue_hook_meas_context_t;
 
 typedef struct UE_RRC_SI_INFO_NR_r17_s {
   bool sib15_validity;
@@ -260,11 +297,15 @@ typedef struct l3_measurements_s {
 } l3_measurements_t;
 
 typedef struct rrcPerNB {
-  NR_MeasObjectToAddMod_t *MeasObj[MAX_MEAS_OBJ];
-  NR_ReportConfigToAddMod_t *ReportConfig[MAX_MEAS_CONFIG];
+  NR_MeasObjectToAddMod_t *MeasObj[MAX_MEAS_OBJ + 1];
+  NR_ReportConfigToAddMod_t *ReportConfig[MAX_MEAS_CONFIG + 1];
   NR_QuantityConfigNR_t *QuantityConfig[MAX_QUANTITY_CONFIG];
-  NR_MeasIdToAddMod_t *MeasId[MAX_MEAS_ID];
-  NR_VarMeasReport_t *MeasReport[MAX_MEAS_ID];
+  NR_MeasIdToAddMod_t *MeasId[MAX_MEAS_ID + 1];
+  NR_VarMeasReport_t *MeasReport[MAX_MEAS_ID + 1];
+  nr_ue_hook_meas_context_t hook_meas;
+  int hook_plmn_count;
+  bool hook_capability_enquiry_valid;
+  unsigned hook_requested_rats;
   NR_MeasGapConfig_t *measGapConfig;
   NR_UE_RRC_SI_INFO SInfo;
   NR_RSRP_Range_t s_measure;

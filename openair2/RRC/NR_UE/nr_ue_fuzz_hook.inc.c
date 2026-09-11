@@ -146,6 +146,8 @@ static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
   hook->field_mutation.range_max = 0;
 }
 
+#include "nr_ue_fuzz_hook_context.inc.c"
+
 static void nr_ue_fuzz_hook_write_timer_state(FILE *fp, const char *name, const NR_timer_t *timer)
 {
   if (!fp || !name || !timer)
@@ -213,6 +215,34 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "last_hook_srb=%d\n", hook->last_hook_srb_id);
   fprintf(fp, "nr_rrc_state=%s\n", nr_ue_fuzz_hook_rrc_state_name(rrc->nrRrcState));
   fprintf(fp, "as_security_activated=%d\n", rrc->as_security_activated ? 1 : 0);
+  fprintf(fp, "context_gnb=%d\n", hook->context_gnb);
+  fprintf(fp, "context_result=%s\n", hook->context_result);
+  fprintf(fp, "mutation_generation=%lu\n", hook->mutation_generation);
+  fprintf(fp, "original_meas_id=%d\n", hook->original_meas_id);
+  fprintf(fp, "mutated_meas_id=%d\n", hook->mutated_meas_id);
+  for (int msg = NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE; msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT; msg++)
+    fprintf(fp, "submitted.%s=%lu\n", nr_ue_fuzz_hook_msg_name(msg), hook->submitted[msg]);
+  for (int gnb = 0; gnb < NB_CNX_UE; gnb++) {
+    const nr_ue_hook_meas_context_t *ctx = &rrc->perNB[gnb].hook_meas;
+    fprintf(fp, "meas.%d.valid=%d\n", gnb, ctx->valid);
+    fprintf(fp, "meas.%d.generation=%lu\n", gnb, ctx->generation);
+    fprintf(fp, "meas.%d.completion_submitted_generation=%lu\n", gnb, ctx->completion_submitted_generation);
+    fprintf(fp, "capability.%d.enquiry_valid=%d\n", gnb, rrc->perNB[gnb].hook_capability_enquiry_valid);
+    fprintf(fp, "capability.%d.requested_rats=%u\n", gnb, rrc->perNB[gnb].hook_requested_rats);
+    fprintf(fp, "setup.%d.plmn_count=%d\n", gnb, rrc->perNB[gnb].hook_plmn_count);
+    for (int id = 1; id <= MAX_MEAS_ID; id++) {
+      const nr_ue_hook_meas_binding_t *b = &ctx->binding[id];
+      fprintf(fp, "meas.%d.%d.configured=%d\n", gnb, id, b->configured);
+      fprintf(fp, "meas.%d.%d.supported=%d\n", gnb, id, b->supported);
+      fprintf(fp, "meas.%d.%d.removed=%d\n", gnb, id, ctx->removed[id]);
+      if (b->configured) {
+        fprintf(fp, "meas.%d.%d.object_id=%d\n", gnb, id, b->object_id);
+        fprintf(fp, "meas.%d.%d.report_id=%d\n", gnb, id, b->report_id);
+        fprintf(fp, "meas.%d.%d.rs_type=%d\n", gnb, id, b->rs_type);
+        fprintf(fp, "meas.%d.%d.quantities=%u\n", gnb, id, b->quantities);
+      }
+    }
+  }
   nr_ue_fuzz_hook_write_timer_state(fp, "T310", &timers->T310);
   nr_ue_fuzz_hook_write_timer_state(fp, "T300", &timers->T300);
   nr_ue_fuzz_hook_write_timer_state(fp, "T301", &timers->T301);
@@ -262,6 +292,8 @@ static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
   hook->replay_mode[0] = '\0';
   hook->measurement_bootstrap_enabled = false;
   hook->measurement_bootstrap_done = false;
+  hook->require_security = false;
+  hook->require_reconfiguration_complete = false;
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 }
 
@@ -306,6 +338,9 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   hook->replay_mode[0] = '\0';
   hook->measurement_bootstrap_enabled = false;
   hook->measurement_bootstrap_done = false;
+  hook->require_security = false;
+  hook->require_reconfiguration_complete = false;
+  hook->context_result[0] = '\0';
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 
   FILE *fp = fopen(hook->control_path, "r");
@@ -342,6 +377,10 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       nr_ue_fuzz_hook_copy_text(hook->replay_mode, sizeof(hook->replay_mode), value);
     else if (!strcasecmp(key, "measurement_bootstrap") || !strcasecmp(key, "measurement_bootstrap_enabled"))
       hook->measurement_bootstrap_enabled = atoi(value) != 0;
+    else if (!strcasecmp(key, "require_security"))
+      hook->require_security = atoi(value) != 0;
+    else if (!strcasecmp(key, "require_reconfiguration_complete"))
+      hook->require_reconfiguration_complete = atoi(value) != 0;
     else if (!strcasecmp(key, "field_mutation_enabled"))
       hook->field_mutation.enabled = atoi(value) != 0;
     else if (!strcasecmp(key, "field_mutation_message"))
@@ -446,7 +485,7 @@ static bool nr_ue_fuzz_hook_preprocess_dl(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook
     return false;
   }
 
-  const bool hit_target = hook->enabled && hook->target_msg == msg;
+  const bool hit_target = hook->enabled && hook->target_msg == msg && nr_ue_hook_gates_ready(rrc);
   if (!hit_target)
     return false;
 
@@ -478,7 +517,7 @@ static bool nr_ue_fuzz_hook_should_repeat_dl(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_h
   if (replayed)
     return false;
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  const bool hit_target = hook->enabled && hook->target_msg == msg;
+  const bool hit_target = hook->enabled && hook->target_msg == msg && nr_ue_hook_gates_ready(rrc);
   if (!hit_target)
     return false;
 
@@ -536,7 +575,7 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
 {
   nr_ue_fuzz_hook_reload_config(rrc);
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  const bool hit_target = hook->enabled && hook->target_msg == msg;
+  const bool hit_target = hook->enabled && hook->target_msg == msg && nr_ue_hook_gates_ready(rrc);
 
   if (hit_target && hook->action == NR_UE_HOOK_ACTION_DROP) {
     LOG_W(NR_RRC, "[UE %ld][HOOK] drop %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
@@ -554,7 +593,12 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
     nr_ue_fuzz_hook_sleep_ms(delay_ms);
   }
 
-  nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+  if (!nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL)) {
+    nr_ue_hook_context_result(rrc, "pdcp_submission_failed");
+    nr_ue_fuzz_hook_write_state(rrc);
+    return;
+  }
+  nr_ue_hook_record_submission(rrc, msg);
   nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
 
   if (hit_target && hook->action == NR_UE_HOOK_ACTION_DELAY) {
@@ -567,8 +611,13 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
 
   if (hit_target && hook->action == NR_UE_HOOK_ACTION_DUPLICATE) {
     LOG_W(NR_RRC, "[UE %ld][HOOK] duplicate %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
+    if (!nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL)) {
+      nr_ue_hook_context_result(rrc, "pdcp_submission_failed");
+      nr_ue_fuzz_hook_write_state(rrc);
+      return;
+    }
     nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DUPLICATE, srb_id);
-    nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, size, buffer, deliver_pdu_srb_rlc, NULL);
+    nr_ue_hook_record_submission(rrc, msg);
     if (hook->arm_once)
       nr_ue_fuzz_hook_disarm_persistent(rrc);
     nr_ue_fuzz_hook_write_state(rrc);
@@ -586,8 +635,13 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
           replay_mode,
           replay_delay_ms);
     nr_ue_fuzz_hook_sleep_ms(replay_delay_ms);
+    if (!nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, hook->last_ul_size, hook->last_ul_pdu, deliver_pdu_srb_rlc, NULL)) {
+      nr_ue_hook_context_result(rrc, "pdcp_submission_failed");
+      nr_ue_fuzz_hook_write_state(rrc);
+      return;
+    }
     nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_REPLAY, srb_id);
-    nr_pdcp_data_req_srb(rrc->ue_id, srb_id, 0, hook->last_ul_size, hook->last_ul_pdu, deliver_pdu_srb_rlc, NULL);
+    nr_ue_hook_record_submission(rrc, msg);
     if (hook->arm_once)
       nr_ue_fuzz_hook_disarm_persistent(rrc);
     nr_ue_fuzz_hook_write_state(rrc);

@@ -353,12 +353,36 @@ static const nr_ue_fuzz_hook_field_adapter_t builtin_field_adapters[] = {
 
 #include "nr_ue_fuzz_hook_auto_generated.inc.c"
 
+/* A distinct transform namespace keeps context adapters separate from generated
+ * domain-selection adapters with the same field identity. */
+static const nr_ue_fuzz_hook_field_adapter_t context_field_adapters[] = {
+    {NR_UE_HOOK_MSG_MEASUREMENT_REPORT, "MeasurementReport", "measId", "integer_transform", nr_ue_hook_mutate_meas_context},
+    {NR_UE_HOOK_MSG_MEASUREMENT_REPORT, "MeasurementReport", "measResults", "field_assignment", nr_ue_hook_mutate_meas_context},
+    {NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, "RRCSetupComplete", "selectedPLMN-Identity", "integer_transform", nr_ue_hook_mutate_plmn},
+    {NR_UE_HOOK_MSG_UE_CAPABILITY_INFORMATION,
+     "UECapabilityInformation",
+     "ue-CapabilityRAT-ContainerList",
+     "field_assignment",
+     nr_ue_hook_mutate_rat},
+};
+
 /* Resolve one adapter identity across both catalogs; do not silently shadow a path. */
 static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter(const nr_ue_fuzz_hook_state_t *hook)
 {
   if (!hook || !hook->field_mutation.enabled)
     return NULL;
   const nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
+
+  if (nr_ue_fuzz_hook_text_eq(mutation->transform_name, "runtime_context")) {
+    for (size_t i = 0; i < sizeof(context_field_adapters) / sizeof(*context_field_adapters); i++) {
+      const nr_ue_fuzz_hook_field_adapter_t *adapter = &context_field_adapters[i];
+      if (adapter->target_msg == hook->target_msg && nr_ue_fuzz_hook_text_eq(mutation->message, adapter->message_name)
+          && nr_ue_fuzz_hook_text_eq(mutation->field, adapter->field_name)
+          && nr_ue_fuzz_hook_text_eq(mutation->operator_family, adapter->operator_family))
+        return adapter;
+    }
+    return NULL;
+  }
 
   const nr_ue_fuzz_hook_field_adapter_t *found = NULL;
   const struct {
@@ -442,6 +466,10 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   if (!hook->enabled || msg != hook->target_msg)
     return false;
+  if (!nr_ue_hook_gates_ready(rrc)) {
+    nr_ue_fuzz_hook_write_state(rrc);
+    return false;
+  }
   nr_ue_fuzz_hook_prepare_txn(hook);
   if (!hook->enabled || !hook->field_mutation.enabled
       || (hook->action != NR_UE_HOOK_ACTION_MUTATE_FIELD && hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN))
@@ -460,8 +488,10 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
           hook->field_mutation.operator_family);
     return false;
   }
-  if (!adapter->apply(rrc, payload, hook->field_mutation.selected_mode))
+  if (!adapter->apply(rrc, payload, hook->field_mutation.selected_mode)) {
+    nr_ue_fuzz_hook_write_state(rrc);
     return false;
+  }
   nr_ue_fuzz_hook_record_fire(rrc, msg, hook->action, -1);
   if (hook->arm_once)
     nr_ue_fuzz_hook_disarm_persistent(rrc);
@@ -473,5 +503,8 @@ static bool nr_ue_fuzz_hook_mutate_ul_dcch(void *context, NR_UL_DCCH_Message_t *
 {
   nr_ue_fuzz_hook_msg_t msg = NR_UE_HOOK_MSG_NONE;
   void *payload = nr_ue_fuzz_hook_message_payload(pdu, &msg);
-  return nr_ue_fuzz_hook_mutate_payload(context, msg, payload);
+  bool changed = nr_ue_fuzz_hook_mutate_payload(context, msg, payload);
+  if (context && msg == NR_UE_HOOK_MSG_MEASUREMENT_REPORT && !changed)
+    nr_ue_hook_cache_report(context, payload);
+  return changed;
 }

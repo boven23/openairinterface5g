@@ -488,6 +488,14 @@ static void get_sib19_schedinfo(NR_UE_RRC_SI_INFO *SI_info, NR_SI_SchedulingInfo
 
 static void nr_rrc_process_sib1(NR_UE_RRC_INST_t *rrc, NR_UE_RRC_SI_INFO *SI_info, NR_SIB1_t *sib1)
 {
+  for (int gnb = 0; gnb < NB_CNX_UE; gnb++) {
+    if (&rrc->perNB[gnb].SInfo != SI_info)
+      continue;
+    rrc->perNB[gnb].hook_plmn_count = 0;
+    for (int i = 0; i < sib1->cellAccessRelatedInfo.plmn_IdentityInfoList.list.count; i++)
+      rrc->perNB[gnb].hook_plmn_count +=
+          sib1->cellAccessRelatedInfo.plmn_IdentityInfoList.list.array[i]->plmn_IdentityList.list.count;
+  }
   if (g_log->log_component[NR_RRC].level >= OAILOG_DEBUG)
     xer_fprint(stdout, &asn_DEF_NR_SIB1, (const void *)sib1);
   LOG_A(NR_RRC, "SIB1 decoded\n");
@@ -957,7 +965,7 @@ static void nr_rrc_process_reconfigurationWithSync(NR_UE_RRC_INST_t *rrc,
 
   // Clear neighbor cell lists from measurement objects during handover
   rrcPerNB_t *rrcNB = &rrc->perNB[gNB_index];
-  for (int i = 0; i < MAX_MEAS_OBJ; i++) {
+  for (int i = 1; i <= MAX_MEAS_OBJ; i++) {
     if (rrcNB->MeasObj[i] && rrcNB->MeasObj[i]->measObject.present == NR_MeasObjectToAddMod__measObject_PR_measObjectNR) {
       NR_MeasObjectNR_t *measObjNR = rrcNB->MeasObj[i]->measObject.choice.measObjectNR;
       if (measObjNR->cellsToAddModList) {
@@ -1208,43 +1216,7 @@ static bool nr_rrc_process_reconfiguration_v1530(NR_UE_RRC_INST_t *rrc, NR_RRCRe
   return dedicatedsib1;
 }
 
-static void handle_meas_reporting_remove(rrcPerNB_t *rrc, int id, NR_UE_Timers_Constants_t *timers)
-{
-  // remove the measurement reporting entry for this measId if included
-  asn1cFreeStruc(asn_DEF_NR_VarMeasReport, rrc->MeasReport[id]);
-  // TODO stop the periodical reporting timer or timer T321, whichever is running,
-  // and reset the associated information (e.g. timeToTrigger) for this measId
-  nr_timer_stop(&timers->T321);
-
-  l3_measurements_t *l3_measurements = &rrc->l3_measurements;
-  nr_timer_stop(&l3_measurements->TA2);
-  nr_timer_stop(&l3_measurements->periodic_report_timer);
-
-  l3_measurements->reports_sent = 0;
-  l3_measurements->max_reports = 0;
-  l3_measurements->report_interval_ms = 0;
-}
-
-static void handle_measobj_remove(rrcPerNB_t *rrc, struct NR_MeasObjectToRemoveList *remove_list, NR_UE_Timers_Constants_t *timers)
-{
-  // section 5.5.2.4 in 38.331
-  for (int i = 0; i < remove_list->list.count; i++) {
-    // for each measObjectId included in the received measObjectToRemoveList
-    // that is part of measObjectList in the configuration
-    NR_MeasObjectId_t id = *remove_list->list.array[i];
-    if (rrc->MeasObj[id - 1]) {
-      // remove the entry with the matching measObjectId from the measObjectList
-      asn1cFreeStruc(asn_DEF_NR_MeasObjectToAddMod, rrc->MeasObj[id - 1]);
-      // remove all measId associated with this measObjectId from the measIdList
-      for (int j = 0; j < MAX_MEAS_ID; j++) {
-        if (rrc->MeasId[j] && rrc->MeasId[j]->measObjectId == id) {
-          asn1cFreeStruc(asn_DEF_NR_MeasIdToAddMod, rrc->MeasId[j]);
-          handle_meas_reporting_remove(rrc, j, timers);
-        }
-      }
-    }
-  }
-}
+#include "nr_ue_meas_config.inc.c"
 
 static void update_ssb_configmob(NR_SSB_ConfigMobility_t *source, NR_SSB_ConfigMobility_t *target)
 {
@@ -1315,6 +1287,8 @@ static void handle_measobj_addmod(rrcPerNB_t *rrc, struct NR_MeasObjectToAddModL
       continue;
     }
     NR_MeasObjectId_t id = measObj->measObjectId;
+    if (id < 1 || id > MAX_MEAS_OBJ)
+      continue;
     if (rrc->MeasObj[id]) {
       update_nr_measobj(measObj->measObject.choice.measObjectNR, rrc->MeasObj[id]->measObject.choice.measObjectNR);
     } else {
@@ -1330,9 +1304,11 @@ static void handle_reportconfig_remove(rrcPerNB_t *rrc,
 {
   for (int i = 0; i < remove_list->list.count; i++) {
     NR_ReportConfigId_t id = *remove_list->list.array[i];
+    if (id < 1 || id > MAX_MEAS_CONFIG)
+      continue;
     // remove the entry with the matching reportConfigId from the reportConfigList
     asn1cFreeStruc(asn_DEF_NR_ReportConfigToAddMod, rrc->ReportConfig[id]);
-    for (int j = 0; j < MAX_MEAS_ID; j++) {
+    for (int j = 1; j <= MAX_MEAS_ID; j++) {
       if (rrc->MeasId[j] && rrc->MeasId[j]->reportConfigId == id) {
         // remove all measId associated with the reportConfigId from the measIdList
         asn1cFreeStruc(asn_DEF_NR_MeasIdToAddMod, rrc->MeasId[j]);
@@ -1353,52 +1329,16 @@ static void handle_reportconfig_addmod(rrcPerNB_t *rrc,
       continue;
     }
     NR_ReportConfigId_t id = rep->reportConfigId;
+    if (id < 1 || id > MAX_MEAS_CONFIG)
+      continue;
     if (rrc->ReportConfig[id]) {
-      for (int j = 0; j < MAX_MEAS_ID; j++) {
+      for (int j = 1; j <= MAX_MEAS_ID; j++) {
         // for each measId associated with this reportConfigId included in the measIdList
         if (rrc->MeasId[j] && rrc->MeasId[j]->reportConfigId == id)
           handle_meas_reporting_remove(rrc, j, timers);
       }
     }
     UPDATE_IE(rrc->ReportConfig[id], addmod_list->list.array[i], NR_ReportConfigToAddMod_t);
-  }
-}
-
-static void handle_quantityconfig(rrcPerNB_t *rrc, NR_QuantityConfig_t *quantityConfig, NR_UE_Timers_Constants_t *timers)
-{
-  if (quantityConfig->quantityConfigNR_List) {
-    for (int i = 0; i < quantityConfig->quantityConfigNR_List->list.count; i++) {
-      NR_QuantityConfigNR_t *quantityNR = quantityConfig->quantityConfigNR_List->list.array[i];
-      if (!rrc->QuantityConfig[i])
-        rrc->QuantityConfig[i] = calloc(1, sizeof(*rrc->QuantityConfig[i]));
-      rrc->QuantityConfig[i]->quantityConfigCell = quantityNR->quantityConfigCell;
-      // TODO: It remains to compute ssb_filter_coeff_rsrp and csi_RS_filter_coeff_rsrp for multiple quantityConfig
-      // TS 38.331 - 5.5.3.2 Layer 3 filtering
-      NR_QuantityConfigRS_t *qcc = &quantityNR->quantityConfigCell;
-      l3_measurements_t *l3_measurements = &rrc->l3_measurements;
-      if (qcc->ssb_FilterConfig.filterCoefficientRSRP)
-        l3_measurements->ssb_filter_coeff_rsrp = 1. / pow(2, (*qcc->ssb_FilterConfig.filterCoefficientRSRP) / 4);
-      if (qcc->csi_RS_FilterConfig.filterCoefficientRSRP)
-        l3_measurements->csi_RS_filter_coeff_rsrp = 1. / pow(2, (*qcc->csi_RS_FilterConfig.filterCoefficientRSRP) / 4);
-      if (quantityNR->quantityConfigRS_Index)
-        UPDATE_IE(rrc->QuantityConfig[i]->quantityConfigRS_Index, quantityNR->quantityConfigRS_Index, struct NR_QuantityConfigRS);
-    }
-  }
-  for (int j = 0; j < MAX_MEAS_ID; j++) {
-    // for each measId included in the measIdList
-    if (rrc->MeasId[j])
-      handle_meas_reporting_remove(rrc, j, timers);
-  }
-}
-
-static void handle_measid_remove(rrcPerNB_t *rrc, struct NR_MeasIdToRemoveList *remove_list, NR_UE_Timers_Constants_t *timers)
-{
-  for (int i = 0; i < remove_list->list.count; i++) {
-    NR_MeasId_t id = *remove_list->list.array[i];
-    if (rrc->MeasId[id]) {
-      asn1cFreeStruc(asn_DEF_NR_MeasIdToAddMod, rrc->MeasId[id]);
-      handle_meas_reporting_remove(rrc, id, timers);
-    }
   }
 }
 
@@ -1412,6 +1352,8 @@ static void handle_measid_addmod(rrcPerNB_t *rrc,
     NR_MeasId_t id = addmod_list->list.array[i]->measId;
     NR_ReportConfigId_t reportId = addmod_list->list.array[i]->reportConfigId;
     NR_MeasObjectId_t measObjectId = addmod_list->list.array[i]->measObjectId;
+    if (id < 1 || id > MAX_MEAS_ID || reportId < 1 || reportId > MAX_MEAS_CONFIG || measObjectId < 1 || measObjectId > MAX_MEAS_OBJ)
+      continue;
     UPDATE_IE(rrc->MeasId[id], addmod_list->list.array[i], NR_MeasIdToAddMod_t);
     handle_meas_reporting_remove(rrc, id, timers);
     if (rrc->ReportConfig[reportId]) {
@@ -1589,10 +1531,11 @@ static void nr_rrc_ue_process_rrcReconfiguration(NR_UE_RRC_INST_t *rrc, int gNB_
         nr_neighbor_cell_info_t neighbor_cells[NUMBER_OF_NEIGHBORING_CELLS_MAX];
         int num_neighbors = 0;
         nr_rrc_ue_process_measConfig(rrcNB, ie->measConfig, &rrc->timers_and_constants, neighbor_cells, &num_neighbors);
+        nr_ue_hook_snapshot_meas(rrc, gNB_index);
+        nr_ue_fuzz_hook_write_state(rrc);
         if (num_neighbors > 0) {
           nr_rrc_mac_config_req_meas(rrc->ue_id, neighbor_cells, num_neighbors);
         }
-        nr_ue_fuzz_hook_bootstrap_measurement_report(rrc, gNB_index);
       }
       if (ie->lateNonCriticalExtension) {
         LOG_E(NR_RRC, "RRCReconfiguration includes lateNonCriticalExtension. Not handled.\n");
@@ -1723,9 +1666,7 @@ NR_UE_RRC_INST_t *nr_rrc_init_ue(char *uecap_file, int instance_id, int num_ant_
   for (int i = 0; i < NB_CNX_UE; i++) {
     rrcPerNB_t *ptr = &rrc->perNB[i];
     ptr->SInfo = (NR_UE_RRC_SI_INFO){0};
-    ptr->l3_measurements = (l3_measurements_t){0};
-    ptr->l3_measurements.ssb_filter_coeff_rsrp = 1.0f;
-    ptr->l3_measurements.csi_RS_filter_coeff_rsrp = 1.0f;
+    nr_ue_hook_reset_measurements(&ptr->l3_measurements);
     init_SI_timers(&ptr->SInfo);
   }
 
@@ -2131,6 +2072,7 @@ static void rrc_ue_generate_RRCSetupComplete(NR_UE_RRC_INST_t *rrc, const uint8_
 
 static void nr_rrc_rrcsetup_fallback(NR_UE_RRC_INST_t *rrc)
 {
+  nr_ue_hook_clear_context(rrc);
   LOG_W(NR_RRC,
         "[UE %ld] Received RRCSetup in response to %s request\n",
         rrc->ue_id,
@@ -2222,6 +2164,7 @@ static void nr_rrc_process_rrcsetup(NR_UE_RRC_INST_t *rrc, const NR_RRCSetup_t *
 
   // set the content of RRCSetupComplete message
   // TODO procedues described in 5.3.3.4 seems more complex than what we actualy do
+  rrc->fuzz_hook.context_gnb = 0; // RRCSetup applies masterCellGroup to perNB[0].
   rrc_ue_generate_RRCSetupComplete(rrc, rrcSetup->rrc_TransactionIdentifier);
 }
 
@@ -2500,6 +2443,7 @@ static void nr_rrc_ue_generate_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc,
         size,
         srb_id);
   nr_ue_fuzz_hook_send_srb(rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE, srb_id, buffer, size);
+  nr_ue_fuzz_hook_bootstrap_measurement_report(rrc, rrc->fuzz_hook.context_gnb);
 }
 
 static void nr_rrc_ue_handle_rrcReconfiguration(NR_UE_RRC_INST_t *rrc,
@@ -2615,6 +2559,7 @@ static void nr_rrc_ue_process_rrcReestablishment(NR_UE_RRC_INST_t *rrc,
 
 static void nr_rrc_ue_process_ueCapabilityEnquiry(NR_UE_RRC_INST_t *rrc, NR_UECapabilityEnquiry_t *UECapabilityEnquiry)
 {
+  nr_ue_hook_record_enquiry(rrc, UECapabilityEnquiry);
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
   LOG_I(NR_RRC, "Receiving from SRB1 (DL-DCCH), Processing UECapabilityEnquiry\n");
 
@@ -2685,6 +2630,7 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
                                  const nr_pdcp_integrity_data_t *msg_integrity,
                                  bool replayed)
 {
+  rrc->fuzz_hook.context_gnb = gNB_indexP;
   NR_DL_DCCH_Message_t *dl_dcch_msg = NULL;
   if (Srb_id != 1 && Srb_id != 2) {
     LOG_E(NR_RRC, "Received message on DL-DCCH (SRB%ld), should not have ...\n", Srb_id);
@@ -2900,7 +2846,7 @@ static int get_rsrp_value(const meas_t *cell)
 
 static int get_meas_id(rrcPerNB_t *rrcNB, int report_config_id)
 {
-  for (int j = 0; j < MAX_MEAS_ID; j++) {
+  for (int j = 1; j <= MAX_MEAS_ID; j++) {
     NR_MeasIdToAddMod_t *meas_id_toAddMod = rrcNB->MeasId[j];
     if (meas_id_toAddMod && meas_id_toAddMod->reportConfigId == report_config_id)
       return meas_id_toAddMod->measId;
@@ -3067,7 +3013,7 @@ static void nr_ue_check_meas_report(NR_UE_RRC_INST_t *rrc, const uint8_t gnb_ind
   rrcPerNB_t *rrcNB = rrc->perNB + gnb_index;
   l3_measurements_t *l3_measurements = &rrcNB->l3_measurements;
 
-  for (int i = 0; i < MAX_MEAS_CONFIG; i++) {
+  for (int i = 1; i <= MAX_MEAS_CONFIG; i++) {
     NR_ReportConfigToAddMod_t *report_config = rrcNB->ReportConfig[i];
     if (report_config == NULL)
       continue;
@@ -3191,45 +3137,7 @@ static void nr_rrc_handle_meas_indication(NR_UE_RRC_INST_t *rrc, NRRrcMacMeasDat
   }
 }
 
-static void nr_ue_fuzz_hook_bootstrap_measurement_report(NR_UE_RRC_INST_t *rrc, int gNB_index)
-{
-  if (!rrc)
-    return;
-
-  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  if (!hook->enabled || hook->target_msg != NR_UE_HOOK_MSG_MEASUREMENT_REPORT || !hook->measurement_bootstrap_enabled)
-    return;
-  if (hook->measurement_bootstrap_done)
-    return;
-
-  rrcPerNB_t *rrcNB = rrc->perNB + gNB_index;
-  l3_measurements_t *l3_measurements = &rrcNB->l3_measurements;
-
-  if (l3_measurements->trigger_to_measid <= 0) {
-    for (int i = 0; i < MAX_MEAS_CONFIG; i++) {
-      if (rrcNB->MeasId[i] != NULL) {
-        l3_measurements->trigger_to_measid = rrcNB->MeasId[i]->measId;
-        l3_measurements->trigger_quantity = NR_MeasTriggerQuantityOffset_PR_rsrp;
-        l3_measurements->rs_type = NR_NR_RS_Type_ssb;
-        l3_measurements->max_reports = 1;
-        l3_measurements->neighbor_cell_valid = false;
-        LOG_W(NR_RRC, "[UE %ld][HOOK] bootstrap: force trigger_to_measid=%ld\n", rrc->ue_id, l3_measurements->trigger_to_measid);
-        break;
-      }
-    }
-  }
-
-  if (l3_measurements->trigger_to_measid > 0) {
-    rrc_ue_generate_measurementReport(rrcNB, rrc->ue_id);
-    l3_measurements->reports_sent = 1;
-    hook->measurement_bootstrap_done = true;
-    nr_ue_fuzz_hook_write_state(rrc);
-  } else {
-    LOG_W(NR_RRC,
-          "[UE %ld][HOOK] measurement bootstrap did not start a report trigger; measurement config may be incomplete\n",
-          rrc->ue_id);
-  }
-}
+#include "nr_ue_fuzz_hook_bootstrap.inc.c"
 
 void *rrc_nrue_task(void *args_p)
 {
@@ -3591,6 +3499,8 @@ void handle_rlf_detection(NR_UE_RRC_INST_t *rrc)
 
 void nr_rrc_going_to_IDLE(NR_UE_RRC_INST_t *rrc, NR_Release_Cause_t release_cause, NR_RRCRelease_t *RRCRelease)
 {
+  nr_ue_hook_clear_context(rrc);
+  rrc->as_security_activated = false;
   NR_UE_Timers_Constants_t *tac = &rrc->timers_and_constants;
   struct NR_RRCRelease_IEs *rrcReleaseIEs = RRCRelease ? RRCRelease->criticalExtensions.choice.rrcRelease : NULL;
 
@@ -3797,6 +3707,9 @@ void rrc_ue_generate_measurementReport(rrcPerNB_t *rrc, instance_t ue_id)
 {
   uint8_t buffer[NR_RRC_BUF_SIZE];
   NR_UE_RRC_INST_t *ue_rrc = get_NR_UE_rrc_inst(ue_id);
+  for (int gnb = 0; gnb < NB_CNX_UE; gnb++)
+    if (&ue_rrc->perNB[gnb] == rrc)
+      ue_rrc->fuzz_hook.context_gnb = gnb;
   l3_measurements_t *l3m = &rrc->l3_measurements;
   int rsrp_dBm = l3m->rs_type == NR_NR_RS_Type_ssb ? l3m->serving_cell.ss_rsrp_dBm.val : l3m->serving_cell.csi_rsrp_dBm.val;
   int rsrp_index = get_rsrp_index(rsrp_dBm);

@@ -25,8 +25,10 @@
       fprintf(stderr, __VA_ARGS__); \
   } while (0)
 static int sent_pdus;
-#define nr_pdcp_data_req_srb(...) (++sent_pdus)
+static int fail_pdcp_call;
+#define nr_pdcp_data_req_srb(...) (++sent_pdus != fail_pdcp_call)
 #include "../nr_ue_fuzz_hook.inc.c"
+#include "../nr_ue_meas_config.inc.c"
 
 #define CHECK(condition)                                              \
   do {                                                                \
@@ -55,6 +57,7 @@ static void reset(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg, nr_ue_fuzz_h
   hook->delay_ms = 1;
   hook->replay_delay_ms = 1;
   sent_pdus = 0;
+  fail_pdcp_call = 0;
 }
 
 static void field_contract(NR_UE_RRC_INST_t *rrc, const char *field, const char *family, const char *mode)
@@ -249,18 +252,28 @@ static void test_nas_and_measurement_fields(void)
   CHECK(ies.measResults.measId == 64);
 }
 
+#include "nr_ue_fuzz_hook_context_test.inc.c"
+
 int main(void)
 {
+  logInit();
   CHECK(mkdtemp(test_root));
   test_dl_lifecycle();
   test_ul_transport();
   test_transactions();
   test_legacy_control_and_ul_callback();
   test_nas_and_measurement_fields();
+  test_review_regressions();
+  test_context_modes();
+  test_context_lifecycle_and_removal();
+  test_context_gates();
+  test_context_control();
+  test_context_capability_and_plmn();
   char path[512];
   snprintf(path, sizeof(path), "%s/state", test_root);
   CHECK(unlink(path) == 0);
   CHECK(rmdir(test_root) == 0);
+  logTerm();
   puts("UE hook lifecycle, legacy control, transaction codecs and field adapters: PASS");
   return 0;
 }
