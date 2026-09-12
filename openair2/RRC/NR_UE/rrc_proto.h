@@ -47,6 +47,7 @@ void nr_rrc_SI_timers(NR_UE_RRC_SI_INFO *SInfo);
 void init_SI_timers(NR_UE_RRC_SI_INFO *SInfo);
 
 void nr_ue_rrc_timer_trigger(int module_id, int hfn, int frame, int gnb_id);
+void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, const char *signal_name, int srb_id);
 void handle_t300_expiry(NR_UE_RRC_INST_t *rrc);
 void handle_t430_expiry(NR_UE_RRC_INST_t *rrc);
 
@@ -74,4 +75,3 @@ void nr_rrc_ue_decode_NR_SBCCH_SL_BCH_Message(NR_UE_RRC_INST_t *rrc,
 void nr_rrc_set_mac_queue(instance_t instance, notifiedFIFO_t *mac_input_nf);
 /** @}*/
 #endif
-

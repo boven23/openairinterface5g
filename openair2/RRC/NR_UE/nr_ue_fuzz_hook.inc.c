@@ -607,6 +607,7 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
     nr_ue_fuzz_hook_write_state(rrc);
     return;
   }
+  nr_ue_rrc_trace_signal(rrc, "TX", nr_ue_fuzz_hook_msg_name(msg), srb_id);
   nr_ue_hook_record_submission(rrc, msg);
   nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
 
@@ -625,6 +626,7 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
       nr_ue_fuzz_hook_write_state(rrc);
       return;
     }
+    nr_ue_rrc_trace_signal(rrc, "TX", nr_ue_fuzz_hook_msg_name(msg), srb_id);
     nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DUPLICATE, srb_id);
     nr_ue_hook_record_submission(rrc, msg);
     if (hook->arm_once)
@@ -649,6 +651,7 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
       nr_ue_fuzz_hook_write_state(rrc);
       return;
     }
+    nr_ue_rrc_trace_signal(rrc, "TX", nr_ue_fuzz_hook_msg_name(msg), srb_id);
     nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_REPLAY, srb_id);
     nr_ue_hook_record_submission(rrc, msg);
     if (hook->arm_once)
