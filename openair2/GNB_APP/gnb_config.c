@@ -2235,6 +2235,20 @@ static void fill_neighbour_cell_configuration(const uint8_t gnb_idx, gNB_RRC_INS
   sort_neighbour_configuration(rrc);
 }
 
+/* Explicit test option: keep the normal cached-capability path by default. */
+static void fill_fuzz_configuration(uint8_t gnb_idx, gNB_RRC_INST *rrc)
+{
+  char path[MAX_OPTNAME_SIZE + 8];
+  snprintf(path, sizeof(path), "%s.[%i].fuzzing", GNB_CONFIG_STRING_GNB_LIST, gnb_idx);
+  paramdef_t params[] = {{.optname = "force_capability_enquiry",
+                         .helpstr = "Request NR capabilities even when the core supplied a cached container",
+                         .uptr = &rrc->fuzz_force_capability_enquiry,
+                         .defuintval = 0,
+                         .type = TYPE_UINT}};
+  config_get(config_get_if(), params, sizeofArray(params), path);
+  AssertFatal(rrc->fuzz_force_capability_enquiry <= 1, "force_capability_enquiry must be 0 or 1\n");
+}
+
 static void fill_measurement_configuration(uint8_t gnb_idx, gNB_RRC_INST *rrc)
 {
   char measurement_path[MAX_OPTNAME_SIZE + 8];
@@ -2255,6 +2269,7 @@ static void fill_measurement_configuration(uint8_t gnb_idx, gNB_RRC_INST *rrc)
   if (*Periodical_EventParams[MEASUREMENT_EVENTS_ENABLE_IDX].i64ptr) {
     nr_per_event_t *periodic_event = (nr_per_event_t *)calloc(1, sizeof(nr_per_event_t));
     periodic_event->includeBeamMeasurements = *Periodical_EventParams[MEASUREMENT_EVENTS_INCLUDE_BEAM_MEAS_IDX].i64ptr;
+    periodic_event->rsrp_only = *Periodical_EventParams[MEASUREMENT_EVENTS_RSRP_ONLY_IDX].i64ptr;
     periodic_event->maxReportCells = *Periodical_EventParams[MEASUREMENT_EVENTS_MAX_RS_INDEX_TO_REPORT].i64ptr;
 
     measurementConfig->per_event = periodic_event;
@@ -2427,6 +2442,7 @@ gNB_RRC_INST *RCconfig_NRRRC()
         fill_neighbour_cell_configuration(k, rrc);
 
         fill_measurement_configuration(k, rrc);
+        fill_fuzz_configuration(k, rrc);
 
         rrc->SIBs = fill_cu_sibs(GNBParamList.paramarray[i]);
 

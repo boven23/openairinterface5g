@@ -163,6 +163,7 @@ typedef struct nr_ue_fuzz_hook_state_s {
   int last_ul_size;
   uint8_t last_ul_pdu[NR_RRC_BUF_SIZE];
   long control_mtime;
+  long control_mtime_nsec;
   char control_path[128];
   char state_path[128];
   nr_ue_fuzz_hook_field_mutation_t field_mutation;

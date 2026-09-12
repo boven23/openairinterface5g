@@ -673,12 +673,12 @@ static NR_ReportConfigToAddMod_t *prepare_periodic_event_report(const nr_per_eve
   prc->reportInterval = NR_ReportInterval_ms1024;
   prc->reportAmount = NR_PeriodicalReportConfig__reportAmount_infinity;
   prc->reportQuantityCell.rsrp = true;
-  prc->reportQuantityCell.rsrq = true;
-  prc->reportQuantityCell.sinr = true;
+  prc->reportQuantityCell.rsrq = !per_event->rsrp_only;
+  prc->reportQuantityCell.sinr = !per_event->rsrp_only;
   prc->reportQuantityRS_Indexes = calloc(1, sizeof(*prc->reportQuantityRS_Indexes));
   prc->reportQuantityRS_Indexes->rsrp = true;
-  prc->reportQuantityRS_Indexes->rsrq = true;
-  prc->reportQuantityRS_Indexes->sinr = true;
+  prc->reportQuantityRS_Indexes->rsrq = !per_event->rsrp_only;
+  prc->reportQuantityRS_Indexes->sinr = !per_event->rsrp_only;
   asn1cCallocOne(prc->maxNrofRS_IndexesToReport, per_event->maxReportCells);
   prc->maxReportCells = per_event->maxReportCells;
   prc->includeBeamMeasurements = per_event->includeBeamMeasurements;
@@ -2280,7 +2280,7 @@ static int rrc_gNB_decode_dcch(gNB_RRC_INST *rrc, const f1ap_ul_rrc_message_t *m
         UE->as_security_active = true;
 
         /* trigger UE capability enquiry if we don't have them yet */
-        if (UE->ue_cap_buffer.len == 0) {
+        if (UE->ue_cap_buffer.len == 0 || rrc->fuzz_force_capability_enquiry) {
           rrc_gNB_generate_UECapabilityEnquiry(rrc, UE);
           /* else blocks are executed after receiving UE capability info */
         } else if (UE->n_initial_pdu > 0) {

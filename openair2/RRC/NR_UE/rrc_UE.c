@@ -194,6 +194,8 @@ void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
 
 #include "nr_ue_fuzz_hook.inc.c"
 static void nr_ue_fuzz_hook_bootstrap_measurement_report(NR_UE_RRC_INST_t *rrc, int gNB_index);
+static void nr_rrc_ue_send_ul_information_transfer_nas(NR_UE_RRC_INST_t *rrc, uint32_t nas_length, uint8_t *nas_pdu);
+static void nr_ue_fuzz_hook_maybe_trigger_ul_information_transfer(NR_UE_RRC_INST_t *rrc);
 /* NAS Attach request with IMSI */
 static const char nr_nas_attach_req_imsi_dummy_NSA_case[] = {
     0x07,
@@ -2572,6 +2574,7 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
     if (ue_rrc->Srb[i] == RB_ESTABLISHED)
       nr_pdcp_config_set_security(ue_rrc->ue_id, i, true, &security_parameters);
   }
+  nr_ue_fuzz_hook_maybe_trigger_ul_information_transfer(ue_rrc);
 }
 
 static void nr_rrc_ue_generate_RRCReconfigurationComplete(NR_UE_RRC_INST_t *rrc, const int srb_id, const uint8_t Transaction_id)
@@ -2943,6 +2946,27 @@ static void nr_rrc_ue_send_ul_information_transfer_nas(NR_UE_RRC_INST_t *rrc, ui
         enc_bytes);
   nr_ue_fuzz_hook_send_srb(rrc, NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER, srb_id, buffer, enc_bytes);
   free(buffer);
+}
+
+static void nr_ue_fuzz_hook_maybe_trigger_ul_information_transfer(NR_UE_RRC_INST_t *rrc)
+{
+  nr_ue_fuzz_hook_reload_config(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (!hook->enabled || hook->target_msg != NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER)
+    return;
+  if (hook->submitted[NR_UE_HOOK_MSG_UL_INFORMATION_TRANSFER] > 0)
+    return;
+  if (!rrc->as_security_activated || (rrc->Srb[1] != RB_ESTABLISHED && rrc->Srb[2] != RB_ESTABLISHED)) {
+    nr_ue_hook_context_result(rrc, "ul_information_transfer_trigger_not_ready");
+    nr_ue_fuzz_hook_write_state(rrc);
+    return;
+  }
+
+  uint8_t dummy_nas[] = {0x7e, 0x00, 0x00, 0x00};
+  LOG_I(NR_RRC,
+        "[UE %ld][HOOK] triggering dummy NAS ULInformationTransfer for stable fuzzing\n",
+        rrc->ue_id);
+  nr_rrc_ue_send_ul_information_transfer_nas(rrc, sizeof(dummy_nas), dummy_nas);
 }
 
 static void apply_ema(val_init_t *vi_rsrp_dBm, float filter_coeff_rsrp, int rsrp_dBm)

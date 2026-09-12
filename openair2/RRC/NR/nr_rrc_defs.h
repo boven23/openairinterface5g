@@ -291,6 +291,7 @@ typedef struct {
 typedef struct {
   long maxReportCells;
   bool includeBeamMeasurements;
+  bool rsrp_only;
 } nr_per_event_t;
 
 typedef struct {
@@ -633,6 +634,7 @@ typedef struct gNB_RRC_INST_s {
   // Per-cell neighbour configurations, indexed by cell_id
   seq_arr_t *neighbour_cell_configuration;
   nr_measurement_configuration_t measurementConfiguration;
+  unsigned int fuzz_force_capability_enquiry; // opt-in; bypass cached capabilities for a fresh enquiry
 
   RB_HEAD(rrc_du_tree, nr_rrc_du_container_t) dus; // DUs, indexed by assoc_id
   size_t num_dus;
