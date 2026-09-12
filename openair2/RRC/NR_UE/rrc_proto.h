@@ -46,8 +46,15 @@ int get_from_lte_ue_fd();
 void nr_rrc_SI_timers(NR_UE_RRC_SI_INFO *SInfo);
 void init_SI_timers(NR_UE_RRC_SI_INFO *SInfo);
 
+extern bool nr_ue_rrc_trace_enabled;
 void nr_ue_rrc_timer_trigger(int module_id, int hfn, int frame, int gnb_id);
 void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, const char *signal_name, int srb_id);
+void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
+                             const char *message_name,
+                             const char *field_name,
+                             const char *operator_family,
+                             const char *mode,
+                             const char *result);
 void handle_t300_expiry(NR_UE_RRC_INST_t *rrc);
 void handle_t430_expiry(NR_UE_RRC_INST_t *rrc);
 

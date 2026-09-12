@@ -11,6 +11,7 @@
 
 #include <ctype.h>
 #include <errno.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
@@ -64,23 +65,55 @@
 static NR_UE_RRC_INST_t *NR_UE_rrc_inst[MAX_NUM_NR_UE_INST] = {0};
 
 #define NR_UE_RRC_SIGNAL_FLOW_LOG "/tmp/nr_ue_rrc_signal_flow.log"
+#define NR_UE_RRC_ADAPTER_FLOW_LOG "/tmp/nr_ue_rrc_adapter_flow.log"
 
-void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, const char *signal_name, int srb_id)
+bool nr_ue_rrc_trace_enabled = true;
+
+static void nr_ue_rrc_format_timestamp(char *buffer, size_t buffer_size, long *nsec)
 {
-  FILE *fp = fopen(NR_UE_RRC_SIGNAL_FLOW_LOG, "a+");
-  if (fp == NULL) {
-    LOG_W(NR_RRC, "Could not open %s for UE RRC signal tracing: %s\n", NR_UE_RRC_SIGNAL_FLOW_LOG, strerror(errno));
-    return;
-  }
-  if (chmod(NR_UE_RRC_SIGNAL_FLOW_LOG, 0666) != 0)
-    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC signal tracing: %s\n", NR_UE_RRC_SIGNAL_FLOW_LOG, strerror(errno));
-
   struct timespec ts = {0};
   clock_gettime(CLOCK_REALTIME, &ts);
   struct tm tm = {0};
   localtime_r(&ts.tv_sec, &tm);
+  strftime(buffer, buffer_size, "%Y-%m-%d %H:%M:%S", &tm);
+  if (nsec)
+    *nsec = ts.tv_nsec;
+}
+
+void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, const char *signal_name, int srb_id)
+{
+  if (!nr_ue_rrc_trace_enabled)
+    return;
+  if (signal_name && strcmp(signal_name, "MIB") == 0)
+    return;
+
+  static pthread_mutex_t trace_lock = PTHREAD_MUTEX_INITIALIZER;
+  static FILE *fp = NULL;
+  static int open_error_reported = 0;
+  static int chmod_error_reported = 0;
+
+  pthread_mutex_lock(&trace_lock);
+
+  if (fp == NULL)
+    fp = fopen(NR_UE_RRC_SIGNAL_FLOW_LOG, "a+");
+  if (fp == NULL) {
+    if (!open_error_reported) {
+      LOG_W(NR_RRC, "Could not open %s for UE RRC signal tracing: %s\n", NR_UE_RRC_SIGNAL_FLOW_LOG, strerror(errno));
+      open_error_reported = 1;
+    }
+    pthread_mutex_unlock(&trace_lock);
+    return;
+  }
+  open_error_reported = 0;
+
+  if (chmod(NR_UE_RRC_SIGNAL_FLOW_LOG, 0666) != 0 && !chmod_error_reported) {
+    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC signal tracing: %s\n", NR_UE_RRC_SIGNAL_FLOW_LOG, strerror(errno));
+    chmod_error_reported = 1;
+  }
+
   char timestamp[40] = "";
-  strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", &tm);
+  long nsec = 0;
+  nr_ue_rrc_format_timestamp(timestamp, sizeof(timestamp), &nsec);
   char srb[16] = "";
   if (srb_id >= 0)
     snprintf(srb, sizeof(srb), "SRB%d", srb_id);
@@ -90,15 +123,73 @@ void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, 
   else if (direction && !strcmp(direction, "TX"))
     direction_label = "发送";
   fseek(fp, 0, SEEK_END);
+  if (ftell(fp) == 0)
+    fprintf(fp, "%-30s  %-6s  %-8s  %-40s  %-5s\n", "系统时间", "UE", "方向", "信令名", "SRB");
   fprintf(fp,
           "%s.%09ld  UE%-3ld  %-2s  %-40s  %-5s\n",
           timestamp,
-          ts.tv_nsec,
+          nsec,
           rrc ? rrc->ue_id : -1,
           direction_label,
           signal_name ? signal_name : "UNKNOWN",
           srb);
-  fclose(fp);
+  fflush(fp);
+  pthread_mutex_unlock(&trace_lock);
+}
+
+void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
+                             const char *message_name,
+                             const char *field_name,
+                             const char *operator_family,
+                             const char *mode,
+                             const char *result)
+{
+  if (!nr_ue_rrc_trace_enabled)
+    return;
+
+  static pthread_mutex_t trace_lock = PTHREAD_MUTEX_INITIALIZER;
+  static FILE *fp = NULL;
+  static int open_error_reported = 0;
+  static int chmod_error_reported = 0;
+
+  pthread_mutex_lock(&trace_lock);
+
+  if (fp == NULL)
+    fp = fopen(NR_UE_RRC_ADAPTER_FLOW_LOG, "a+");
+  if (fp == NULL) {
+    if (!open_error_reported) {
+      LOG_W(NR_RRC, "Could not open %s for UE RRC adapter tracing: %s\n", NR_UE_RRC_ADAPTER_FLOW_LOG, strerror(errno));
+      open_error_reported = 1;
+    }
+    pthread_mutex_unlock(&trace_lock);
+    return;
+  }
+  open_error_reported = 0;
+
+  if (chmod(NR_UE_RRC_ADAPTER_FLOW_LOG, 0666) != 0 && !chmod_error_reported) {
+    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC adapter tracing: %s\n", NR_UE_RRC_ADAPTER_FLOW_LOG, strerror(errno));
+    chmod_error_reported = 1;
+  }
+
+  char timestamp[40] = "";
+  long nsec = 0;
+  nr_ue_rrc_format_timestamp(timestamp, sizeof(timestamp), &nsec);
+
+  fseek(fp, 0, SEEK_END);
+  if (ftell(fp) == 0)
+    fprintf(fp, "%-30s  %-6s  %-32s  %-40s  %-34s  %-24s  %-8s\n", "系统时间", "UE", "消息名", "字段名", "操作族", "模式", "结果");
+  fprintf(fp,
+          "%s.%09ld  UE%-3ld  %-32s  %-40s  %-34s  %-24s  %-8s\n",
+          timestamp,
+          nsec,
+          rrc ? rrc->ue_id : -1,
+          message_name ? message_name : "UNKNOWN",
+          field_name ? field_name : "UNKNOWN",
+          operator_family ? operator_family : "UNKNOWN",
+          mode && mode[0] ? mode : "-",
+          result ? result : "未知");
+  fflush(fp);
+  pthread_mutex_unlock(&trace_lock);
 }
 
 #include "nr_ue_fuzz_hook.inc.c"
