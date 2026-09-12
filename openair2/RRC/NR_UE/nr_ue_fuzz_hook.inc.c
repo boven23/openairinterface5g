@@ -142,6 +142,7 @@ static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
   hook->field_mutation.operator_family[0] = '\0';
   hook->field_mutation.transform_name[0] = '\0';
   hook->field_mutation.selected_mode[0] = '\0';
+  hook->field_mutation.override_value[0] = '\0';
   hook->field_mutation.has_range_min = false;
   hook->field_mutation.range_min = 0;
   hook->field_mutation.has_range_max = false;
@@ -401,6 +402,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.transform_name, sizeof(hook->field_mutation.transform_name), value);
     else if (!strcasecmp(key, "field_mutation_selected_mode"))
       nr_ue_fuzz_hook_copy_text(hook->field_mutation.selected_mode, sizeof(hook->field_mutation.selected_mode), value);
+    else if (!strcasecmp(key, "field_mutation_override_value"))
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation.override_value, sizeof(hook->field_mutation.override_value), value);
     else if (!strcasecmp(key, "field_mutation_value_space_minimum")) {
       hook->field_mutation.range_min = atoi(value);
       hook->field_mutation.has_range_min = true;
