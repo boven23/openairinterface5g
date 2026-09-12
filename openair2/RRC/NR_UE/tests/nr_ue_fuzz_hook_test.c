@@ -3,6 +3,7 @@
  * Controls/state live in a private directory, never a running UE's /tmp files. */
 #include <ctype.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <strings.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -48,6 +49,7 @@ static void reset(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg, nr_ue_fuzz_h
   snprintf(hook->state_path, sizeof(hook->state_path), "%s/state", test_root);
   CHECK(unlink(hook->control_path) == 0 || errno == ENOENT);
   hook->control_mtime = -1;
+  hook->control_mtime_nsec = -1;
   hook->enabled = true;
   hook->arm_once = once;
   hook->target_msg = msg;
@@ -283,9 +285,34 @@ static void test_adapter_identity_selection(void)
 
 #include "nr_ue_fuzz_hook_context_test.inc.c"
 
-int main(void)
+/* Two controls in the same second must not reuse the previous action. */
+static void test_subsecond_control_reload(void)
+{
+  NR_UE_RRC_INST_t rrc;
+  reset(&rrc, NR_UE_HOOK_MSG_NONE, NR_UE_HOOK_ACTION_NONE, false);
+  for (int i = 0; i < 2; i++) {
+    FILE *ctl = fopen(rrc.fuzz_hook.control_path, "w");
+    CHECK(ctl);
+    fprintf(ctl, "enabled=1\ntarget=RRCSetupComplete\naction=%s\n", i ? "duplicate" : "delay");
+    CHECK(fclose(ctl) == 0);
+    struct timespec stamps[2] = {{.tv_sec = 123456, .tv_nsec = i + 1}, {.tv_sec = 123456, .tv_nsec = i + 1}};
+    CHECK(utimensat(AT_FDCWD, rrc.fuzz_hook.control_path, stamps, 0) == 0);
+    nr_ue_fuzz_hook_reload_config(&rrc);
+    CHECK(rrc.fuzz_hook.action == (i ? NR_UE_HOOK_ACTION_DUPLICATE : NR_UE_HOOK_ACTION_DELAY));
+  }
+  CHECK(unlink(rrc.fuzz_hook.control_path) == 0);
+}
+
+#include "nr_ue_fuzz_hook_python_fixture.inc.c"
+
+int main(int argc, char **argv)
 {
   logInit();
+  if (argc == 5 && !strcmp(argv[1], "--control-fixture")) {
+    int result = python_control_fixture(argv[2], argv[3], argv[4]);
+    logTerm();
+    return result;
+  }
   CHECK(mkdtemp(test_root));
   test_dl_lifecycle();
   test_ul_transport();
@@ -294,6 +321,7 @@ int main(void)
   test_nas_and_measurement_fields();
   test_review_regressions();
   test_adapter_identity_selection();
+  test_subsecond_control_reload();
   test_context_modes();
   test_context_lifecycle_and_removal();
   test_context_gates();

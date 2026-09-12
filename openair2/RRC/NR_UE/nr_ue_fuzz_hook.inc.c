@@ -184,6 +184,7 @@ static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
   snprintf(hook->control_path, sizeof(hook->control_path), "/tmp/oai_nr_ue_hook_%ld.ctl", rrc->ue_id);
   snprintf(hook->state_path, sizeof(hook->state_path), "/tmp/oai_nr_ue_hook_%ld.state", rrc->ue_id);
   hook->control_mtime = -1;
+  hook->control_mtime_nsec = -1;
   hook->last_dl_txn = -1;
   hook->txn_offset = 1;
   hook->delay_ms = 0;
@@ -309,6 +310,7 @@ static void nr_ue_fuzz_hook_disarm_persistent(NR_UE_RRC_INST_t *rrc)
   if (unlink(hook->control_path) != 0 && errno != ENOENT)
     LOG_W(NR_RRC, "[UE %ld][HOOK] failed to remove ctl %s: %s\n", rrc->ue_id, hook->control_path, strerror(errno));
   hook->control_mtime = -1;
+  hook->control_mtime_nsec = -1;
 }
 
 static void nr_ue_fuzz_hook_record_fire(NR_UE_RRC_INST_t *rrc,
@@ -328,10 +330,11 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   nr_ue_fuzz_hook_ensure_paths(rrc);
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   struct stat st = {0};
-  if (stat(hook->control_path, &st) != 0 || hook->control_mtime == st.st_mtime)
+  if (stat(hook->control_path, &st) != 0 || (hook->control_mtime == st.st_mtime && hook->control_mtime_nsec == st.st_mtim.tv_nsec))
     return;
 
   hook->control_mtime = st.st_mtime;
+  hook->control_mtime_nsec = st.st_mtim.tv_nsec;
   hook->enabled = false;
   hook->arm_once = false;
   hook->target_msg = NR_UE_HOOK_MSG_NONE;
@@ -655,4 +658,5 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
       nr_ue_fuzz_hook_disarm_persistent(rrc);
     nr_ue_fuzz_hook_write_state(rrc);
   }
+  nr_ue_fuzz_hook_write_state(rrc);
 }

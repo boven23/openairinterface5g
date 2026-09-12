@@ -420,6 +420,7 @@ typedef enum {
 #define MEASUREMENT_EVENTS_TIME_TO_TRIGGER "time_to_trigger"
 #define MEASUREMENT_EVENTS_THRESHOLD "threshold"
 #define MEASUREMENT_EVENTS_PERIODICAL_BEAM_MEASUREMENT "includeBeamMeasurements"
+#define MEASUREMENT_EVENTS_PERIODICAL_RSRP_ONLY "rsrp_only"
 #define MEASUREMENT_EVENTS_PERIODICAL_NR_OF_RS_INDEXES "maxNrofRS_IndexesToReport"
 #define MEASUREMENT_EVENTS_PCI_ID "physCellId"
 #define MEASUREMENT_EVENT_ENABLE "enable"
@@ -443,6 +444,7 @@ typedef enum {
   {                                                                                                                               \
         {MEASUREMENT_EVENT_ENABLE, "enable the event", 0, .i64ptr = NULL, .defint64val = 1, TYPE_INT64, 0}, \
         {MEASUREMENT_EVENTS_PERIODICAL_BEAM_MEASUREMENT, "includeBeamMeasurements", PARAMFLAG_BOOL, .i64ptr = NULL, .defint64val = 1, TYPE_INT64, 0}, \
+        {MEASUREMENT_EVENTS_PERIODICAL_RSRP_ONLY, "RSRP-only periodical report quantity", PARAMFLAG_BOOL, .i64ptr = NULL, .defint64val = 0, TYPE_INT64, 0}, \
         {MEASUREMENT_EVENTS_PERIODICAL_NR_OF_RS_INDEXES, "maxNrofRS_IndexesToReport", 0, .i64ptr = NULL, .defint64val = 4, TYPE_INT64, 0},            \
   }
 // clang-format on
@@ -454,7 +456,8 @@ typedef enum {
 #define MEASUREMENT_EVENTS_OFFSET_IDX 2
 #define MEASUREMENT_EVENTS_HYSTERESIS_IDX 3
 #define MEASUREMENT_EVENTS_INCLUDE_BEAM_MEAS_IDX 1
-#define MEASUREMENT_EVENTS_MAX_RS_INDEX_TO_REPORT 2
+#define MEASUREMENT_EVENTS_RSRP_ONLY_IDX 2
+#define MEASUREMENT_EVENTS_MAX_RS_INDEX_TO_REPORT 3
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 /*                                            SIB2 cell reselection configuration parameters                                           */
