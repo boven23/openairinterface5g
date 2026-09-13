@@ -389,7 +389,20 @@ static const nr_ue_fuzz_hook_field_adapter_t builtin_field_adapters[] = {
     },
 };
 
-#include "nr_ue_fuzz_hook_auto_generated.inc.c"
+#if defined(__has_include)
+#  if __has_include("nr_ue_fuzz_hook_auto_generated.inc.c")
+#    define NR_UE_FUZZ_HOOK_HAS_AUTO_GENERATED_ADAPTERS 1
+#  endif
+#endif
+
+#ifdef NR_UE_FUZZ_HOOK_HAS_AUTO_GENERATED_ADAPTERS
+#  include "nr_ue_fuzz_hook_auto_generated.inc.c"
+#  define NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT \
+    (sizeof(auto_generated_field_adapters) / sizeof(auto_generated_field_adapters[0]))
+#else
+static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[1] = {{0}};
+#  define NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT 0
+#endif
 
 /* A distinct transform namespace keeps context adapters separate from generated
  * domain-selection adapters with the same field identity. */
@@ -442,7 +455,7 @@ static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter
     size_t count;
   } catalogs[] = {
       {builtin_field_adapters, sizeof(builtin_field_adapters) / sizeof(builtin_field_adapters[0])},
-      {auto_generated_field_adapters, sizeof(auto_generated_field_adapters) / sizeof(auto_generated_field_adapters[0])},
+      {auto_generated_field_adapters, NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT},
   };
   for (size_t c = 0; c < sizeof(catalogs) / sizeof(catalogs[0]); ++c) {
     for (size_t i = 0; i < catalogs[c].count; ++i) {
