@@ -11,8 +11,12 @@
 
 #include <ctype.h>
 #include <errno.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <string.h>
 #include <strings.h>
 #include <sys/stat.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "LTE_MeasObjectToAddMod.h"
@@ -59,6 +63,134 @@
 #include "openair2/SDAP/nr_sdap/nr_sdap_entity.h"
 
 static NR_UE_RRC_INST_t *NR_UE_rrc_inst[MAX_NUM_NR_UE_INST] = {0};
+
+#define NR_UE_RRC_SIGNAL_FLOW_LOG "/tmp/nr_ue_rrc_signal_flow.log"
+#define NR_UE_RRC_ADAPTER_FLOW_LOG "/tmp/nr_ue_rrc_adapter_flow.log"
+
+bool nr_ue_rrc_trace_enabled = true;
+
+static void nr_ue_rrc_format_timestamp(char *buffer, size_t buffer_size, long *nsec)
+{
+  struct timespec ts = {0};
+  clock_gettime(CLOCK_REALTIME, &ts);
+  struct tm tm = {0};
+  localtime_r(&ts.tv_sec, &tm);
+  strftime(buffer, buffer_size, "%Y-%m-%d %H:%M:%S", &tm);
+  if (nsec)
+    *nsec = ts.tv_nsec;
+}
+
+void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, const char *signal_name, int srb_id)
+{
+  if (!nr_ue_rrc_trace_enabled)
+    return;
+  if (signal_name && strcmp(signal_name, "MIB") == 0)
+    return;
+
+  static pthread_mutex_t trace_lock = PTHREAD_MUTEX_INITIALIZER;
+  static FILE *fp = NULL;
+  static int open_error_reported = 0;
+  static int chmod_error_reported = 0;
+
+  pthread_mutex_lock(&trace_lock);
+
+  if (fp == NULL)
+    fp = fopen(NR_UE_RRC_SIGNAL_FLOW_LOG, "a+");
+  if (fp == NULL) {
+    if (!open_error_reported) {
+      LOG_W(NR_RRC, "Could not open %s for UE RRC signal tracing: %s\n", NR_UE_RRC_SIGNAL_FLOW_LOG, strerror(errno));
+      open_error_reported = 1;
+    }
+    pthread_mutex_unlock(&trace_lock);
+    return;
+  }
+  open_error_reported = 0;
+
+  if (chmod(NR_UE_RRC_SIGNAL_FLOW_LOG, 0666) != 0 && !chmod_error_reported) {
+    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC signal tracing: %s\n", NR_UE_RRC_SIGNAL_FLOW_LOG, strerror(errno));
+    chmod_error_reported = 1;
+  }
+
+  char timestamp[40] = "";
+  long nsec = 0;
+  nr_ue_rrc_format_timestamp(timestamp, sizeof(timestamp), &nsec);
+  char srb[16] = "";
+  if (srb_id >= 0)
+    snprintf(srb, sizeof(srb), "SRB%d", srb_id);
+  const char *direction_label = "未知";
+  if (direction && !strcmp(direction, "RX"))
+    direction_label = "接收";
+  else if (direction && !strcmp(direction, "TX"))
+    direction_label = "发送";
+  fseek(fp, 0, SEEK_END);
+  if (ftell(fp) == 0)
+    fprintf(fp, "%-30s  %-6s  %-8s  %-40s  %-5s\n", "系统时间", "UE", "方向", "信令名", "SRB");
+  fprintf(fp,
+          "%s.%09ld  UE%-3ld  %-2s  %-40s  %-5s\n",
+          timestamp,
+          nsec,
+          rrc ? rrc->ue_id : -1,
+          direction_label,
+          signal_name ? signal_name : "UNKNOWN",
+          srb);
+  fflush(fp);
+  pthread_mutex_unlock(&trace_lock);
+}
+
+void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
+                             const char *message_name,
+                             const char *field_name,
+                             const char *operator_family,
+                             const char *mode,
+                             const char *result)
+{
+  if (!nr_ue_rrc_trace_enabled)
+    return;
+
+  static pthread_mutex_t trace_lock = PTHREAD_MUTEX_INITIALIZER;
+  static FILE *fp = NULL;
+  static int open_error_reported = 0;
+  static int chmod_error_reported = 0;
+
+  pthread_mutex_lock(&trace_lock);
+
+  if (fp == NULL)
+    fp = fopen(NR_UE_RRC_ADAPTER_FLOW_LOG, "a+");
+  if (fp == NULL) {
+    if (!open_error_reported) {
+      LOG_W(NR_RRC, "Could not open %s for UE RRC adapter tracing: %s\n", NR_UE_RRC_ADAPTER_FLOW_LOG, strerror(errno));
+      open_error_reported = 1;
+    }
+    pthread_mutex_unlock(&trace_lock);
+    return;
+  }
+  open_error_reported = 0;
+
+  if (chmod(NR_UE_RRC_ADAPTER_FLOW_LOG, 0666) != 0 && !chmod_error_reported) {
+    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC adapter tracing: %s\n", NR_UE_RRC_ADAPTER_FLOW_LOG, strerror(errno));
+    chmod_error_reported = 1;
+  }
+
+  char timestamp[40] = "";
+  long nsec = 0;
+  nr_ue_rrc_format_timestamp(timestamp, sizeof(timestamp), &nsec);
+
+  fseek(fp, 0, SEEK_END);
+  if (ftell(fp) == 0)
+    fprintf(fp, "%-30s  %-6s  %-32s  %-40s  %-34s  %-24s  %-8s\n", "系统时间", "UE", "消息名", "字段名", "操作族", "模式", "结果");
+  fprintf(fp,
+          "%s.%09ld  UE%-3ld  %-32s  %-40s  %-34s  %-24s  %-8s\n",
+          timestamp,
+          nsec,
+          rrc ? rrc->ue_id : -1,
+          message_name ? message_name : "UNKNOWN",
+          field_name ? field_name : "UNKNOWN",
+          operator_family ? operator_family : "UNKNOWN",
+          mode && mode[0] ? mode : "-",
+          result ? result : "未知");
+  fflush(fp);
+  pthread_mutex_unlock(&trace_lock);
+}
 
 #include "nr_ue_fuzz_hook.inc.c"
 static void nr_ue_fuzz_hook_bootstrap_measurement_report(NR_UE_RRC_INST_t *rrc, int gNB_index);
@@ -410,6 +542,7 @@ static void nr_rrc_ue_prepare_RRCSetupRequest(NR_UE_RRC_INST_t *rrc)
   uint8_t buf[1024];
   int len = do_RRCSetupRequest(buf, sizeof(buf), rv, rrc->fiveG_S_TMSI);
 
+  nr_ue_rrc_trace_signal(rrc, "TX", "RRCSetupRequest", 0);
   nr_rlc_srb_recv_sdu(rrc->ue_id, 0, buf, len);
 }
 
@@ -1564,6 +1697,7 @@ void process_nsa_message(NR_UE_RRC_INST_t *rrc, nsa_message_t nsa_message_type, 
         SEQUENCE_free(&asn_DEF_NR_RRCReconfiguration, RRCReconfiguration, 1);
         return;
       }
+      nr_ue_rrc_trace_signal(rrc, "RX", "NSA-RRCReconfiguration", -1);
       nr_rrc_ue_process_rrcReconfiguration(rrc, 0, RRCReconfiguration);
       ASN_STRUCT_FREE(asn_DEF_NR_RRCReconfiguration, RRCReconfiguration);
     } break;
@@ -1584,6 +1718,7 @@ void process_nsa_message(NR_UE_RRC_INST_t *rrc, nsa_message_t nsa_message_type, 
             RadioBearerConfig->drb_ToAddModList->list.array[0]->drb_Identity,
             RadioBearerConfig->securityConfig->securityAlgorithmConfig->cipheringAlgorithm,
             *RadioBearerConfig->securityConfig->keyToUse);
+      nr_ue_rrc_trace_signal(rrc, "RX", "NSA-RadioBearerConfig", -1);
       nr_rrc_ue_process_RadioBearerConfig(rrc, RadioBearerConfig);
       if (LOG_DEBUGFLAG(DEBUG_ASN1))
         xer_fprint(stdout, &asn_DEF_NR_RadioBearerConfig, (const void *)RadioBearerConfig);
@@ -1861,6 +1996,7 @@ static void nr_rrc_ue_decode_NR_BCCH_BCH_Message(NR_UE_RRC_INST_t *rrc,
     get_sib = check_si_status(SI_info);
   }
   if (bcch_message->message.present == NR_BCCH_BCH_MessageType_PR_mib) {
+    nr_ue_rrc_trace_signal(rrc, "RX", "MIB", -1);
     nr_mac_rrc_message_t rrc_msg = {0};
     rrc_msg.payload_type = NR_MAC_RRC_CONFIG_MIB;
     nr_mac_rrc_config_mib_t *config_mib = &rrc_msg.payload.config_mib;
@@ -1885,6 +2021,7 @@ static void nr_rrc_ue_prepare_RRCReestablishmentRequest(NR_UE_RRC_INST_t *rrc)
 {
   uint8_t buffer[1024];
   int buf_size = do_RRCReestablishmentRequest(buffer, rrc->reestablishment_cause, rrc->phyCellID, rrc->rnti); // old rnti
+  nr_ue_rrc_trace_signal(rrc, "TX", "RRCReestablishmentRequest", 0);
   nr_rlc_srb_recv_sdu(rrc->ue_id, 0, buffer, buf_size);
 }
 
@@ -1993,12 +2130,14 @@ static void nr_rrc_ue_decode_NR_BCCH_DL_SCH_Message(NR_UE_RRC_INST_t *rrc,
   if (bcch_message->message.present == NR_BCCH_DL_SCH_MessageType_PR_c1) {
     switch (bcch_message->message.choice.c1->present) {
       case NR_BCCH_DL_SCH_MessageType__c1_PR_systemInformationBlockType1:
+        nr_ue_rrc_trace_signal(rrc, "RX", "SIB1", -1);
         nr_rrc_process_sib1(rrc, SI_info, bcch_message->message.choice.c1->choice.systemInformationBlockType1);
         // mac layer will free after usage the sib1
         bcch_message->message.choice.c1->choice.systemInformationBlockType1 = NULL;
         break;
       case NR_BCCH_DL_SCH_MessageType__c1_PR_systemInformation:
         LOG_I(NR_RRC, "[UE %ld] %d:%d Decoding SI\n", rrc->ue_id, frame, slot);
+        nr_ue_rrc_trace_signal(rrc, "RX", "SystemInformation", -1);
         NR_SystemInformation_t *si = bcch_message->message.choice.c1->choice.systemInformation;
         nr_decode_SI(SI_info, si, rrc, hfn, frame);
         break;
@@ -2235,12 +2374,14 @@ static int8_t nr_rrc_ue_decode_ccch(NR_UE_RRC_INST_t *rrc, const NRRrcMacCcchDat
 
       case NR_DL_CCCH_MessageType__c1_PR_rrcReject:
         LOG_W(NR_RRC, "[UE%ld] Logical Channel DL-CCCH (SRB0), Received RRCReject \n", rrc->ue_id);
+        nr_ue_rrc_trace_signal(rrc, "RX", "RRCReject", 0);
         nr_rrc_process_rrcreject(rrc, dl_ccch_msg->message.choice.c1->choice.rrcReject);
         rval = 0;
         break;
 
       case NR_DL_CCCH_MessageType__c1_PR_rrcSetup:
         LOG_I(NR_RRC, "[UE%ld][RAPROC] Logical Channel DL-CCCH (SRB0), Received NR_RRCSetup\n", rrc->ue_id);
+        nr_ue_rrc_trace_signal(rrc, "RX", "RRCSetup", 0);
         nr_rrc_process_rrcsetup(rrc, dl_ccch_msg->message.choice.c1->choice.rrcSetup);
         rval = 0;
         break;
@@ -2277,6 +2418,7 @@ static int8_t nr_rrc_ue_decode_pcch(NR_UE_RRC_INST_t *rrc, const byte_array_t pc
   }
 
   LOG_D(NR_RRC, "[UE %ld] Received Paging message with %d record(s)\n", rrc->ue_id, count);
+  nr_ue_rrc_trace_signal(rrc, "RX", "Paging", -1);
 
   const uint64_t ue_fiveg_s_tmsi = rrc->fiveG_S_TMSI & ((1ULL << 48) - 1);
   for (int i = 0; i < count; i++) {
@@ -2387,7 +2529,8 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
     }
 
     srb_id = 1; // SecurityModeFailure in SRB1
-    nr_pdcp_data_req_srb(ue_rrc->ue_id, srb_id, 0, (enc_rval.encoded + 7) / 8, buffer, deliver_pdu_srb_rlc, NULL);
+    if (nr_pdcp_data_req_srb(ue_rrc->ue_id, srb_id, 0, (enc_rval.encoded + 7) / 8, buffer, deliver_pdu_srb_rlc, NULL))
+      nr_ue_rrc_trace_signal(ue_rrc, "TX", "SecurityModeFailure", srb_id);
 
     return;
   }
@@ -2664,6 +2807,7 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
         case NR_DL_DCCH_MessageType__c1_PR_rrcReconfiguration: {
           const nr_ue_fuzz_hook_msg_t hook_msg = NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION;
           NR_RRCReconfiguration_t *rrcReconfiguration = c1->choice.rrcReconfiguration;
+          nr_ue_rrc_trace_signal(rrc, "RX", "RRCReconfiguration", Srb_id);
           if (nr_ue_fuzz_hook_preprocess_dl(rrc, hook_msg, rrcReconfiguration->rrc_TransactionIdentifier, replayed))
             break;
           if (!replayed)
@@ -2674,10 +2818,12 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
 
         case NR_DL_DCCH_MessageType__c1_PR_rrcResume:
           LOG_E(NR_RRC, "Received rrcResume on DL-DCCH-Message -> Not handled\n");
+          nr_ue_rrc_trace_signal(rrc, "RX", "RRCResume", Srb_id);
           break;
         case NR_DL_DCCH_MessageType__c1_PR_rrcRelease: {
           const nr_ue_fuzz_hook_msg_t hook_msg = NR_UE_HOOK_MSG_DL_RRC_RELEASE;
           LOG_I(NR_RRC, "[UE %ld] Received RRC Release (gNB %d)\n", rrc->ue_id, gNB_indexP);
+          nr_ue_rrc_trace_signal(rrc, "RX", "RRCRelease", Srb_id);
           if (nr_ue_fuzz_hook_preprocess_dl(rrc, hook_msg, c1->choice.rrcRelease->rrc_TransactionIdentifier, replayed))
             break;
           if (!replayed)
@@ -2693,6 +2839,7 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
           const nr_ue_fuzz_hook_msg_t hook_msg = NR_UE_HOOK_MSG_DL_UE_CAPABILITY_ENQUIRY;
           NR_UECapabilityEnquiry_t *ueCapabilityEnquiry = c1->choice.ueCapabilityEnquiry;
           LOG_I(NR_RRC, "Received Capability Enquiry (gNB %d)\n", gNB_indexP);
+          nr_ue_rrc_trace_signal(rrc, "RX", "UECapabilityEnquiry", Srb_id);
           if (nr_ue_fuzz_hook_preprocess_dl(rrc, hook_msg, ueCapabilityEnquiry->rrc_TransactionIdentifier, replayed))
             break;
           if (!replayed)
@@ -2705,6 +2852,7 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
           const nr_ue_fuzz_hook_msg_t hook_msg = NR_UE_HOOK_MSG_DL_RRC_REESTABLISHMENT;
           NR_RRCReestablishment_t *rrcReestablishment = c1->choice.rrcReestablishment;
           LOG_I(NR_RRC, "Logical Channel DL-DCCH (SRB1), Received RRCReestablishment\n");
+          nr_ue_rrc_trace_signal(rrc, "RX", "RRCReestablishment", Srb_id);
           if (nr_ue_fuzz_hook_preprocess_dl(rrc, hook_msg, rrcReestablishment->rrc_TransactionIdentifier, replayed))
             break;
           if (!replayed)
@@ -2715,6 +2863,7 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
 
         case NR_DL_DCCH_MessageType__c1_PR_dlInformationTransfer: {
           NR_DLInformationTransfer_t *dlInfo = c1->choice.dlInformationTransfer;
+          nr_ue_rrc_trace_signal(rrc, "RX", "DLInformationTransfer", Srb_id);
 
           if (dlInfo->criticalExtensions.present == NR_DLInformationTransfer__criticalExtensions_PR_dlInformationTransfer) {
             NR_DLInformationTransfer_IEs_t *dlInfo_IE = dlInfo->criticalExtensions.choice.dlInformationTransfer;
@@ -2732,19 +2881,37 @@ static int nr_rrc_ue_decode_dcch(NR_UE_RRC_INST_t *rrc,
           }
         } break;
         case NR_DL_DCCH_MessageType__c1_PR_mobilityFromNRCommand:
+          nr_ue_rrc_trace_signal(rrc, "RX", "MobilityFromNRCommand", Srb_id);
+          break;
         case NR_DL_DCCH_MessageType__c1_PR_dlDedicatedMessageSegment_r16:
+          nr_ue_rrc_trace_signal(rrc, "RX", "DLDedicatedMessageSegment-r16", Srb_id);
+          break;
         case NR_DL_DCCH_MessageType__c1_PR_ueInformationRequest_r16:
+          nr_ue_rrc_trace_signal(rrc, "RX", "UEInformationRequest-r16", Srb_id);
+          break;
         case NR_DL_DCCH_MessageType__c1_PR_dlInformationTransferMRDC_r16:
+          nr_ue_rrc_trace_signal(rrc, "RX", "DLInformationTransferMRDC-r16", Srb_id);
+          break;
         case NR_DL_DCCH_MessageType__c1_PR_loggedMeasurementConfiguration_r16:
+          nr_ue_rrc_trace_signal(rrc, "RX", "LoggedMeasurementConfiguration-r16", Srb_id);
+          break;
         case NR_DL_DCCH_MessageType__c1_PR_spare3:
+          nr_ue_rrc_trace_signal(rrc, "RX", "DL-DCCH-spare3", Srb_id);
+          break;
         case NR_DL_DCCH_MessageType__c1_PR_spare2:
+          nr_ue_rrc_trace_signal(rrc, "RX", "DL-DCCH-spare2", Srb_id);
+          break;
         case NR_DL_DCCH_MessageType__c1_PR_spare1:
+          nr_ue_rrc_trace_signal(rrc, "RX", "DL-DCCH-spare1", Srb_id);
+          break;
         case NR_DL_DCCH_MessageType__c1_PR_counterCheck:
+          nr_ue_rrc_trace_signal(rrc, "RX", "CounterCheck", Srb_id);
           break;
         case NR_DL_DCCH_MessageType__c1_PR_securityModeCommand: {
           const nr_ue_fuzz_hook_msg_t hook_msg = NR_UE_HOOK_MSG_DL_SECURITY_MODE_COMMAND;
           NR_SecurityModeCommand_t *securityModeCommand = c1->choice.securityModeCommand;
           LOG_I(NR_RRC, "Received securityModeCommand (gNB %d)\n", gNB_indexP);
+          nr_ue_rrc_trace_signal(rrc, "RX", "SecurityModeCommand", Srb_id);
           if (nr_ue_fuzz_hook_preprocess_dl(rrc, hook_msg, securityModeCommand->rrc_TransactionIdentifier, replayed))
             break;
           if (!replayed)

@@ -568,12 +568,30 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
           hook->field_mutation.message,
           hook->field_mutation.field,
           hook->field_mutation.operator_family);
+    nr_ue_rrc_trace_adapter(rrc,
+                            hook->field_mutation.message,
+                            hook->field_mutation.field,
+                            hook->field_mutation.operator_family,
+                            hook->field_mutation.selected_mode,
+                            "未找到adapter");
     return false;
   }
   if (!adapter->apply(rrc, payload, hook->field_mutation.selected_mode)) {
+    nr_ue_rrc_trace_adapter(rrc,
+                            adapter->message_name,
+                            adapter->field_name,
+                            adapter->operator_family,
+                            hook->field_mutation.selected_mode,
+                            "未修改");
     nr_ue_fuzz_hook_write_state(rrc);
     return false;
   }
+  nr_ue_rrc_trace_adapter(rrc,
+                          adapter->message_name,
+                          adapter->field_name,
+                          adapter->operator_family,
+                          hook->field_mutation.selected_mode,
+                          "已修改");
   nr_ue_fuzz_hook_record_fire(rrc, msg, hook->action, -1);
   if (hook->arm_once)
     nr_ue_fuzz_hook_disarm_persistent(rrc);

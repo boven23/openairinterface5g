@@ -12,6 +12,8 @@
 #include "LAYER2/NR_MAC_UE/mac_proto.h"
 #include "nr-uesoftmodem.h"
 
+void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, const char *signal_name, int srb_id);
+
 void free_sl_rrc(NR_UE_RRC_INST_t *rrc)
 {
 
@@ -421,7 +423,7 @@ int configure_NR_SL_Preconfig(NR_UE_RRC_INST_t *rrc,int sync_source)
 }
 
 /*decode SL-BCH (SL-MIB) message*/
-static int8_t nr_sl_rrc_ue_decode_SL_MIB(uint8_t *const bufferP, const uint8_t buffer_len)
+static int8_t nr_sl_rrc_ue_decode_SL_MIB(NR_UE_RRC_INST_t *rrc, uint8_t *const bufferP, const uint8_t buffer_len)
 {
   NR_MasterInformationBlockSidelink_t *sl_mib = NULL;
 
@@ -442,6 +444,7 @@ static int8_t nr_sl_rrc_ue_decode_SL_MIB(uint8_t *const bufferP, const uint8_t b
     uint8_t val_slot = sl_mib->slotIndex_r16.buf[0];
 
     LOG_D(NR_RRC, "%d:%d SL-RRC - Received MIB.\n", val_fn, val_slot >> 1);
+    nr_ue_rrc_trace_signal(rrc, "RX", "SL-MIB", -1);
     LOG_D(NR_RRC, "SL-MIB Contents - Incoverage:%d\n", sl_mib->inCoverage_r16);
     LOG_D(NR_RRC, "SL-MIB Contents - sl-TDD-Config:%x\n" , *((uint16_t *)(sl_mib->sl_TDD_Config_r16.buf)));
 
@@ -459,7 +462,7 @@ void nr_rrc_ue_decode_NR_SBCCH_SL_BCH_Message(NR_UE_RRC_INST_t *rrc,
                                               const uint16_t rx_slss_id)
 {
 
-  nr_sl_rrc_ue_decode_SL_MIB((uint8_t*)pduP, pdu_len);
+  nr_sl_rrc_ue_decode_SL_MIB(rrc, (uint8_t*)pduP, pdu_len);
 
   DevAssert(rrc->sl_preconfig);
 
