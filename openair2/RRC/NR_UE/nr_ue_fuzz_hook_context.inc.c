@@ -18,10 +18,12 @@ static unsigned nr_ue_hook_quantities(const NR_MeasReportQuantity_t *q)
   return (q->rsrp ? 1 : 0) | (q->rsrq ? 2 : 0) | (q->sinr ? 4 : 0);
 }
 
-/* Match the production report constructor: only measured RSRP is available. */
+/* The bootstrap constructor can materialize an RSRP report whenever the live
+ * measurement binding requests RSRP. Other requested quantities remain outside
+ * this synthetic trigger and are handled by context checks separately. */
 static bool nr_ue_hook_source_supported(const nr_ue_hook_meas_binding_t *binding)
 {
-  return binding->supported && binding->quantities == 1;
+  return binding->supported && (binding->quantities & 1u);
 }
 
 static void nr_ue_hook_reset_measurements(l3_measurements_t *meas)
