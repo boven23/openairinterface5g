@@ -23,7 +23,7 @@ static unsigned nr_ue_hook_quantities(const NR_MeasReportQuantity_t *q)
  * this synthetic trigger and are handled by context checks separately. */
 static bool nr_ue_hook_source_supported(const nr_ue_hook_meas_binding_t *binding)
 {
-  return binding->supported && binding->quantities == 1u;
+  return binding->supported && (binding->quantities & 1u);
 }
 
 static void nr_ue_hook_reset_measurements(l3_measurements_t *meas)
