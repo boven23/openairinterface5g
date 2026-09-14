@@ -103,6 +103,7 @@ typedef enum nr_ue_fuzz_hook_action_e {
   NR_UE_HOOK_ACTION_DELAY,
   NR_UE_HOOK_ACTION_MUTATE_TXN,
   NR_UE_HOOK_ACTION_MUTATE_FIELD,
+  NR_UE_HOOK_ACTION_INTEGRITY_FAILURE,
 } nr_ue_fuzz_hook_action_t;
 
 typedef struct nr_ue_fuzz_hook_field_mutation_s {
@@ -134,6 +135,13 @@ typedef struct nr_ue_fuzz_hook_state_s {
   bool measurement_bootstrap_done;
   bool require_security;
   bool require_reconfiguration_complete;
+  bool procedure_trigger_enabled;
+  bool procedure_trigger_fired;
+  nr_ue_fuzz_hook_msg_t procedure_trigger_msg;
+  nr_ue_fuzz_hook_action_t procedure_trigger_action;
+  unsigned long procedure_trigger_count;
+  nr_ue_fuzz_hook_msg_t last_procedure_trigger_msg;
+  nr_ue_fuzz_hook_action_t last_procedure_trigger_action;
   int context_gnb;
   unsigned long submitted[NR_UE_HOOK_MSG_DL_RRC_RELEASE + 1];
   char context_result[64];

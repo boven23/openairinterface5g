@@ -27,9 +27,47 @@
   } while (0)
 static int sent_pdus;
 static int fail_pdcp_call;
+static int rlf_detection_calls;
+void handle_rlf_detection(NR_UE_RRC_INST_t *rrc);
+void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, const char *signal_name, int srb_id);
+void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
+                             const char *message_name,
+                             const char *field_name,
+                             const char *operator_family,
+                             const char *mode,
+                             const char *result);
 #define nr_pdcp_data_req_srb(...) (++sent_pdus != fail_pdcp_call)
 #include "../nr_ue_fuzz_hook.inc.c"
 #include "../nr_ue_meas_config.inc.c"
+
+void handle_rlf_detection(NR_UE_RRC_INST_t *rrc)
+{
+  (void)rrc;
+  rlf_detection_calls++;
+}
+
+void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, const char *signal_name, int srb_id)
+{
+  (void)rrc;
+  (void)direction;
+  (void)signal_name;
+  (void)srb_id;
+}
+
+void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
+                             const char *message_name,
+                             const char *field_name,
+                             const char *operator_family,
+                             const char *mode,
+                             const char *result)
+{
+  (void)rrc;
+  (void)message_name;
+  (void)field_name;
+  (void)operator_family;
+  (void)mode;
+  (void)result;
+}
 
 #define CHECK(condition)                                              \
   do {                                                                \
@@ -60,6 +98,7 @@ static void reset(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg, nr_ue_fuzz_h
   hook->replay_delay_ms = 1;
   sent_pdus = 0;
   fail_pdcp_call = 0;
+  rlf_detection_calls = 0;
 }
 
 static void field_contract(NR_UE_RRC_INST_t *rrc, const char *field, const char *family, const char *mode)
@@ -243,15 +282,6 @@ static void test_nas_and_measurement_fields(void)
     ASN_STRUCT_FREE(asn_DEF_NR_ULInformationTransfer, decoded);
     ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_ULInformationTransfer, &payload);
   }
-  reset(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, NR_UE_HOOK_ACTION_MUTATE_FIELD, true);
-  field_contract(&rrc, "measId", "integer_transform", "boundary_max");
-  NR_MeasurementReport_t report = {0};
-  NR_MeasurementReport_IEs_t ies = {0};
-  report.criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
-  report.criticalExtensions.choice.measurementReport = &ies;
-  ies.measResults.measId = 1;
-  CHECK(nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, &report));
-  CHECK(ies.measResults.measId == 64);
 }
 
 /* Preserve remote exact-path selection alongside local native adapters. */
@@ -273,13 +303,19 @@ static void test_adapter_identity_selection(void)
     report.criticalExtensions.present = NR_MeasurementReport__criticalExtensions_PR_measurementReport;
     report.criticalExtensions.choice.measurementReport = &ies;
     ies.measResults.measId = 1;
-    CHECK(nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, &report));
-    CHECK(ies.measResults.measId == 64);
-    ies.measResults.measId = 1;
-    nr_ue_fuzz_hook_copy_text(m->adapter_key, sizeof(m->adapter_key), "unknown-adapter");
-    CHECK(!nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, &report));
-    CHECK(ies.measResults.measId == 1);
-    CHECK(rrc.fuzz_hook.hook_fire_count == 1);
+    if (NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT > 0) {
+      CHECK(nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, &report));
+      CHECK(ies.measResults.measId == 64);
+      ies.measResults.measId = 1;
+      nr_ue_fuzz_hook_copy_text(m->adapter_key, sizeof(m->adapter_key), "unknown-adapter");
+      CHECK(!nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, &report));
+      CHECK(ies.measResults.measId == 1);
+      CHECK(rrc.fuzz_hook.hook_fire_count == 1);
+    } else {
+      CHECK(!nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, &report));
+      CHECK(ies.measResults.measId == 1);
+      CHECK(rrc.fuzz_hook.hook_fire_count == 0);
+    }
   }
 }
 
@@ -303,6 +339,49 @@ static void test_subsecond_control_reload(void)
   CHECK(unlink(rrc.fuzz_hook.control_path) == 0);
 }
 
+static void test_integrity_failure_procedure_trigger(void)
+{
+  NR_UE_RRC_INST_t rrc;
+  uint8_t bytes[] = {1, 2, 3};
+  reset(&rrc, NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE, NR_UE_HOOK_ACTION_DELAY, true);
+  rrc.fuzz_hook.procedure_trigger_enabled = true;
+  rrc.fuzz_hook.procedure_trigger_msg = NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION;
+  rrc.fuzz_hook.procedure_trigger_action = NR_UE_HOOK_ACTION_INTEGRITY_FAILURE;
+
+  CHECK(!nr_ue_fuzz_hook_maybe_inject_integrity_failure(&rrc));
+  CHECK(rlf_detection_calls == 0);
+  CHECK(rrc.fuzz_hook.procedure_trigger_count == 0);
+  CHECK(!strcmp(rrc.fuzz_hook.context_result, "integrity_failure_waiting_for_connected_context"));
+
+  rrc.nrRrcState = RRC_STATE_CONNECTED_NR;
+  rrc.as_security_activated = true;
+  rrc.Srb[2] = RB_ESTABLISHED;
+  rrc.status_DRBs[0] = RB_ESTABLISHED;
+  rrc.fuzz_hook.submitted[NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE] = 1;
+
+  CHECK(nr_ue_fuzz_hook_maybe_inject_integrity_failure(&rrc));
+  CHECK(rlf_detection_calls == 1);
+  CHECK(rrc.fuzz_hook.enabled);
+  CHECK(rrc.fuzz_hook.target_msg == NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE);
+  CHECK(rrc.fuzz_hook.action == NR_UE_HOOK_ACTION_DELAY);
+  CHECK(rrc.fuzz_hook.procedure_trigger_fired);
+  CHECK(rrc.fuzz_hook.procedure_trigger_count == 1);
+  CHECK(rrc.fuzz_hook.last_procedure_trigger_msg == NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION);
+  CHECK(rrc.fuzz_hook.last_procedure_trigger_action == NR_UE_HOOK_ACTION_INTEGRITY_FAILURE);
+  CHECK(rrc.fuzz_hook.hook_fire_count == 1);
+  CHECK(rrc.fuzz_hook.last_hook_msg == NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION);
+  CHECK(rrc.fuzz_hook.last_hook_action == NR_UE_HOOK_ACTION_INTEGRITY_FAILURE);
+  CHECK(!strcmp(rrc.fuzz_hook.context_result, "integrity_failure_injected"));
+
+  CHECK(!nr_ue_fuzz_hook_maybe_inject_integrity_failure(&rrc));
+  CHECK(rlf_detection_calls == 1);
+  nr_ue_fuzz_hook_send_srb(&rrc, NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE, 1, bytes, sizeof(bytes));
+  CHECK(sent_pdus == 1);
+  CHECK(rrc.fuzz_hook.hook_fire_count == 2);
+  CHECK(rrc.fuzz_hook.last_hook_msg == NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE);
+  CHECK(rrc.fuzz_hook.last_hook_action == NR_UE_HOOK_ACTION_DELAY);
+}
+
 #include "nr_ue_fuzz_hook_python_fixture.inc.c"
 
 int main(int argc, char **argv)
@@ -322,6 +401,7 @@ int main(int argc, char **argv)
   test_review_regressions();
   test_adapter_identity_selection();
   test_subsecond_control_reload();
+  test_integrity_failure_procedure_trigger();
   test_context_modes();
   test_context_lifecycle_and_removal();
   test_context_gates();

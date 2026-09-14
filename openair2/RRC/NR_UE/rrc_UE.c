@@ -3371,6 +3371,7 @@ void *rrc_nrue(void *notUsed)
       LOG_D(NR_RRC, "Received %s: frame %d\n", ITTI_MSG_NAME(msg_p), rrc->current_frame);
       // increase the timers every 10ms (every new frame)
       nr_rrc_handle_timers(rrc);
+      nr_ue_fuzz_hook_maybe_inject_integrity_failure(rrc);
       NR_UE_RRC_SI_INFO *SInfo = &rrc->perNB[NRRRC_FRAME_PROCESS(msg_p).gnb_id].SInfo;
       nr_rrc_SI_timers(SInfo);
       if (rrc->process_target_ntncfg) {

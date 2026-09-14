@@ -49,6 +49,8 @@ static const char *nr_ue_fuzz_hook_action_name(nr_ue_fuzz_hook_action_t action)
       return "mutate_txn";
     case NR_UE_HOOK_ACTION_MUTATE_FIELD:
       return "mutate_field";
+    case NR_UE_HOOK_ACTION_INTEGRITY_FAILURE:
+      return "integrity_failure";
     case NR_UE_HOOK_ACTION_NONE:
     default:
       return "none";
@@ -120,6 +122,8 @@ static nr_ue_fuzz_hook_action_t nr_ue_fuzz_hook_action_from_name(const char *nam
     return NR_UE_HOOK_ACTION_MUTATE_TXN;
   if (!strcasecmp(name, "mutate_field"))
     return NR_UE_HOOK_ACTION_MUTATE_FIELD;
+  if (!strcasecmp(name, "integrity_failure"))
+    return NR_UE_HOOK_ACTION_INTEGRITY_FAILURE;
   return NR_UE_HOOK_ACTION_NONE;
 }
 
@@ -193,6 +197,10 @@ static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
   hook->replay_mode[0] = '\0';
   hook->measurement_bootstrap_enabled = false;
   hook->measurement_bootstrap_done = false;
+  hook->procedure_trigger_enabled = false;
+  hook->procedure_trigger_fired = false;
+  hook->procedure_trigger_msg = NR_UE_HOOK_MSG_NONE;
+  hook->procedure_trigger_action = NR_UE_HOOK_ACTION_NONE;
 }
 
 static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
@@ -213,6 +221,13 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "replay_mode=%s\n", hook->replay_mode);
   fprintf(fp, "measurement_bootstrap_enabled=%d\n", hook->measurement_bootstrap_enabled ? 1 : 0);
   fprintf(fp, "measurement_bootstrap_done=%d\n", hook->measurement_bootstrap_done ? 1 : 0);
+  fprintf(fp, "procedure_trigger_enabled=%d\n", hook->procedure_trigger_enabled ? 1 : 0);
+  fprintf(fp, "procedure_trigger_fired=%d\n", hook->procedure_trigger_fired ? 1 : 0);
+  fprintf(fp, "procedure_trigger_target=%s\n", nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg));
+  fprintf(fp, "procedure_trigger_action=%s\n", nr_ue_fuzz_hook_action_name(hook->procedure_trigger_action));
+  fprintf(fp, "procedure_trigger_count=%lu\n", hook->procedure_trigger_count);
+  fprintf(fp, "last_procedure_trigger_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_procedure_trigger_msg));
+  fprintf(fp, "last_procedure_trigger_action=%s\n", nr_ue_fuzz_hook_action_name(hook->last_procedure_trigger_action));
   fprintf(fp, "hook_fire_count=%lu\n", hook->hook_fire_count);
   fprintf(fp, "last_hook_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_hook_msg));
   fprintf(fp, "last_hook_action=%s\n", nr_ue_fuzz_hook_action_name(hook->last_hook_action));
@@ -300,6 +315,10 @@ static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
   hook->measurement_bootstrap_done = false;
   hook->require_security = false;
   hook->require_reconfiguration_complete = false;
+  hook->procedure_trigger_enabled = false;
+  hook->procedure_trigger_fired = false;
+  hook->procedure_trigger_msg = NR_UE_HOOK_MSG_NONE;
+  hook->procedure_trigger_action = NR_UE_HOOK_ACTION_NONE;
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 }
 
@@ -348,6 +367,10 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   hook->measurement_bootstrap_done = false;
   hook->require_security = false;
   hook->require_reconfiguration_complete = false;
+  hook->procedure_trigger_enabled = false;
+  hook->procedure_trigger_fired = false;
+  hook->procedure_trigger_msg = NR_UE_HOOK_MSG_NONE;
+  hook->procedure_trigger_action = NR_UE_HOOK_ACTION_NONE;
   hook->context_result[0] = '\0';
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 
@@ -385,6 +408,12 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       nr_ue_fuzz_hook_copy_text(hook->replay_mode, sizeof(hook->replay_mode), value);
     else if (!strcasecmp(key, "measurement_bootstrap") || !strcasecmp(key, "measurement_bootstrap_enabled"))
       hook->measurement_bootstrap_enabled = atoi(value) != 0;
+    else if (!strcasecmp(key, "procedure_trigger_enabled"))
+      hook->procedure_trigger_enabled = atoi(value) != 0;
+    else if (!strcasecmp(key, "procedure_trigger_target") || !strcasecmp(key, "procedure_trigger_message"))
+      hook->procedure_trigger_msg = nr_ue_fuzz_hook_msg_from_name(value);
+    else if (!strcasecmp(key, "procedure_trigger_action"))
+      hook->procedure_trigger_action = nr_ue_fuzz_hook_action_from_name(value);
     else if (!strcasecmp(key, "require_security"))
       hook->require_security = atoi(value) != 0;
     else if (!strcasecmp(key, "require_reconfiguration_complete"))
@@ -419,8 +448,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
 
   LOG_I(NR_RRC,
         "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d "
-        "replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d adapter_key=%s operator_family=%s transform=%s field=%s mode=%s "
-        "range=[%d,%d]\n",
+        "replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d procedure_trigger=%s/%s adapter_key=%s operator_family=%s "
+        "transform=%s field=%s mode=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->target_msg),
@@ -432,6 +461,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
         hook->replay_mode,
         hook->measurement_bootstrap_enabled ? 1 : 0,
         hook->measurement_bootstrap_done ? 1 : 0,
+        nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg),
+        nr_ue_fuzz_hook_action_name(hook->procedure_trigger_action),
         hook->field_mutation.adapter_key,
         hook->field_mutation.operator_family,
         hook->field_mutation.transform_name,
@@ -440,6 +471,55 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
         hook->field_mutation.has_range_min ? hook->field_mutation.range_min : 0,
         hook->field_mutation.has_range_max ? hook->field_mutation.range_max : 0);
   nr_ue_fuzz_hook_write_state(rrc);
+}
+
+static bool nr_ue_fuzz_hook_has_reestablishment_context(const NR_UE_RRC_INST_t *rrc)
+{
+  if (!rrc->as_security_activated || rrc->nrRrcState != RRC_STATE_CONNECTED_NR)
+    return false;
+  if (rrc->Srb[2] == RB_NOT_PRESENT)
+    return false;
+  for (int i = 0; i < MAX_DRBS_PER_UE; i++) {
+    if (rrc->status_DRBs[i] != RB_NOT_PRESENT)
+      return true;
+  }
+  return false;
+}
+
+static bool nr_ue_fuzz_hook_maybe_inject_integrity_failure(NR_UE_RRC_INST_t *rrc)
+{
+  nr_ue_fuzz_hook_reload_config(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (!hook->enabled || !hook->procedure_trigger_enabled || hook->procedure_trigger_fired)
+    return false;
+  if (hook->procedure_trigger_msg == NR_UE_HOOK_MSG_NONE)
+    hook->procedure_trigger_msg = NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION;
+  if (hook->procedure_trigger_msg != NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION
+      || hook->procedure_trigger_action != NR_UE_HOOK_ACTION_INTEGRITY_FAILURE) {
+    nr_ue_hook_context_result(rrc, "unsupported_procedure_trigger");
+    nr_ue_fuzz_hook_write_state(rrc);
+    return false;
+  }
+  if (hook->submitted[NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE] == 0 || !nr_ue_fuzz_hook_has_reestablishment_context(rrc)) {
+    nr_ue_hook_context_result(rrc, "integrity_failure_waiting_for_connected_context");
+    nr_ue_fuzz_hook_write_state(rrc);
+    return false;
+  }
+
+  LOG_W(NR_RRC,
+        "[UE %ld][HOOK] inject integrity failure after %s to trigger RRC reestablishment\n",
+        rrc->ue_id,
+        nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg));
+  hook->procedure_trigger_fired = true;
+  hook->procedure_trigger_count++;
+  hook->last_procedure_trigger_msg = hook->procedure_trigger_msg;
+  hook->last_procedure_trigger_action = hook->procedure_trigger_action;
+  nr_ue_fuzz_hook_record_fire(rrc, hook->procedure_trigger_msg, hook->procedure_trigger_action, 1);
+  nr_ue_hook_context_result(rrc, "integrity_failure_injected");
+  nr_ue_fuzz_hook_write_state(rrc);
+  handle_rlf_detection(rrc);
+  nr_ue_fuzz_hook_write_state(rrc);
+  return true;
 }
 
 static void nr_ue_fuzz_hook_record_dl(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg, int txn)

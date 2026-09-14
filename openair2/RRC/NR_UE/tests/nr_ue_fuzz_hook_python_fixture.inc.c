@@ -135,11 +135,12 @@ static int python_control_fixture(const char *root, const char *message, const c
       break;
   }
   nr_ue_fuzz_hook_send_srb(&rrc, msg, 1, bytes, (enc.encoded + 7) / 8);
-  printf("RESULT {\"changed\":%s,\"decoded_value\":%ld,\"encoded_bytes\":%ld,\"pdcp_calls\":%d}\n",
+  printf("RESULT {\"changed\":%s,\"decoded_value\":%ld,\"encoded_bytes\":%ld,\"pdcp_calls\":%d,\"auto_generated_adapters\":%zu}\n",
          changed ? "true" : "false",
          value,
          (enc.encoded + 7) / 8,
-         sent_pdus);
+         sent_pdus,
+         (size_t)NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT);
   ASN_STRUCT_FREE(asn_DEF_NR_UL_DCCH_Message, decoded);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &pdu);
   nr_ue_hook_clear_context(&rrc);

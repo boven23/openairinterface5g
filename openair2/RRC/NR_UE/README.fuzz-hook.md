@@ -2,7 +2,9 @@
 
 The UE reads `/tmp/oai_nr_ue_hook_<ue-id>.ctl` and writes the matching `.state`
 file. Hooks act when a message actually reaches the UE RRC handler or outgoing
-SRB path; arming a hook does not generate a protocol procedure.
+SRB path. The only procedure-generating helper is the explicit
+`procedure_trigger_*` control used to initiate RRC re-establishment from inside
+the UE; ordinary arming still does not generate a protocol procedure.
 
 ## Supported operations
 
@@ -70,6 +72,39 @@ message name in both `target` and `field_mutation_message`.
 Check `hook_fire_count`, `last_hook_msg`, and `last_hook_action` in `.state`.
 `seen_*` means observed by the hook, not successfully received by the gNB;
 outgoing dropped messages are also observed.
+
+## UE-internal re-establishment trigger
+
+`RRCReestablishmentComplete` hooks can request an internal fault injection that
+initiates re-establishment before the final UL message is fuzzed:
+
+```ini
+enabled=1
+target=RRCReestablishmentComplete
+action=mutate_field
+arm_once=1
+procedure_trigger_enabled=1
+procedure_trigger_target=DL_RRCReconfiguration
+procedure_trigger_action=integrity_failure
+field_mutation_enabled=1
+field_mutation_message=RRCReestablishmentComplete
+field_mutation_field=transactionIdentifier
+field_mutation_operator_family=integer_transform
+field_mutation_selected_mode=mismatch_in_range
+```
+
+The trigger fires once after AS security is active, an
+`RRCReconfigurationComplete` has been submitted, SRB2 is present, and at least
+one DRB exists. It then calls the UE's normal `handle_rlf_detection()` path with
+`context_result=integrity_failure_injected`. The main hook remains armed so the
+later `RRCReestablishmentComplete` can still be dropped, delayed, duplicated,
+replayed, or mutated according to `action`.
+
+This helper models the UE-side integrity-failure consequence without editing
+already verified downlink bytes. It replaces gNB telnet `ci force_reestab` and
+does not require artificial DRB traffic. Inspect `procedure_trigger_count`,
+`last_procedure_trigger_msg`, and `last_procedure_trigger_action` separately
+from the final UL hook's `last_hook_*` fields.
 
 ## Downlink-dependent mutations
 
