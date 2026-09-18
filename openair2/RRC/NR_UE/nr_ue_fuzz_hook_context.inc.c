@@ -138,8 +138,14 @@ static bool nr_ue_hook_gates_ready(NR_UE_RRC_INST_t *rrc)
 
 static void nr_ue_hook_record_submission(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg)
 {
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   if (msg > NR_UE_HOOK_MSG_NONE && msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT)
-    rrc->fuzz_hook.submitted[msg]++;
+    hook->submitted[msg]++;
+  if (msg == NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE) {
+    hook->rrc_reconfiguration_complete_submit_time_valid = true;
+    hook->rrc_reconfiguration_complete_submit_time_ms = nr_ue_fuzz_hook_now_ms(rrc);
+    hook->procedure_trigger_waited_ms = 0;
+  }
   rrcPerNB_t *nb = nr_ue_hook_context_nb(rrc);
   if (msg == NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE && nb && nb->hook_meas.valid)
     nb->hook_meas.completion_submitted_generation = nb->hook_meas.generation;

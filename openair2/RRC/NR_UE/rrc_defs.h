@@ -139,6 +139,10 @@ typedef struct nr_ue_fuzz_hook_state_s {
   bool procedure_trigger_fired;
   nr_ue_fuzz_hook_msg_t procedure_trigger_msg;
   nr_ue_fuzz_hook_action_t procedure_trigger_action;
+  int procedure_trigger_delay_ms;
+  bool rrc_reconfiguration_complete_submit_time_valid;
+  unsigned long rrc_reconfiguration_complete_submit_time_ms;
+  unsigned long procedure_trigger_waited_ms;
   unsigned long procedure_trigger_count;
   nr_ue_fuzz_hook_msg_t last_procedure_trigger_msg;
   nr_ue_fuzz_hook_action_t last_procedure_trigger_action;

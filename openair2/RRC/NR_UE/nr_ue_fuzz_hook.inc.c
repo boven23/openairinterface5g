@@ -153,6 +153,15 @@ static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
   hook->field_mutation.range_max = 0;
 }
 
+static unsigned long nr_ue_fuzz_hook_now_ms(const NR_UE_RRC_INST_t *rrc)
+{
+  if (!rrc)
+    return 0;
+  const unsigned long hfn = rrc->current_hfn > 0 ? (unsigned long)rrc->current_hfn : 0;
+  const unsigned long frame = rrc->current_frame > 0 ? (unsigned long)rrc->current_frame : 0;
+  return (hfn * 1024UL + frame) * 10UL;
+}
+
 #include "nr_ue_fuzz_hook_context.inc.c"
 
 static void nr_ue_fuzz_hook_write_timer_state(FILE *fp, const char *name, const NR_timer_t *timer)
@@ -201,6 +210,10 @@ static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
   hook->procedure_trigger_fired = false;
   hook->procedure_trigger_msg = NR_UE_HOOK_MSG_NONE;
   hook->procedure_trigger_action = NR_UE_HOOK_ACTION_NONE;
+  hook->procedure_trigger_delay_ms = 0;
+  hook->rrc_reconfiguration_complete_submit_time_valid = false;
+  hook->rrc_reconfiguration_complete_submit_time_ms = 0;
+  hook->procedure_trigger_waited_ms = 0;
 }
 
 static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
@@ -225,6 +238,12 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "procedure_trigger_fired=%d\n", hook->procedure_trigger_fired ? 1 : 0);
   fprintf(fp, "procedure_trigger_target=%s\n", nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg));
   fprintf(fp, "procedure_trigger_action=%s\n", nr_ue_fuzz_hook_action_name(hook->procedure_trigger_action));
+  fprintf(fp, "procedure_trigger_delay_ms=%d\n", hook->procedure_trigger_delay_ms);
+  fprintf(fp,
+          "rrc_reconfiguration_complete_submit_time_valid=%d\n",
+          hook->rrc_reconfiguration_complete_submit_time_valid ? 1 : 0);
+  fprintf(fp, "rrc_reconfiguration_complete_submit_time_ms=%lu\n", hook->rrc_reconfiguration_complete_submit_time_ms);
+  fprintf(fp, "procedure_trigger_waited_ms=%lu\n", hook->procedure_trigger_waited_ms);
   fprintf(fp, "procedure_trigger_count=%lu\n", hook->procedure_trigger_count);
   fprintf(fp, "last_procedure_trigger_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_procedure_trigger_msg));
   fprintf(fp, "last_procedure_trigger_action=%s\n", nr_ue_fuzz_hook_action_name(hook->last_procedure_trigger_action));
@@ -319,6 +338,10 @@ static void nr_ue_fuzz_hook_disarm(NR_UE_RRC_INST_t *rrc)
   hook->procedure_trigger_fired = false;
   hook->procedure_trigger_msg = NR_UE_HOOK_MSG_NONE;
   hook->procedure_trigger_action = NR_UE_HOOK_ACTION_NONE;
+  hook->procedure_trigger_delay_ms = 0;
+  hook->rrc_reconfiguration_complete_submit_time_valid = false;
+  hook->rrc_reconfiguration_complete_submit_time_ms = 0;
+  hook->procedure_trigger_waited_ms = 0;
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 }
 
@@ -371,6 +394,10 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   hook->procedure_trigger_fired = false;
   hook->procedure_trigger_msg = NR_UE_HOOK_MSG_NONE;
   hook->procedure_trigger_action = NR_UE_HOOK_ACTION_NONE;
+  hook->procedure_trigger_delay_ms = 0;
+  hook->rrc_reconfiguration_complete_submit_time_valid = false;
+  hook->rrc_reconfiguration_complete_submit_time_ms = 0;
+  hook->procedure_trigger_waited_ms = 0;
   hook->context_result[0] = '\0';
   nr_ue_fuzz_hook_reset_field_mutation(hook);
 
@@ -414,6 +441,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       hook->procedure_trigger_msg = nr_ue_fuzz_hook_msg_from_name(value);
     else if (!strcasecmp(key, "procedure_trigger_action"))
       hook->procedure_trigger_action = nr_ue_fuzz_hook_action_from_name(value);
+    else if (!strcasecmp(key, "procedure_trigger_delay_ms") || !strcasecmp(key, "procedure_trigger_settle_ms"))
+      hook->procedure_trigger_delay_ms = atoi(value);
     else if (!strcasecmp(key, "require_security"))
       hook->require_security = atoi(value) != 0;
     else if (!strcasecmp(key, "require_reconfiguration_complete"))
@@ -448,7 +477,8 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
 
   LOG_I(NR_RRC,
         "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d "
-        "replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d procedure_trigger=%s/%s adapter_key=%s operator_family=%s "
+        "replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d procedure_trigger=%s/%s trigger_delay_ms=%d "
+        "adapter_key=%s operator_family=%s "
         "transform=%s field=%s mode=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
@@ -463,6 +493,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
         hook->measurement_bootstrap_done ? 1 : 0,
         nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg),
         nr_ue_fuzz_hook_action_name(hook->procedure_trigger_action),
+        hook->procedure_trigger_delay_ms,
         hook->field_mutation.adapter_key,
         hook->field_mutation.operator_family,
         hook->field_mutation.transform_name,
@@ -486,6 +517,33 @@ static bool nr_ue_fuzz_hook_has_reestablishment_context(const NR_UE_RRC_INST_t *
   return false;
 }
 
+static bool nr_ue_fuzz_hook_procedure_trigger_delay_elapsed(NR_UE_RRC_INST_t *rrc)
+{
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (hook->procedure_trigger_delay_ms <= 0) {
+    hook->procedure_trigger_waited_ms = 0;
+    return true;
+  }
+
+  const unsigned long now_ms = nr_ue_fuzz_hook_now_ms(rrc);
+  if (!hook->rrc_reconfiguration_complete_submit_time_valid) {
+    hook->rrc_reconfiguration_complete_submit_time_valid = true;
+    hook->rrc_reconfiguration_complete_submit_time_ms = now_ms;
+    hook->procedure_trigger_waited_ms = 0;
+  } else if (now_ms >= hook->rrc_reconfiguration_complete_submit_time_ms) {
+    hook->procedure_trigger_waited_ms = now_ms - hook->rrc_reconfiguration_complete_submit_time_ms;
+  } else {
+    hook->procedure_trigger_waited_ms = 0;
+  }
+
+  if (hook->procedure_trigger_waited_ms < (unsigned long)hook->procedure_trigger_delay_ms) {
+    nr_ue_hook_context_result(rrc, "integrity_failure_waiting_for_reconfiguration_settle");
+    nr_ue_fuzz_hook_write_state(rrc);
+    return false;
+  }
+  return true;
+}
+
 static bool nr_ue_fuzz_hook_maybe_inject_integrity_failure(NR_UE_RRC_INST_t *rrc)
 {
   nr_ue_fuzz_hook_reload_config(rrc);
@@ -505,11 +563,14 @@ static bool nr_ue_fuzz_hook_maybe_inject_integrity_failure(NR_UE_RRC_INST_t *rrc
     nr_ue_fuzz_hook_write_state(rrc);
     return false;
   }
+  if (!nr_ue_fuzz_hook_procedure_trigger_delay_elapsed(rrc))
+    return false;
 
   LOG_W(NR_RRC,
-        "[UE %ld][HOOK] inject integrity failure after %s to trigger RRC reestablishment\n",
+        "[UE %ld][HOOK] inject integrity failure after %s to trigger RRC reestablishment (waited %lu ms)\n",
         rrc->ue_id,
-        nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg));
+        nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg),
+        hook->procedure_trigger_waited_ms);
   hook->procedure_trigger_fired = true;
   hook->procedure_trigger_count++;
   hook->last_procedure_trigger_msg = hook->procedure_trigger_msg;

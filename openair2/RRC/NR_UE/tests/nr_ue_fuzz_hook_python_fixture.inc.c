@@ -72,7 +72,7 @@ static int python_control_fixture(const char *root, const char *message, const c
       break;
     }
     case NR_UE_HOOK_MSG_MEASUREMENT_REPORT: {
-      unsigned quantities = !strcmp(scenario, "unsupported_quantities") ? 7 : 1;
+      unsigned quantities = !strcmp(scenario, "unsupported_quantities") ? 2 : 1;
       configure_binding(&rrc.perNB[0], 1, 1, 1, NR_NR_RS_Type_ssb, quantities);
       configure_binding(&rrc.perNB[0], 2, 2, 2, NR_NR_RS_Type_ssb, 1);
       nr_ue_hook_snapshot_meas(&rrc, 0);

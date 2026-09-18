@@ -86,6 +86,7 @@ arm_once=1
 procedure_trigger_enabled=1
 procedure_trigger_target=DL_RRCReconfiguration
 procedure_trigger_action=integrity_failure
+procedure_trigger_delay_ms=2000
 field_mutation_enabled=1
 field_mutation_message=RRCReestablishmentComplete
 field_mutation_field=transactionIdentifier
@@ -94,8 +95,13 @@ field_mutation_selected_mode=mismatch_in_range
 ```
 
 The trigger fires once after AS security is active, an
-`RRCReconfigurationComplete` has been submitted, SRB2 is present, and at least
-one DRB exists. It then calls the UE's normal `handle_rlf_detection()` path with
+`RRCReconfigurationComplete` has been submitted, SRB2 is present, at least one
+DRB exists, and `procedure_trigger_delay_ms` has elapsed since the
+`RRCReconfigurationComplete` submission. The delay gives the gNB time to
+process the completion and settle pending PDU session actions before the UE
+starts re-establishment. While waiting, `.state` reports
+`context_result=integrity_failure_waiting_for_reconfiguration_settle` and
+`procedure_trigger_waited_ms`; when the trigger fires it reports
 `context_result=integrity_failure_injected`. The main hook remains armed so the
 later `RRCReestablishmentComplete` can still be dropped, delayed, duplicated,
 replayed, or mutated according to `action`.

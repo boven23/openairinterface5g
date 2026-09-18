@@ -390,9 +390,9 @@ static void test_review_regressions(void)
   CHECK(rrc.perNB[0].l3_measurements.ssb_filter_coeff_rsrp == 1.0f);
   CHECK(rrc.perNB[0].l3_measurements.csi_RS_filter_coeff_rsrp == 1.0f);
   context_contract(&rrc, "measId", "integer_transform", "configured_measId_mismatch");
-  configure_binding(&rrc.perNB[0], 1, 1, 1, NR_NR_RS_Type_csi_rs, 3);
+  configure_binding(&rrc.perNB[0], 1, 1, 1, NR_NR_RS_Type_csi_rs, 2);
   nr_ue_hook_snapshot_meas(&rrc, 0);
-  NR_MeasurementReport_t *report = make_report(1, NR_NR_RS_Type_csi_rs, 1);
+  NR_MeasurementReport_t *report = make_report(1, NR_NR_RS_Type_csi_rs, 2);
   CHECK(!mutate_report(&rrc, report));
   CHECK(!strcmp(rrc.fuzz_hook.context_result, "source_report_quantities_unsupported"));
   ASN_STRUCT_FREE(asn_DEF_NR_MeasurementReport, report);

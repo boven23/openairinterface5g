@@ -382,6 +382,42 @@ static void test_integrity_failure_procedure_trigger(void)
   CHECK(rrc.fuzz_hook.last_hook_action == NR_UE_HOOK_ACTION_DELAY);
 }
 
+static void test_integrity_failure_procedure_trigger_delay(void)
+{
+  NR_UE_RRC_INST_t rrc;
+  reset(&rrc, NR_UE_HOOK_MSG_RRC_REESTABLISHMENT_COMPLETE, NR_UE_HOOK_ACTION_DELAY, true);
+  rrc.fuzz_hook.procedure_trigger_enabled = true;
+  rrc.fuzz_hook.procedure_trigger_msg = NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION;
+  rrc.fuzz_hook.procedure_trigger_action = NR_UE_HOOK_ACTION_INTEGRITY_FAILURE;
+  rrc.fuzz_hook.procedure_trigger_delay_ms = 50;
+  rrc.nrRrcState = RRC_STATE_CONNECTED_NR;
+  rrc.as_security_activated = true;
+  rrc.Srb[2] = RB_ESTABLISHED;
+  rrc.status_DRBs[0] = RB_ESTABLISHED;
+  rrc.current_hfn = 0;
+  rrc.current_frame = 100;
+  nr_ue_hook_record_submission(&rrc, NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE);
+
+  CHECK(!nr_ue_fuzz_hook_maybe_inject_integrity_failure(&rrc));
+  CHECK(rlf_detection_calls == 0);
+  CHECK(rrc.fuzz_hook.procedure_trigger_count == 0);
+  CHECK(rrc.fuzz_hook.procedure_trigger_waited_ms == 0);
+  CHECK(!strcmp(rrc.fuzz_hook.context_result, "integrity_failure_waiting_for_reconfiguration_settle"));
+
+  rrc.current_frame = 104;
+  CHECK(!nr_ue_fuzz_hook_maybe_inject_integrity_failure(&rrc));
+  CHECK(rlf_detection_calls == 0);
+  CHECK(rrc.fuzz_hook.procedure_trigger_waited_ms == 40);
+
+  rrc.current_frame = 105;
+  CHECK(nr_ue_fuzz_hook_maybe_inject_integrity_failure(&rrc));
+  CHECK(rlf_detection_calls == 1);
+  CHECK(rrc.fuzz_hook.procedure_trigger_fired);
+  CHECK(rrc.fuzz_hook.procedure_trigger_count == 1);
+  CHECK(rrc.fuzz_hook.procedure_trigger_waited_ms == 50);
+  CHECK(!strcmp(rrc.fuzz_hook.context_result, "integrity_failure_injected"));
+}
+
 #include "nr_ue_fuzz_hook_python_fixture.inc.c"
 
 int main(int argc, char **argv)
@@ -402,6 +438,7 @@ int main(int argc, char **argv)
   test_adapter_identity_selection();
   test_subsecond_control_reload();
   test_integrity_failure_procedure_trigger();
+  test_integrity_failure_procedure_trigger_delay();
   test_context_modes();
   test_context_lifecycle_and_removal();
   test_context_gates();
