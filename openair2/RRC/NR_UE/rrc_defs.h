@@ -106,6 +106,8 @@ typedef enum nr_ue_fuzz_hook_action_e {
   NR_UE_HOOK_ACTION_INTEGRITY_FAILURE,
 } nr_ue_fuzz_hook_action_t;
 
+#define NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS 4
+
 typedef struct nr_ue_fuzz_hook_field_mutation_s {
   bool enabled;
   char message[64];
@@ -174,10 +176,16 @@ typedef struct nr_ue_fuzz_hook_state_s {
   int last_ul_srb_id;
   int last_ul_size;
   uint8_t last_ul_pdu[NR_RRC_BUF_SIZE];
+  unsigned int field_mutation_count;
+  unsigned int field_mutation_applied_count;
+  unsigned int field_mutation_failed_index;
+  char field_mutation_result[64];
+  nr_ue_fuzz_hook_field_mutation_t field_mutations[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS];
   long control_mtime;
   long control_mtime_nsec;
   char control_path[128];
   char state_path[128];
+  /* Legacy/current mutation slot. Generated adapters still read override_value here. */
   nr_ue_fuzz_hook_field_mutation_t field_mutation;
 } nr_ue_fuzz_hook_state_t;
 

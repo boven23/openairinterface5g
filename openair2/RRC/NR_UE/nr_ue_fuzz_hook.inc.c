@@ -136,21 +136,34 @@ static void nr_ue_fuzz_hook_copy_text(char *dst, size_t dst_size, const char *sr
   snprintf(dst, dst_size, "%s", src);
 }
 
+static void nr_ue_fuzz_hook_reset_one_field_mutation(nr_ue_fuzz_hook_field_mutation_t *mutation)
+{
+  if (!mutation)
+    return;
+  mutation->enabled = false;
+  mutation->message[0] = '\0';
+  mutation->adapter_key[0] = '\0';
+  mutation->domain_id[0] = '\0';
+  mutation->field[0] = '\0';
+  mutation->operator_family[0] = '\0';
+  mutation->transform_name[0] = '\0';
+  mutation->selected_mode[0] = '\0';
+  mutation->override_value[0] = '\0';
+  mutation->has_range_min = false;
+  mutation->range_min = 0;
+  mutation->has_range_max = false;
+  mutation->range_max = 0;
+}
+
 static void nr_ue_fuzz_hook_reset_field_mutation(nr_ue_fuzz_hook_state_t *hook)
 {
-  hook->field_mutation.enabled = false;
-  hook->field_mutation.message[0] = '\0';
-  hook->field_mutation.adapter_key[0] = '\0';
-  hook->field_mutation.domain_id[0] = '\0';
-  hook->field_mutation.field[0] = '\0';
-  hook->field_mutation.operator_family[0] = '\0';
-  hook->field_mutation.transform_name[0] = '\0';
-  hook->field_mutation.selected_mode[0] = '\0';
-  hook->field_mutation.override_value[0] = '\0';
-  hook->field_mutation.has_range_min = false;
-  hook->field_mutation.range_min = 0;
-  hook->field_mutation.has_range_max = false;
-  hook->field_mutation.range_max = 0;
+  nr_ue_fuzz_hook_reset_one_field_mutation(&hook->field_mutation);
+  for (unsigned int i = 0; i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i)
+    nr_ue_fuzz_hook_reset_one_field_mutation(&hook->field_mutations[i]);
+  hook->field_mutation_count = 0;
+  hook->field_mutation_applied_count = 0;
+  hook->field_mutation_failed_index = 0;
+  hook->field_mutation_result[0] = '\0';
 }
 
 static unsigned long nr_ue_fuzz_hook_now_ms(const NR_UE_RRC_INST_t *rrc)
@@ -316,6 +329,29 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "field_mutation_selected_mode=%s\n", hook->field_mutation.selected_mode);
   fprintf(fp, "field_mutation_value_space_minimum=%d\n", hook->field_mutation.has_range_min ? hook->field_mutation.range_min : 0);
   fprintf(fp, "field_mutation_value_space_maximum=%d\n", hook->field_mutation.has_range_max ? hook->field_mutation.range_max : 0);
+  fprintf(fp, "field_mutation_count=%u\n", hook->field_mutation_count);
+  fprintf(fp, "field_mutation_applied_count=%u\n", hook->field_mutation_applied_count);
+  fprintf(fp, "field_mutation_failed_index=%u\n", hook->field_mutation_failed_index);
+  fprintf(fp, "field_mutation_result=%s\n", hook->field_mutation_result);
+  for (unsigned int i = 0; i < hook->field_mutation_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i) {
+    const nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutations[i];
+    fprintf(fp, "field_mutation_%u_enabled=%d\n", i, mutation->enabled ? 1 : 0);
+    fprintf(fp, "field_mutation_%u_message=%s\n", i, mutation->message);
+    fprintf(fp, "field_mutation_%u_adapter_key=%s\n", i, mutation->adapter_key);
+    fprintf(fp, "field_mutation_%u_domain_id=%s\n", i, mutation->domain_id);
+    fprintf(fp, "field_mutation_%u_field=%s\n", i, mutation->field);
+    fprintf(fp, "field_mutation_%u_operator_family=%s\n", i, mutation->operator_family);
+    fprintf(fp, "field_mutation_%u_transform=%s\n", i, mutation->transform_name);
+    fprintf(fp, "field_mutation_%u_selected_mode=%s\n", i, mutation->selected_mode);
+    fprintf(fp,
+            "field_mutation_%u_value_space_minimum=%d\n",
+            i,
+            mutation->has_range_min ? mutation->range_min : 0);
+    fprintf(fp,
+            "field_mutation_%u_value_space_maximum=%d\n",
+            i,
+            mutation->has_range_max ? mutation->range_max : 0);
+  }
   fclose(fp);
 }
 
@@ -366,6 +402,42 @@ static void nr_ue_fuzz_hook_record_fire(NR_UE_RRC_INST_t *rrc,
   hook->last_hook_msg = msg;
   hook->last_hook_action = action;
   hook->last_hook_srb_id = srb_id;
+}
+
+static bool nr_ue_fuzz_hook_parse_field_mutation_key(nr_ue_fuzz_hook_field_mutation_t *mutation,
+                                                     const char *key,
+                                                     const char *value)
+{
+  if (!mutation || !key || !value)
+    return false;
+  if (!strcasecmp(key, "enabled"))
+    mutation->enabled = atoi(value) != 0;
+  else if (!strcasecmp(key, "message"))
+    nr_ue_fuzz_hook_copy_text(mutation->message, sizeof(mutation->message), value);
+  else if (!strcasecmp(key, "adapter_key"))
+    nr_ue_fuzz_hook_copy_text(mutation->adapter_key, sizeof(mutation->adapter_key), value);
+  else if (!strcasecmp(key, "domain_id"))
+    nr_ue_fuzz_hook_copy_text(mutation->domain_id, sizeof(mutation->domain_id), value);
+  else if (!strcasecmp(key, "field"))
+    nr_ue_fuzz_hook_copy_text(mutation->field, sizeof(mutation->field), value);
+  else if (!strcasecmp(key, "operator_family"))
+    nr_ue_fuzz_hook_copy_text(mutation->operator_family, sizeof(mutation->operator_family), value);
+  else if (!strcasecmp(key, "transform"))
+    nr_ue_fuzz_hook_copy_text(mutation->transform_name, sizeof(mutation->transform_name), value);
+  else if (!strcasecmp(key, "selected_mode"))
+    nr_ue_fuzz_hook_copy_text(mutation->selected_mode, sizeof(mutation->selected_mode), value);
+  else if (!strcasecmp(key, "override_value"))
+    nr_ue_fuzz_hook_copy_text(mutation->override_value, sizeof(mutation->override_value), value);
+  else if (!strcasecmp(key, "value_space_minimum")) {
+    mutation->range_min = atoi(value);
+    mutation->has_range_min = true;
+  } else if (!strcasecmp(key, "value_space_maximum")) {
+    mutation->range_max = atoi(value);
+    mutation->has_range_max = true;
+  } else {
+    return false;
+  }
+  return true;
 }
 
 static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
@@ -447,30 +519,24 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
       hook->require_security = atoi(value) != 0;
     else if (!strcasecmp(key, "require_reconfiguration_complete"))
       hook->require_reconfiguration_complete = atoi(value) != 0;
-    else if (!strcasecmp(key, "field_mutation_enabled"))
-      hook->field_mutation.enabled = atoi(value) != 0;
-    else if (!strcasecmp(key, "field_mutation_message"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.message, sizeof(hook->field_mutation.message), value);
-    else if (!strcasecmp(key, "field_mutation_adapter_key"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.adapter_key, sizeof(hook->field_mutation.adapter_key), value);
-    else if (!strcasecmp(key, "field_mutation_domain_id"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.domain_id, sizeof(hook->field_mutation.domain_id), value);
-    else if (!strcasecmp(key, "field_mutation_field"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.field, sizeof(hook->field_mutation.field), value);
-    else if (!strcasecmp(key, "field_mutation_operator_family"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.operator_family, sizeof(hook->field_mutation.operator_family), value);
-    else if (!strcasecmp(key, "field_mutation_transform"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.transform_name, sizeof(hook->field_mutation.transform_name), value);
-    else if (!strcasecmp(key, "field_mutation_selected_mode"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.selected_mode, sizeof(hook->field_mutation.selected_mode), value);
-    else if (!strcasecmp(key, "field_mutation_override_value"))
-      nr_ue_fuzz_hook_copy_text(hook->field_mutation.override_value, sizeof(hook->field_mutation.override_value), value);
-    else if (!strcasecmp(key, "field_mutation_value_space_minimum")) {
-      hook->field_mutation.range_min = atoi(value);
-      hook->field_mutation.has_range_min = true;
-    } else if (!strcasecmp(key, "field_mutation_value_space_maximum")) {
-      hook->field_mutation.range_max = atoi(value);
-      hook->field_mutation.has_range_max = true;
+    else if (!strcasecmp(key, "field_mutation_count")) {
+      int count = atoi(value);
+      if (count < 0)
+        count = 0;
+      if (count > NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS)
+        count = NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS;
+      hook->field_mutation_count = (unsigned int)count;
+    } else if (!strncasecmp(key, "field_mutation_", strlen("field_mutation_"))) {
+      unsigned int index = 0;
+      char subkey[128] = {0};
+      if (sscanf(key, "field_mutation_%u_%127s", &index, subkey) == 2 && index < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS) {
+        if (nr_ue_fuzz_hook_parse_field_mutation_key(&hook->field_mutations[index], subkey, value)
+            && hook->field_mutation_count <= index)
+          hook->field_mutation_count = index + 1;
+      } else {
+        const char *legacy_key = key + strlen("field_mutation_");
+        nr_ue_fuzz_hook_parse_field_mutation_key(&hook->field_mutation, legacy_key, value);
+      }
     }
   }
   fclose(fp);
@@ -478,7 +544,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
   LOG_I(NR_RRC,
         "[UE %ld][HOOK] loaded ctl enabled=%d target=%s action=%s arm_once=%d txn_offset=%d delay_ms=%d replay_delay_ms=%d "
         "replay_mode=%s measurement_bootstrap=%d bootstrap_done=%d procedure_trigger=%s/%s trigger_delay_ms=%d "
-        "adapter_key=%s operator_family=%s "
+        "field_mutation_count=%u adapter_key=%s operator_family=%s "
         "transform=%s field=%s mode=%s range=[%d,%d]\n",
         rrc->ue_id,
         hook->enabled ? 1 : 0,
@@ -494,6 +560,7 @@ static void nr_ue_fuzz_hook_reload_config(NR_UE_RRC_INST_t *rrc)
         nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg),
         nr_ue_fuzz_hook_action_name(hook->procedure_trigger_action),
         hook->procedure_trigger_delay_ms,
+        hook->field_mutation_count,
         hook->field_mutation.adapter_key,
         hook->field_mutation.operator_family,
         hook->field_mutation.transform_name,

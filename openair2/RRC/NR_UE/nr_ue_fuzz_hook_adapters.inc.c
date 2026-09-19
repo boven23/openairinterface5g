@@ -430,11 +430,12 @@ static const nr_ue_fuzz_hook_field_adapter_t context_field_adapters[] = {
 };
 
 /* Resolve one adapter identity across both catalogs; do not silently shadow a path. */
-static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter(const nr_ue_fuzz_hook_state_t *hook)
+static const nr_ue_fuzz_hook_field_adapter_t *
+nr_ue_fuzz_hook_find_field_adapter_for_mutation(const nr_ue_fuzz_hook_state_t *hook,
+                                                const nr_ue_fuzz_hook_field_mutation_t *mutation)
 {
-  if (!hook || !hook->field_mutation.enabled)
+  if (!hook || !mutation || !mutation->enabled)
     return NULL;
-  const nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
   const bool has_adapter_key = mutation->adapter_key[0] != '\0';
   const bool has_domain_id = mutation->domain_id[0] != '\0';
 
@@ -525,7 +526,7 @@ static void *nr_ue_fuzz_hook_message_payload(NR_UL_DCCH_Message_t *pdu, nr_ue_fu
 static void nr_ue_fuzz_hook_prepare_txn(nr_ue_fuzz_hook_state_t *hook)
 {
   nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
-  if (hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN || mutation->enabled || mutation->message[0] || mutation->field[0]
+  if (hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN || hook->field_mutation_count > 0 || mutation->enabled || mutation->message[0] || mutation->field[0]
       || mutation->operator_family[0] || mutation->transform_name[0] || mutation->selected_mode[0] || mutation->has_range_min
       || mutation->has_range_max)
     return;
@@ -552,49 +553,99 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
     return false;
   }
   nr_ue_fuzz_hook_prepare_txn(hook);
-  if (!hook->enabled || !hook->field_mutation.enabled
-      || (hook->action != NR_UE_HOOK_ACTION_MUTATE_FIELD && hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN))
+  if (!hook->enabled || (hook->action != NR_UE_HOOK_ACTION_MUTATE_FIELD && hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN))
     return false;
-  if (hook->action == NR_UE_HOOK_ACTION_MUTATE_TXN
-      && (!nr_ue_fuzz_hook_text_eq(hook->field_mutation.field, "transactionIdentifier")
-          || !nr_ue_fuzz_hook_text_eq(hook->field_mutation.operator_family, "integer_transform")))
-    return false;
-  const nr_ue_fuzz_hook_field_adapter_t *adapter = nr_ue_fuzz_hook_find_field_adapter(hook);
-  if (!adapter) {
-    LOG_W(NR_RRC,
-          "[UE %ld][HOOK] no unique adapter for key=%s %s.%s:%s\n",
-          rrc->ue_id,
-          hook->field_mutation.adapter_key,
-          hook->field_mutation.message,
-          hook->field_mutation.field,
-          hook->field_mutation.operator_family);
-    nr_ue_rrc_trace_adapter(rrc,
-                            hook->field_mutation.message,
-                            hook->field_mutation.field,
-                            hook->field_mutation.operator_family,
-                            hook->field_mutation.selected_mode,
-                            "未找到adapter");
-    return false;
+
+  const nr_ue_fuzz_hook_field_mutation_t *mutations[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS] = {0};
+  const nr_ue_fuzz_hook_field_adapter_t *adapters[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS] = {0};
+  unsigned int mutation_count = 0;
+  if (hook->field_mutation_count > 0) {
+    for (unsigned int i = 0; i < hook->field_mutation_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i) {
+      if (hook->field_mutations[i].enabled)
+        mutations[mutation_count++] = &hook->field_mutations[i];
+    }
+  } else if (hook->field_mutation.enabled) {
+    mutations[mutation_count++] = &hook->field_mutation;
   }
-  if (!adapter->apply(rrc, payload, hook->field_mutation.selected_mode)) {
+
+  hook->field_mutation_applied_count = 0;
+  hook->field_mutation_failed_index = 0;
+  hook->field_mutation_result[0] = '\0';
+  if (mutation_count == 0)
+    return false;
+
+  if (hook->action == NR_UE_HOOK_ACTION_MUTATE_TXN && mutation_count != 1)
+    return false;
+
+  for (unsigned int i = 0; i < mutation_count; ++i) {
+    const nr_ue_fuzz_hook_field_mutation_t *mutation = mutations[i];
+    if (hook->action == NR_UE_HOOK_ACTION_MUTATE_TXN
+        && (!nr_ue_fuzz_hook_text_eq(mutation->field, "transactionIdentifier")
+            || !nr_ue_fuzz_hook_text_eq(mutation->operator_family, "integer_transform")))
+      return false;
+    adapters[i] = nr_ue_fuzz_hook_find_field_adapter_for_mutation(hook, mutation);
+    if (!adapters[i]) {
+      hook->field_mutation_failed_index = i + 1;
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "adapter_not_found");
+      LOG_W(NR_RRC,
+            "[UE %ld][HOOK] no unique adapter for key=%s %s.%s:%s\n",
+            rrc->ue_id,
+            mutation->adapter_key,
+            mutation->message,
+            mutation->field,
+            mutation->operator_family);
+      nr_ue_rrc_trace_adapter(rrc,
+                              mutation->message,
+                              mutation->field,
+                              mutation->operator_family,
+                              mutation->selected_mode,
+                              "未找到adapter");
+      nr_ue_fuzz_hook_write_state(rrc);
+      return false;
+    }
+  }
+
+  for (unsigned int i = 0; i < mutation_count; ++i) {
+    const nr_ue_fuzz_hook_field_mutation_t *mutation = mutations[i];
+    const nr_ue_fuzz_hook_field_adapter_t *adapter = adapters[i];
+    hook->field_mutation = *mutation;
+    if (!adapter->apply(rrc, payload, mutation->selected_mode)) {
+      hook->field_mutation_failed_index = i + 1;
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "apply_failed");
+      nr_ue_rrc_trace_adapter(rrc,
+                              adapter->message_name,
+                              adapter->field_name,
+                              adapter->operator_family,
+                              mutation->selected_mode,
+                              "未修改");
+      nr_ue_fuzz_hook_write_state(rrc);
+      return false;
+    }
+    hook->field_mutation_applied_count++;
     nr_ue_rrc_trace_adapter(rrc,
                             adapter->message_name,
                             adapter->field_name,
                             adapter->operator_family,
-                            hook->field_mutation.selected_mode,
-                            "未修改");
-    nr_ue_fuzz_hook_write_state(rrc);
-    return false;
+                            mutation->selected_mode,
+                            "已修改");
   }
-  nr_ue_rrc_trace_adapter(rrc,
-                          adapter->message_name,
-                          adapter->field_name,
-                          adapter->operator_family,
-                          hook->field_mutation.selected_mode,
-                          "已修改");
+  nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "applied");
   nr_ue_fuzz_hook_record_fire(rrc, msg, hook->action, -1);
+  const unsigned int applied_count = hook->field_mutation_applied_count;
+  const unsigned int original_mutation_count = mutation_count;
+  nr_ue_fuzz_hook_field_mutation_t applied_mutations[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS] = {0};
+  for (unsigned int i = 0; i < mutation_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i)
+    applied_mutations[i] = *mutations[i];
+  char field_mutation_result[sizeof(hook->field_mutation_result)] = {0};
+  nr_ue_fuzz_hook_copy_text(field_mutation_result, sizeof(field_mutation_result), hook->field_mutation_result);
   if (hook->arm_once)
     nr_ue_fuzz_hook_disarm_persistent(rrc);
+  hook->field_mutation_applied_count = applied_count;
+  hook->field_mutation_count = original_mutation_count;
+  for (unsigned int i = 0; i < original_mutation_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i)
+    hook->field_mutations[i] = applied_mutations[i];
+  hook->field_mutation_failed_index = 0;
+  nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), field_mutation_result);
   nr_ue_fuzz_hook_write_state(rrc);
   return true;
 }
