@@ -64,10 +64,21 @@
 
 static NR_UE_RRC_INST_t *NR_UE_rrc_inst[MAX_NUM_NR_UE_INST] = {0};
 
-#define NR_UE_RRC_SIGNAL_FLOW_LOG "/tmp/nr_ue_rrc_signal_flow.log"
-#define NR_UE_RRC_ADAPTER_FLOW_LOG "/tmp/nr_ue_rrc_adapter_flow.log"
+#define NR_UE_RRC_SIGNAL_FLOW_LOG "nr_ue_rrc_signal_flow.log"
+#define NR_UE_RRC_ADAPTER_FLOW_LOG "nr_ue_rrc_adapter_flow.log"
 
 bool nr_ue_rrc_trace_enabled = true;
+
+static const char *nr_ue_rrc_trace_path(const char *filename, char *buffer, size_t buffer_size)
+{
+  const char *root = getenv("OAI_NR_UE_HOOK_ROOT");
+  if (!root || root[0] == '\0')
+    root = "/tmp";
+  const size_t root_len = strlen(root);
+  const char *separator = root_len > 0 && root[root_len - 1] == '/' ? "" : "/";
+  snprintf(buffer, buffer_size, "%s%s%s", root, separator, filename);
+  return buffer;
+}
 
 static void nr_ue_rrc_format_timestamp(char *buffer, size_t buffer_size, long *nsec)
 {
@@ -91,14 +102,17 @@ void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, 
   static FILE *fp = NULL;
   static int open_error_reported = 0;
   static int chmod_error_reported = 0;
+  static char log_path[512] = "";
 
   pthread_mutex_lock(&trace_lock);
 
+  if (log_path[0] == '\0')
+    nr_ue_rrc_trace_path(NR_UE_RRC_SIGNAL_FLOW_LOG, log_path, sizeof(log_path));
   if (fp == NULL)
-    fp = fopen(NR_UE_RRC_SIGNAL_FLOW_LOG, "a+");
+    fp = fopen(log_path, "a+");
   if (fp == NULL) {
     if (!open_error_reported) {
-      LOG_W(NR_RRC, "Could not open %s for UE RRC signal tracing: %s\n", NR_UE_RRC_SIGNAL_FLOW_LOG, strerror(errno));
+      LOG_W(NR_RRC, "Could not open %s for UE RRC signal tracing: %s\n", log_path, strerror(errno));
       open_error_reported = 1;
     }
     pthread_mutex_unlock(&trace_lock);
@@ -106,8 +120,8 @@ void nr_ue_rrc_trace_signal(const NR_UE_RRC_INST_t *rrc, const char *direction, 
   }
   open_error_reported = 0;
 
-  if (chmod(NR_UE_RRC_SIGNAL_FLOW_LOG, 0666) != 0 && !chmod_error_reported) {
-    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC signal tracing: %s\n", NR_UE_RRC_SIGNAL_FLOW_LOG, strerror(errno));
+  if (chmod(log_path, 0666) != 0 && !chmod_error_reported) {
+    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC signal tracing: %s\n", log_path, strerror(errno));
     chmod_error_reported = 1;
   }
 
@@ -151,14 +165,17 @@ void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
   static FILE *fp = NULL;
   static int open_error_reported = 0;
   static int chmod_error_reported = 0;
+  static char log_path[512] = "";
 
   pthread_mutex_lock(&trace_lock);
 
+  if (log_path[0] == '\0')
+    nr_ue_rrc_trace_path(NR_UE_RRC_ADAPTER_FLOW_LOG, log_path, sizeof(log_path));
   if (fp == NULL)
-    fp = fopen(NR_UE_RRC_ADAPTER_FLOW_LOG, "a+");
+    fp = fopen(log_path, "a+");
   if (fp == NULL) {
     if (!open_error_reported) {
-      LOG_W(NR_RRC, "Could not open %s for UE RRC adapter tracing: %s\n", NR_UE_RRC_ADAPTER_FLOW_LOG, strerror(errno));
+      LOG_W(NR_RRC, "Could not open %s for UE RRC adapter tracing: %s\n", log_path, strerror(errno));
       open_error_reported = 1;
     }
     pthread_mutex_unlock(&trace_lock);
@@ -166,8 +183,8 @@ void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
   }
   open_error_reported = 0;
 
-  if (chmod(NR_UE_RRC_ADAPTER_FLOW_LOG, 0666) != 0 && !chmod_error_reported) {
-    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC adapter tracing: %s\n", NR_UE_RRC_ADAPTER_FLOW_LOG, strerror(errno));
+  if (chmod(log_path, 0666) != 0 && !chmod_error_reported) {
+    LOG_W(NR_RRC, "Could not chmod %s for shared UE RRC adapter tracing: %s\n", log_path, strerror(errno));
     chmod_error_reported = 1;
   }
 

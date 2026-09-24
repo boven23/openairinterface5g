@@ -208,8 +208,13 @@ static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   if (hook->control_path[0] != '\0')
     return;
-  snprintf(hook->control_path, sizeof(hook->control_path), "/tmp/oai_nr_ue_hook_%ld.ctl", rrc->ue_id);
-  snprintf(hook->state_path, sizeof(hook->state_path), "/tmp/oai_nr_ue_hook_%ld.state", rrc->ue_id);
+  const char *root = getenv("OAI_NR_UE_HOOK_ROOT");
+  if (!root || root[0] == '\0')
+    root = "/tmp";
+  const size_t root_len = strlen(root);
+  const char *separator = root_len > 0 && root[root_len - 1] == '/' ? "" : "/";
+  snprintf(hook->control_path, sizeof(hook->control_path), "%s%soai_nr_ue_hook_%ld.ctl", root, separator, rrc->ue_id);
+  snprintf(hook->state_path, sizeof(hook->state_path), "%s%soai_nr_ue_hook_%ld.state", root, separator, rrc->ue_id);
   hook->control_mtime = -1;
   hook->control_mtime_nsec = -1;
   hook->last_dl_txn = -1;
