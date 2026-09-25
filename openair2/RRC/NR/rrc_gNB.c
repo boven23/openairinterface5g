@@ -8,6 +8,7 @@
 
 #include <netinet/in.h>
 #include <netinet/sctp.h>
+#include <errno.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -102,6 +103,185 @@ mui_t rrc_gNB_mui = 0;
 
 /* 5.3.3.3 TS 38.331: Random UE identity mask for 39-bit values */
 #define NR_RRC_RANDOM_VALUE_39_BIT_MASK (0x7fffffffffULL)
+
+#define NR_GNB_FUZZ_HOOK_TARGET_MAX 64
+#define NR_GNB_FUZZ_HOOK_ACTION_MAX 32
+#define NR_GNB_FUZZ_HOOK_PATH_MAX 512
+#define NR_GNB_FUZZ_HOOK_TEMP_PATH_MAX (NR_GNB_FUZZ_HOOK_PATH_MAX + 8)
+
+typedef struct nr_gnb_fuzz_hook_control_s {
+  bool enabled;
+  bool arm_once;
+  char target[NR_GNB_FUZZ_HOOK_TARGET_MAX];
+  char action[NR_GNB_FUZZ_HOOK_ACTION_MAX];
+} nr_gnb_fuzz_hook_control_t;
+
+typedef struct nr_gnb_fuzz_hook_state_s {
+  ue_id_t ue_id;
+  ue_id_t actual_ue_id;
+  unsigned long hook_fire_count;
+  char last_hook_msg[NR_GNB_FUZZ_HOOK_TARGET_MAX];
+  char last_hook_action[NR_GNB_FUZZ_HOOK_ACTION_MAX];
+  int last_hook_srb;
+} nr_gnb_fuzz_hook_state_t;
+
+static nr_gnb_fuzz_hook_state_t nr_gnb_fuzz_hook_state = {
+    .ue_id = 0,
+    .actual_ue_id = 0,
+    .last_hook_msg = "NONE",
+    .last_hook_action = "none",
+};
+static bool nr_gnb_fuzz_hook_state_valid = false;
+
+static const char *nr_gnb_fuzz_hook_root(void)
+{
+  const char *root = getenv("OAI_NR_GNB_HOOK_ROOT");
+  return root && root[0] ? root : "/tmp";
+}
+
+static void nr_gnb_fuzz_hook_path(char *out, size_t out_size, ue_id_t ue_id, const char *suffix)
+{
+  snprintf(out, out_size, "%s/oai_nr_gnb_hook_%lu.%s", nr_gnb_fuzz_hook_root(), (unsigned long)ue_id, suffix);
+}
+
+static const char *nr_gnb_fuzz_hook_message_name(uint32_t message_id)
+{
+  switch (message_id) {
+    case NR_DL_DCCH_MessageType__c1_PR_rrcReconfiguration:
+      return "RRCReconfiguration";
+    case NR_DL_DCCH_MessageType__c1_PR_securityModeCommand:
+      return "SecurityModeCommand";
+    case NR_DL_DCCH_MessageType__c1_PR_ueCapabilityEnquiry:
+      return "UECapabilityEnquiry";
+    case NR_DL_DCCH_MessageType__c1_PR_dlInformationTransfer:
+      return "DLInformationTransfer";
+    case NR_DL_DCCH_MessageType__c1_PR_rrcRelease:
+      return "RRCRelease";
+    case NR_DL_DCCH_MessageType__c1_PR_rrcReestablishment:
+      return "RRCReestablishment";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+static bool nr_gnb_fuzz_hook_bool_value(const char *value)
+{
+  return strcmp(value, "1") == 0 || strcmp(value, "true") == 0 || strcmp(value, "TRUE") == 0 || strcmp(value, "True") == 0;
+}
+
+static void nr_gnb_fuzz_hook_trim(char *value)
+{
+  char *start = value;
+  while (*start == ' ' || *start == '\t' || *start == '\r' || *start == '\n')
+    ++start;
+  if (start != value)
+    memmove(value, start, strlen(start) + 1);
+
+  size_t len = strlen(value);
+  while (len > 0 && (value[len - 1] == ' ' || value[len - 1] == '\t' || value[len - 1] == '\r' || value[len - 1] == '\n')) {
+    value[len - 1] = '\0';
+    --len;
+  }
+}
+
+static bool nr_gnb_fuzz_hook_read_control(ue_id_t ue_id, nr_gnb_fuzz_hook_control_t *control)
+{
+  *control = (nr_gnb_fuzz_hook_control_t){
+      .enabled = false,
+      .arm_once = true,
+      .target = "NONE",
+      .action = "none",
+  };
+
+  char path[NR_GNB_FUZZ_HOOK_PATH_MAX];
+  nr_gnb_fuzz_hook_path(path, sizeof(path), ue_id, "ctl");
+  FILE *file = fopen(path, "r");
+  if (!file)
+    return false;
+
+  char line[512];
+  while (fgets(line, sizeof(line), file)) {
+    char *separator = strchr(line, '=');
+    if (!separator)
+      continue;
+    *separator = '\0';
+    char *key = line;
+    char *value = separator + 1;
+    nr_gnb_fuzz_hook_trim(key);
+    nr_gnb_fuzz_hook_trim(value);
+
+    if (strcmp(key, "enabled") == 0) {
+      control->enabled = nr_gnb_fuzz_hook_bool_value(value);
+    } else if (strcmp(key, "arm_once") == 0) {
+      control->arm_once = nr_gnb_fuzz_hook_bool_value(value);
+    } else if (strcmp(key, "target") == 0) {
+      snprintf(control->target, sizeof(control->target), "%s", value);
+    } else if (strcmp(key, "action") == 0) {
+      snprintf(control->action, sizeof(control->action), "%s", value);
+    }
+  }
+  fclose(file);
+  return true;
+}
+
+static void nr_gnb_fuzz_hook_write_control(ue_id_t ue_id, const nr_gnb_fuzz_hook_control_t *control)
+{
+  char path[NR_GNB_FUZZ_HOOK_PATH_MAX];
+  char temporary[NR_GNB_FUZZ_HOOK_TEMP_PATH_MAX];
+  nr_gnb_fuzz_hook_path(path, sizeof(path), ue_id, "ctl");
+  snprintf(temporary, sizeof(temporary), "%s.tmp", path);
+
+  FILE *file = fopen(temporary, "w");
+  if (!file)
+    return;
+  fprintf(file, "enabled=%d\n", control->enabled ? 1 : 0);
+  fprintf(file, "target=%s\n", control->target);
+  fprintf(file, "action=%s\n", control->action);
+  fprintf(file, "arm_once=%d\n", control->arm_once ? 1 : 0);
+  fclose(file);
+  if (rename(temporary, path) != 0)
+    LOG_W(NR_RRC, "gNB fuzz hook: failed to update control file %s: %s\n", path, strerror(errno));
+}
+
+static nr_gnb_fuzz_hook_state_t *nr_gnb_fuzz_hook_get_state(ue_id_t ue_id)
+{
+  if (!nr_gnb_fuzz_hook_state_valid || nr_gnb_fuzz_hook_state.ue_id != ue_id) {
+    nr_gnb_fuzz_hook_state = (nr_gnb_fuzz_hook_state_t){
+        .ue_id = ue_id,
+        .actual_ue_id = ue_id,
+        .last_hook_msg = "NONE",
+        .last_hook_action = "none",
+    };
+    nr_gnb_fuzz_hook_state_valid = true;
+  }
+  return &nr_gnb_fuzz_hook_state;
+}
+
+static void nr_gnb_fuzz_hook_write_state(const nr_gnb_fuzz_hook_state_t *state)
+{
+  char path[NR_GNB_FUZZ_HOOK_PATH_MAX];
+  char temporary[NR_GNB_FUZZ_HOOK_TEMP_PATH_MAX];
+  nr_gnb_fuzz_hook_path(path, sizeof(path), state->ue_id, "state");
+  snprintf(temporary, sizeof(temporary), "%s.tmp", path);
+
+  FILE *file = fopen(temporary, "w");
+  if (!file)
+    return;
+  fprintf(file, "target_ue_id=%lu\n", (unsigned long)state->ue_id);
+  fprintf(file, "actual_ue_id=%lu\n", (unsigned long)state->actual_ue_id);
+  fprintf(file, "hook_fire_count=%lu\n", state->hook_fire_count);
+  fprintf(file, "last_hook_msg=%s\n", state->last_hook_msg);
+  fprintf(file, "last_hook_action=%s\n", state->last_hook_action);
+  fprintf(file, "last_hook_srb=%d\n", state->last_hook_srb);
+  fclose(file);
+  if (rename(temporary, path) != 0)
+    LOG_W(NR_RRC, "gNB fuzz hook: failed to update state file %s: %s\n", path, strerror(errno));
+}
+
+static bool nr_gnb_fuzz_hook_target_matches(const nr_gnb_fuzz_hook_control_t *control, const char *message_name)
+{
+  return control->enabled && strcmp(control->target, message_name) == 0;
+}
 
 /** @brief clone and re-enqueue an NGAP message after delaying
  * delays the ongoing transaction (in msg_p) by setting a timer to wait
@@ -308,17 +488,68 @@ static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
                                                   int size)
 {
   DevAssert(size > 0);
+  const char *message_name = nr_gnb_fuzz_hook_message_name(message_id);
+  nr_gnb_fuzz_hook_control_t hook_control;
+  ue_id_t hook_control_ue_id = ue_p->rrc_ue_id;
+  bool hook_control_loaded = nr_gnb_fuzz_hook_read_control(hook_control_ue_id, &hook_control);
+  if ((!hook_control_loaded || !hook_control.enabled) && hook_control_ue_id != 0) {
+    nr_gnb_fuzz_hook_control_t wildcard_control;
+    if (nr_gnb_fuzz_hook_read_control(0, &wildcard_control)) {
+      hook_control = wildcard_control;
+      hook_control_ue_id = 0;
+    }
+  }
+  nr_gnb_fuzz_hook_state_t *hook_state = nr_gnb_fuzz_hook_get_state(hook_control_ue_id);
+  hook_state->actual_ue_id = ue_p->rrc_ue_id;
+  int hook_transmit_count = 1;
+
+  if (nr_gnb_fuzz_hook_target_matches(&hook_control, message_name)) {
+    ++hook_state->hook_fire_count;
+    snprintf(hook_state->last_hook_msg, sizeof(hook_state->last_hook_msg), "%s", message_name);
+    snprintf(hook_state->last_hook_action, sizeof(hook_state->last_hook_action), "%s", hook_control.action);
+    hook_state->last_hook_srb = srb_id;
+    nr_gnb_fuzz_hook_write_state(hook_state);
+
+    LOG_W(NR_RRC,
+          "gNB fuzz hook fired: ue_id=%lu msg=%s action=%s stage=post_encode_pre_pdcp\n",
+          (unsigned long)ue_p->rrc_ue_id,
+          message_name,
+          hook_control.action);
+
+    if (hook_control.arm_once) {
+      hook_control.enabled = false;
+      nr_gnb_fuzz_hook_write_control(hook_control_ue_id, &hook_control);
+    }
+
+    if (strcmp(hook_control.action, "drop") == 0) {
+      return;
+    }
+    if (strcmp(hook_control.action, "duplicate") == 0 || strcmp(hook_control.action, "replay") == 0) {
+      hook_transmit_count = 2;
+    } else if (strcmp(hook_control.action, "mutate_field") == 0) {
+      LOG_W(NR_RRC,
+            "gNB fuzz hook mutate_field matched %s, but no generated gNB field adapter is linked; forwarding original payload\n",
+            message_name);
+    } else if (strcmp(hook_control.action, "delay") == 0) {
+      LOG_W(NR_RRC, "gNB fuzz hook delay matched %s, but async delay is not linked; forwarding immediately\n", message_name);
+    }
+  } else {
+    nr_gnb_fuzz_hook_write_state(hook_state);
+  }
+
   f1_ue_data_t ue_data = cu_get_f1_ue_data(ue_p->rrc_ue_id);
   RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
   f1ap_dl_rrc_message_t dl_rrc = {.gNB_CU_ue_id = ue_p->rrc_ue_id, .gNB_DU_ue_id = ue_data.secondary_ue, .srb_id = srb_id};
   deliver_dl_rrc_message_data_t data = {.rrc = rrc, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
-  nr_pdcp_data_req_srb(ue_p->rrc_ue_id,
-                       srb_id,
-                       rrc_gNB_mui++,
-                       size,
-                       (unsigned char *const)buffer,
-                       rrc_deliver_dl_rrc_message,
-                       &data);
+  for (int transmit_index = 0; transmit_index < hook_transmit_count; ++transmit_index) {
+    nr_pdcp_data_req_srb(ue_p->rrc_ue_id,
+                         srb_id,
+                         rrc_gNB_mui++,
+                         size,
+                         (unsigned char *const)buffer,
+                         rrc_deliver_dl_rrc_message,
+                         &data);
+  }
 
 #ifdef E2_AGENT
   E2_AGENT_SIGNAL_DL_DCCH_RRC_MSG(buffer, size, message_id);
