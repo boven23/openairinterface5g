@@ -29,6 +29,7 @@
 #include "NR_BWP-Downlink.h" //asn_DEF_NR_BWP_Downlink
 #include "NR_RRCReconfiguration.h"
 #include "NR_MeasConfig.h"
+#include "NR_UL-CCCH-Message.h"
 #include "NR_UL-DCCH-Message.h"
 #include "uper_encoder.h"
 #include "uper_decoder.h"
@@ -540,10 +541,9 @@ static void nr_rrc_ue_prepare_RRCSetupRequest(NR_UE_RRC_INST_t *rrc)
   }
 
   uint8_t buf[1024];
-  int len = do_RRCSetupRequest(buf, sizeof(buf), rv, rrc->fiveG_S_TMSI);
+  int len = do_RRCSetupRequest(buf, sizeof(buf), rv, rrc->fiveG_S_TMSI, rrc, nr_ue_fuzz_hook_mutate_ul_ccch);
 
-  nr_ue_rrc_trace_signal(rrc, "TX", "RRCSetupRequest", 0);
-  nr_rlc_srb_recv_sdu(rrc->ue_id, 0, buf, len);
+  nr_ue_fuzz_hook_send_ccch(rrc, NR_UE_HOOK_MSG_RRC_SETUP_REQUEST, buf, len);
 }
 
 static void nr_rrc_configure_default_SI(NR_UE_RRC_SI_INFO *SI_info,
@@ -2549,6 +2549,10 @@ static void nr_rrc_ue_process_securityModeCommand(NR_UE_RRC_INST_t *ue_rrc,
   uint8_t buffer[200];
   nr_ue_fuzz_hook_mutate_ul_dcch(ue_rrc, &ul_dcch_msg);
   asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, sizeof(buffer));
+  if (enc_rval.encoded <= 0)
+    (void)nr_ue_fuzz_hook_repair_ul_dcch_encoding(ue_rrc, &ul_dcch_msg, buffer, sizeof(buffer), &enc_rval);
+  else
+    nr_ue_fuzz_hook_discard_integer_encode_patches(ue_rrc);
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %jd)!\n", enc_rval.failed_type->name, enc_rval.encoded);
 
   if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
@@ -2754,6 +2758,10 @@ static void nr_rrc_ue_process_ueCapabilityEnquiry(NR_UE_RRC_INST_t *rrc, NR_UECa
       nr_ue_fuzz_hook_mutate_ul_dcch(rrc, &ul_dcch_msg);
       asn_enc_rval_t enc_rval =
           uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, sizeof(buffer));
+      if (enc_rval.encoded <= 0)
+        (void)nr_ue_fuzz_hook_repair_ul_dcch_encoding(rrc, &ul_dcch_msg, buffer, sizeof(buffer), &enc_rval);
+      else
+        nr_ue_fuzz_hook_discard_integer_encode_patches(rrc);
       AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %jd)!\n", enc_rval.failed_type->name, enc_rval.encoded);
 
       if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
@@ -2963,9 +2971,7 @@ static void nr_ue_fuzz_hook_maybe_trigger_ul_information_transfer(NR_UE_RRC_INST
   }
 
   uint8_t dummy_nas[] = {0x7e, 0x00, 0x00, 0x00};
-  LOG_I(NR_RRC,
-        "[UE %ld][HOOK] triggering dummy NAS ULInformationTransfer for stable fuzzing\n",
-        rrc->ue_id);
+  LOG_I(NR_RRC, "[UE %ld][HOOK] triggering dummy NAS ULInformationTransfer for stable fuzzing\n", rrc->ue_id);
   nr_rrc_ue_send_ul_information_transfer_nas(rrc, sizeof(dummy_nas), dummy_nas);
 }
 

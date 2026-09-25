@@ -139,7 +139,7 @@ static bool nr_ue_hook_gates_ready(NR_UE_RRC_INST_t *rrc)
 static void nr_ue_hook_record_submission(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg)
 {
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
-  if (msg > NR_UE_HOOK_MSG_NONE && msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT)
+  if (msg >= NR_UE_HOOK_MSG_RRC_SETUP_REQUEST && msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT)
     hook->submitted[msg]++;
   if (msg == NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE) {
     hook->rrc_reconfiguration_complete_submit_time_valid = true;

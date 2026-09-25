@@ -228,16 +228,23 @@ static bool nr_ue_fuzz_hook_apply_siglog_boolean_adapter(NR_UE_RRC_INST_t *rrc, 
                                                            nr_ue_fuzz_hook_locate_siglogmeasconfigavailable_slot);
 }
 
-static bool nr_ue_fuzz_hook_apply_txn_value(NR_UE_RRC_INST_t *rrc, long *value, const char *mode)
+static bool nr_ue_fuzz_hook_apply_integer_value(NR_UE_RRC_INST_t *rrc,
+                                                long *value,
+                                                const char *mode,
+                                                int default_min,
+                                                int default_max,
+                                                bool allow_runtime_echo)
 {
   const nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   const nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
-  const int min_value = mutation->has_range_min ? mutation->range_min : 0;
-  const int max_value = mutation->has_range_max ? mutation->range_max : 3;
-  if (!value || min_value < 0 || max_value > 3 || min_value > max_value)
+  const int min_value = mutation->has_range_min ? mutation->range_min : default_min;
+  const int max_value = mutation->has_range_max ? mutation->range_max : default_max;
+  if (!value || min_value > max_value)
     return false;
 
   const bool echoed = nr_ue_fuzz_hook_text_eq(mutation->transform_name, "runtime_echoed_mismatch");
+  if (echoed && !allow_runtime_echo)
+    return false;
   if (mutation->transform_name[0] && !echoed && !nr_ue_fuzz_hook_text_eq(mutation->transform_name, "domain_value_selection"))
     return false;
   const long reference = echoed && hook->last_dl_txn >= 0 ? hook->last_dl_txn : *value;
@@ -263,15 +270,23 @@ static bool nr_ue_fuzz_hook_apply_txn_value(NR_UE_RRC_INST_t *rrc, long *value, 
     chosen = strtol(mutation->override_value, &end, 0);
     if (!end || *end)
       return false;
-    if (chosen < min_value || chosen > max_value)
-      return false;
   } else {
     return false;
   }
   if (chosen == *value)
     return false;
+  if (!nr_ue_fuzz_hook_register_integer_encode_patch(rrc, value, chosen, min_value, max_value))
+    return false;
   *value = chosen;
   return true;
+}
+
+static bool nr_ue_fuzz_hook_apply_txn_value(NR_UE_RRC_INST_t *rrc, long *value, const char *mode)
+{
+  const nr_ue_fuzz_hook_field_mutation_t *mutation = &rrc->fuzz_hook.field_mutation;
+  if ((mutation->has_range_min && mutation->range_min < 0) || (mutation->has_range_max && mutation->range_max > 3))
+    return false;
+  return nr_ue_fuzz_hook_apply_integer_value(rrc, value, mode, 0, 3, true);
 }
 
 #define NR_UE_TXN_ADAPTER(name, type)                                                                            \
@@ -291,6 +306,19 @@ NR_UE_TXN_ADAPTER(nr_ue_txn_dl_capability, NR_UECapabilityEnquiry_t)
 NR_UE_TXN_ADAPTER(nr_ue_txn_dl_reestablishment, NR_RRCReestablishment_t)
 NR_UE_TXN_ADAPTER(nr_ue_txn_dl_release, NR_RRCRelease_t)
 #undef NR_UE_TXN_ADAPTER
+
+static bool nr_ue_fuzz_hook_apply_setup_request_cause(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
+{
+  NR_RRCSetupRequest_t *request = payload;
+  if (!request)
+    return false;
+  return nr_ue_fuzz_hook_apply_integer_value(rrc,
+                                             &request->rrcSetupRequest.establishmentCause,
+                                             mode,
+                                             NR_EstablishmentCause_emergency,
+                                             NR_EstablishmentCause_spare1,
+                                             false);
+}
 
 static bool nr_ue_fuzz_hook_apply_nas_payload(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode)
 {
@@ -318,6 +346,11 @@ static bool nr_ue_fuzz_hook_apply_nas_payload(NR_UE_RRC_INST_t *rrc, void *paylo
 }
 
 static const nr_ue_fuzz_hook_field_adapter_t builtin_field_adapters[] = {
+    {.target_msg = NR_UE_HOOK_MSG_RRC_SETUP_REQUEST,
+     .message_name = "RRCSetupRequest",
+     .field_name = "establishmentCause",
+     .operator_family = "integer_transform",
+     .apply = nr_ue_fuzz_hook_apply_setup_request_cause},
     {.target_msg = NR_UE_HOOK_MSG_DL_RRC_RECONFIGURATION,
      .message_name = "DL_RRCReconfiguration",
      .field_name = "transactionIdentifier",
@@ -390,18 +423,18 @@ static const nr_ue_fuzz_hook_field_adapter_t builtin_field_adapters[] = {
 };
 
 #if defined(__has_include)
-#  if __has_include("nr_ue_fuzz_hook_auto_generated.inc.c")
-#    define NR_UE_FUZZ_HOOK_HAS_AUTO_GENERATED_ADAPTERS 1
-#  endif
+#if __has_include("nr_ue_fuzz_hook_auto_generated.inc.c")
+#define NR_UE_FUZZ_HOOK_HAS_AUTO_GENERATED_ADAPTERS 1
+#endif
 #endif
 
 #ifdef NR_UE_FUZZ_HOOK_HAS_AUTO_GENERATED_ADAPTERS
-#  include "nr_ue_fuzz_hook_auto_generated.inc.c"
-#  define NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT \
-    (sizeof(auto_generated_field_adapters) / sizeof(auto_generated_field_adapters[0]))
+#include "nr_ue_fuzz_hook_auto_generated.inc.c"
+#define NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT \
+  (sizeof(auto_generated_field_adapters) / sizeof(auto_generated_field_adapters[0]))
 #else
 static const nr_ue_fuzz_hook_field_adapter_t auto_generated_field_adapters[1] = {{0}};
-#  define NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT 0
+#define NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT 0
 #endif
 
 /* A distinct transform namespace keeps context adapters separate from generated
@@ -430,9 +463,9 @@ static const nr_ue_fuzz_hook_field_adapter_t context_field_adapters[] = {
 };
 
 /* Resolve one adapter identity across both catalogs; do not silently shadow a path. */
-static const nr_ue_fuzz_hook_field_adapter_t *
-nr_ue_fuzz_hook_find_field_adapter_for_mutation(const nr_ue_fuzz_hook_state_t *hook,
-                                                const nr_ue_fuzz_hook_field_mutation_t *mutation)
+static const nr_ue_fuzz_hook_field_adapter_t *nr_ue_fuzz_hook_find_field_adapter_for_mutation(
+    const nr_ue_fuzz_hook_state_t *hook,
+    const nr_ue_fuzz_hook_field_mutation_t *mutation)
 {
   if (!hook || !mutation || !mutation->enabled)
     return NULL;
@@ -526,9 +559,9 @@ static void *nr_ue_fuzz_hook_message_payload(NR_UL_DCCH_Message_t *pdu, nr_ue_fu
 static void nr_ue_fuzz_hook_prepare_txn(nr_ue_fuzz_hook_state_t *hook)
 {
   nr_ue_fuzz_hook_field_mutation_t *mutation = &hook->field_mutation;
-  if (hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN || hook->field_mutation_count > 0 || mutation->enabled || mutation->message[0] || mutation->field[0]
-      || mutation->operator_family[0] || mutation->transform_name[0] || mutation->selected_mode[0] || mutation->has_range_min
-      || mutation->has_range_max)
+  if (hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN || hook->field_mutation_count > 0 || mutation->enabled || mutation->message[0]
+      || mutation->field[0] || mutation->operator_family[0] || mutation->transform_name[0] || mutation->selected_mode[0]
+      || mutation->has_range_min || mutation->has_range_max)
     return;
   mutation->enabled = true;
   nr_ue_fuzz_hook_copy_text(mutation->message, sizeof(mutation->message), nr_ue_fuzz_hook_msg_name(hook->target_msg));
@@ -544,6 +577,7 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
 {
   if (!rrc || !payload)
     return false;
+  nr_ue_fuzz_hook_clear_integer_encode_patches(rrc);
   nr_ue_fuzz_hook_reload_config(rrc);
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   if (!hook->enabled || msg != hook->target_msg)
@@ -556,6 +590,7 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
   if (!hook->enabled || (hook->action != NR_UE_HOOK_ACTION_MUTATE_FIELD && hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN))
     return false;
 
+  const unsigned int original_field_mutation_count = hook->field_mutation_count;
   const nr_ue_fuzz_hook_field_mutation_t *mutations[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS] = {0};
   const nr_ue_fuzz_hook_field_adapter_t *adapters[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS] = {0};
   unsigned int mutation_count = 0;
@@ -632,7 +667,7 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
   nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "applied");
   nr_ue_fuzz_hook_record_fire(rrc, msg, hook->action, -1);
   const unsigned int applied_count = hook->field_mutation_applied_count;
-  const unsigned int original_mutation_count = mutation_count;
+  const unsigned int original_mutation_count = original_field_mutation_count;
   nr_ue_fuzz_hook_field_mutation_t applied_mutations[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS] = {0};
   for (unsigned int i = 0; i < mutation_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i)
     applied_mutations[i] = *mutations[i];
@@ -642,8 +677,12 @@ static bool nr_ue_fuzz_hook_mutate_payload(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hoo
     nr_ue_fuzz_hook_disarm_persistent(rrc);
   hook->field_mutation_applied_count = applied_count;
   hook->field_mutation_count = original_mutation_count;
-  for (unsigned int i = 0; i < original_mutation_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i)
-    hook->field_mutations[i] = applied_mutations[i];
+  if (original_mutation_count > 0) {
+    for (unsigned int i = 0; i < original_mutation_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i)
+      hook->field_mutations[i] = applied_mutations[i];
+  } else if (mutation_count == 1) {
+    hook->field_mutation = applied_mutations[0];
+  }
   hook->field_mutation_failed_index = 0;
   nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), field_mutation_result);
   nr_ue_fuzz_hook_write_state(rrc);
@@ -658,4 +697,26 @@ static bool nr_ue_fuzz_hook_mutate_ul_dcch(void *context, NR_UL_DCCH_Message_t *
   if (context && msg == NR_UE_HOOK_MSG_MEASUREMENT_REPORT && !changed)
     nr_ue_hook_cache_report(context, payload);
   return changed;
+}
+
+static void *nr_ue_fuzz_hook_ccch_message_payload(NR_UL_CCCH_Message_t *pdu, nr_ue_fuzz_hook_msg_t *msg)
+{
+  *msg = NR_UE_HOOK_MSG_NONE;
+  if (!pdu || pdu->message.present != NR_UL_CCCH_MessageType_PR_c1 || !pdu->message.choice.c1)
+    return NULL;
+  struct NR_UL_CCCH_MessageType__c1 *c1 = pdu->message.choice.c1;
+  switch (c1->present) {
+    case NR_UL_CCCH_MessageType__c1_PR_rrcSetupRequest:
+      *msg = NR_UE_HOOK_MSG_RRC_SETUP_REQUEST;
+      return c1->choice.rrcSetupRequest;
+    default:
+      return NULL;
+  }
+}
+
+static bool nr_ue_fuzz_hook_mutate_ul_ccch(void *context, NR_UL_CCCH_Message_t *pdu)
+{
+  nr_ue_fuzz_hook_msg_t msg = NR_UE_HOOK_MSG_NONE;
+  void *payload = nr_ue_fuzz_hook_ccch_message_payload(pdu, &msg);
+  return nr_ue_fuzz_hook_mutate_payload(context, msg, payload);
 }

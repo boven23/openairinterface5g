@@ -9,13 +9,42 @@ static int python_control_fixture(const char *root, const char *message, const c
   rrc.fuzz_hook.control_mtime = -1;
   rrc.fuzz_hook.control_mtime_nsec = -1;
   nr_ue_fuzz_hook_msg_t msg = nr_ue_fuzz_hook_msg_from_name(message);
-  CHECK(msg >= NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE && msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT);
+  CHECK(msg >= NR_UE_HOOK_MSG_RRC_SETUP_REQUEST && msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT);
   rrc.as_security_activated = strcmp(scenario, "closed_gate") != 0;
   rrc.fuzz_hook.submitted[NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE] = rrc.as_security_activated;
   rrc.perNB[0].SInfo.sib1_validity = 1;
   rrc.perNB[0].hook_plmn_count = 1;
   if (!strcmp(scenario, "pdcp_failure"))
     fail_pdcp_call = 1;
+
+  if (msg == NR_UE_HOOK_MSG_RRC_SETUP_REQUEST) {
+    uint8_t rv[6] = {1, 2, 3, 4, 5, 6};
+    uint8_t bytes[NR_RRC_BUF_SIZE];
+    nr_ue_fuzz_hook_reload_config(&rrc);
+    char field[128];
+    snprintf(field, sizeof(field), "%s", rrc.fuzz_hook.field_mutation.field);
+    int size = do_RRCSetupRequest(bytes, sizeof(bytes), rv, UINT64_MAX, &rrc, nr_ue_fuzz_hook_mutate_ul_ccch);
+    CHECK(size > 0);
+    const bool changed = rrc.fuzz_hook.hook_fire_count > 0;
+    NR_UL_CCCH_Message_t *decoded = NULL;
+    CHECK(uper_decode(NULL, &asn_DEF_NR_UL_CCCH_Message, (void **)&decoded, bytes, size, 0, 0).code == RC_OK);
+    nr_ue_fuzz_hook_msg_t decoded_msg = NR_UE_HOOK_MSG_NONE;
+    void *payload = nr_ue_fuzz_hook_ccch_message_payload(decoded, &decoded_msg);
+    CHECK(decoded_msg == msg && payload);
+    long value = -1;
+    if (!strcmp(field, "establishmentCause"))
+      value = ((NR_RRCSetupRequest_t *)payload)->rrcSetupRequest.establishmentCause;
+    nr_ue_fuzz_hook_send_ccch(&rrc, msg, bytes, size);
+    printf("RESULT {\"changed\":%s,\"decoded_value\":%ld,\"encoded_bytes\":%d,\"pdcp_calls\":%d,\"auto_generated_adapters\":%zu}\n",
+           changed ? "true" : "false",
+           value,
+           size,
+           sent_pdus,
+           (size_t)NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT);
+    ASN_STRUCT_FREE(asn_DEF_NR_UL_CCCH_Message, decoded);
+    nr_ue_hook_clear_context(&rrc);
+    return 0;
+  }
 
   NR_UL_DCCH_Message_t pdu = {0};
   pdu.message.present = NR_UL_DCCH_MessageType_PR_c1;

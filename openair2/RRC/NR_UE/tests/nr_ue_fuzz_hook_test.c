@@ -7,7 +7,9 @@
 #include <strings.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "NR_UL-CCCH-Message.h"
 #include "NR_UL-DCCH-Message.h"
+#include "RRC/NR/MESSAGES/asn1_msg.h"
 #include "uper_encoder.h"
 #include "uper_decoder.h"
 #include "../rrc_defs.h"
@@ -37,6 +39,7 @@ void nr_ue_rrc_trace_adapter(const NR_UE_RRC_INST_t *rrc,
                              const char *mode,
                              const char *result);
 #define nr_pdcp_data_req_srb(...) (++sent_pdus != fail_pdcp_call)
+#define nr_rlc_srb_recv_sdu(...) (++sent_pdus)
 #include "../nr_ue_fuzz_hook.inc.c"
 #include "../nr_ue_meas_config.inc.c"
 
@@ -111,6 +114,34 @@ static void field_contract(NR_UE_RRC_INST_t *rrc, const char *field, const char 
   nr_ue_fuzz_hook_copy_text(m->selected_mode, sizeof(m->selected_mode), mode);
 }
 
+static void illegal_measurement_digit_contract(NR_UE_RRC_INST_t *rrc, unsigned int index, const char *adapter_key)
+{
+  CHECK(index < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS);
+  nr_ue_fuzz_hook_field_mutation_t *m = &rrc->fuzz_hook.field_mutations[index];
+  m->enabled = true;
+  nr_ue_fuzz_hook_copy_text(m->message, sizeof(m->message), "MeasurementReport");
+  nr_ue_fuzz_hook_copy_text(m->adapter_key, sizeof(m->adapter_key), adapter_key);
+  nr_ue_fuzz_hook_copy_text(m->field, sizeof(m->field), "_item_");
+  nr_ue_fuzz_hook_copy_text(m->operator_family, sizeof(m->operator_family), "integer_transform");
+  nr_ue_fuzz_hook_copy_text(m->transform_name, sizeof(m->transform_name), "domain_value_selection");
+  nr_ue_fuzz_hook_copy_text(m->selected_mode, sizeof(m->selected_mode), "set_to_value");
+  nr_ue_fuzz_hook_copy_text(m->override_value, sizeof(m->override_value), "10");
+  m->range_min = 0;
+  m->range_max = 9;
+  m->has_range_min = true;
+  m->has_range_max = true;
+  if (rrc->fuzz_hook.field_mutation_count <= index)
+    rrc->fuzz_hook.field_mutation_count = index + 1;
+}
+
+static void send_ul_for_msg(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg, uint8_t *bytes, int size)
+{
+  if (msg == NR_UE_HOOK_MSG_RRC_SETUP_REQUEST)
+    nr_ue_fuzz_hook_send_ccch(rrc, msg, bytes, size);
+  else
+    nr_ue_fuzz_hook_send_srb(rrc, msg, 1, bytes, size);
+}
+
 static void test_dl_lifecycle(void)
 {
   NR_UE_RRC_INST_t rrc;
@@ -158,23 +189,53 @@ static void test_ul_transport(void)
                                               NR_UE_HOOK_ACTION_DELAY,
                                               NR_UE_HOOK_ACTION_DUPLICATE,
                                               NR_UE_HOOK_ACTION_REPLAY};
-  for (int msg = NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE; msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT; msg++) {
+  for (int msg = NR_UE_HOOK_MSG_RRC_SETUP_REQUEST; msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT; msg++) {
     CHECK(nr_ue_fuzz_hook_msg_from_name(nr_ue_fuzz_hook_msg_name(msg)) == msg);
     for (size_t a = 0; a < sizeof(actions) / sizeof(*actions); a++) {
       for (int once = 0; once <= 1; once++) {
         reset(&rrc, msg, actions[a], once);
-        nr_ue_fuzz_hook_send_srb(&rrc, msg, 1, bytes, sizeof(bytes));
+        send_ul_for_msg(&rrc, msg, bytes, sizeof(bytes));
         int expected = actions[a] == NR_UE_HOOK_ACTION_DROP ? 0 : actions[a] == NR_UE_HOOK_ACTION_DELAY ? 1 : 2;
         CHECK(sent_pdus == expected);
         CHECK(rrc.fuzz_hook.hook_fire_count == 1);
         CHECK(rrc.fuzz_hook.last_ul_msg == msg);
+        CHECK(rrc.fuzz_hook.last_ul_srb_id == (msg == NR_UE_HOOK_MSG_RRC_SETUP_REQUEST ? 0 : 1));
         CHECK(rrc.fuzz_hook.last_ul_size == sizeof(bytes));
-        nr_ue_fuzz_hook_send_srb(&rrc, msg, 1, bytes, sizeof(bytes));
+        send_ul_for_msg(&rrc, msg, bytes, sizeof(bytes));
         CHECK(sent_pdus == expected + (once ? 1 : expected));
         CHECK(rrc.fuzz_hook.hook_fire_count == (once ? 1 : 2));
       }
     }
   }
+}
+
+static void test_setup_request_ccch_mutation(void)
+{
+  NR_UE_RRC_INST_t rrc;
+  uint8_t rv[6] = {1, 2, 3, 4, 5, 6};
+  uint8_t bytes[128];
+  reset(&rrc, NR_UE_HOOK_MSG_RRC_SETUP_REQUEST, NR_UE_HOOK_ACTION_MUTATE_FIELD, true);
+  field_contract(&rrc, "establishmentCause", "integer_transform", "boundary_max");
+  int size = do_RRCSetupRequest(bytes, sizeof(bytes), rv, UINT64_MAX, &rrc, nr_ue_fuzz_hook_mutate_ul_ccch);
+  CHECK(size > 0);
+
+  NR_UL_CCCH_Message_t *decoded = NULL;
+  CHECK(uper_decode(NULL, &asn_DEF_NR_UL_CCCH_Message, (void **)&decoded, bytes, size, 0, 0).code == RC_OK);
+  nr_ue_fuzz_hook_msg_t decoded_msg = NR_UE_HOOK_MSG_NONE;
+  void *payload = nr_ue_fuzz_hook_ccch_message_payload(decoded, &decoded_msg);
+  CHECK(decoded_msg == NR_UE_HOOK_MSG_RRC_SETUP_REQUEST);
+  CHECK(payload);
+  CHECK(((NR_RRCSetupRequest_t *)payload)->rrcSetupRequest.establishmentCause == NR_EstablishmentCause_spare1);
+  CHECK(rrc.fuzz_hook.hook_fire_count == 1);
+  CHECK(rrc.fuzz_hook.last_hook_msg == NR_UE_HOOK_MSG_RRC_SETUP_REQUEST);
+  CHECK(rrc.fuzz_hook.last_hook_action == NR_UE_HOOK_ACTION_MUTATE_FIELD);
+
+  nr_ue_fuzz_hook_send_ccch(&rrc, NR_UE_HOOK_MSG_RRC_SETUP_REQUEST, bytes, size);
+  CHECK(sent_pdus == 1);
+  CHECK(rrc.fuzz_hook.submitted[NR_UE_HOOK_MSG_RRC_SETUP_REQUEST] == 1);
+  CHECK(rrc.fuzz_hook.seen_rrc_setup_request);
+  CHECK(rrc.fuzz_hook.last_ul_srb_id == 0);
+  ASN_STRUCT_FREE(asn_DEF_NR_UL_CCCH_Message, decoded);
 }
 
 /* All ten transaction-bearing payloads: legacy defaults, explicit contracts,
@@ -224,6 +285,103 @@ static void test_transactions(void)
   TEST_TXN(NR_UECapabilityEnquiry, NR_UE_HOOK_MSG_DL_UE_CAPABILITY_ENQUIRY);
   TEST_TXN(NR_RRCReestablishment, NR_UE_HOOK_MSG_DL_RRC_REESTABLISHMENT);
   TEST_TXN(NR_RRCRelease, NR_UE_HOOK_MSG_DL_RRC_RELEASE);
+}
+
+static void test_illegal_integer_override_is_applied_for_fuzzing(void)
+{
+  NR_UE_RRC_INST_t rrc;
+  reset(&rrc, NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, NR_UE_HOOK_ACTION_MUTATE_FIELD, true);
+  field_contract(&rrc, "transactionIdentifier", "integer_transform", "set_to_value");
+  nr_ue_fuzz_hook_field_mutation_t *m = &rrc.fuzz_hook.field_mutation;
+  nr_ue_fuzz_hook_copy_text(m->override_value, sizeof(m->override_value), "4");
+  m->range_min = 0;
+  m->range_max = 3;
+  m->has_range_min = true;
+  m->has_range_max = true;
+
+  NR_RRCSetupComplete_t payload = {0};
+  payload.rrc_TransactionIdentifier = 0;
+  payload.criticalExtensions.present = NR_RRCSetupComplete__criticalExtensions_PR_criticalExtensionsFuture;
+  payload.criticalExtensions.choice.criticalExtensionsFuture =
+      calloc(1, sizeof(*payload.criticalExtensions.choice.criticalExtensionsFuture));
+
+  CHECK(nr_ue_fuzz_hook_mutate_payload(&rrc, NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, &payload));
+  CHECK(payload.rrc_TransactionIdentifier == 4);
+  CHECK(rrc.fuzz_hook.field_mutation_applied_count == 1);
+  CHECK(!strcmp(rrc.fuzz_hook.field_mutation_result, "applied"));
+
+  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_RRCSetupComplete, &payload);
+}
+
+static void test_illegal_integer_override_repairs_uper_encoding(void)
+{
+  NR_UE_RRC_INST_t rrc;
+  reset(&rrc, NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE, NR_UE_HOOK_ACTION_MUTATE_FIELD, true);
+
+  NR_UL_DCCH_Message_t msg = {0};
+  msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
+  msg.message.choice.c1 = calloc(1, sizeof(*msg.message.choice.c1));
+  CHECK(msg.message.choice.c1);
+  msg.message.choice.c1->present = NR_UL_DCCH_MessageType__c1_PR_rrcSetupComplete;
+  msg.message.choice.c1->choice.rrcSetupComplete = calloc(1, sizeof(*msg.message.choice.c1->choice.rrcSetupComplete));
+  CHECK(msg.message.choice.c1->choice.rrcSetupComplete);
+  NR_RRCSetupComplete_t *setup = msg.message.choice.c1->choice.rrcSetupComplete;
+  setup->rrc_TransactionIdentifier = 0;
+  setup->criticalExtensions.present = NR_RRCSetupComplete__criticalExtensions_PR_rrcSetupComplete;
+  setup->criticalExtensions.choice.rrcSetupComplete = calloc(1, sizeof(*setup->criticalExtensions.choice.rrcSetupComplete));
+  CHECK(setup->criticalExtensions.choice.rrcSetupComplete);
+  NR_RRCSetupComplete_IEs_t *ies = setup->criticalExtensions.choice.rrcSetupComplete;
+  ies->selectedPLMN_Identity = 13;
+  CHECK(OCTET_STRING_fromBuf(&ies->dedicatedNAS_Message, "\x01", 1) == 0);
+  CHECK(nr_ue_fuzz_hook_register_integer_encode_patch(&rrc, &ies->selectedPLMN_Identity, 13, 1, 12));
+
+  uint8_t patched[256] = {0};
+  asn_enc_rval_t enc = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, &msg, patched, sizeof(patched));
+  CHECK(enc.encoded <= 0);
+  CHECK(nr_ue_fuzz_hook_repair_ul_dcch_encoding(&rrc, &msg, patched, sizeof(patched), &enc));
+  CHECK(enc.encoded > 0);
+  CHECK(ies->selectedPLMN_Identity == 13);
+
+  uint8_t legal[256] = {0};
+  ies->selectedPLMN_Identity = 1;
+  asn_enc_rval_t legal_enc = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, &msg, legal, sizeof(legal));
+  CHECK(legal_enc.encoded == enc.encoded);
+  CHECK(memcmp(patched, legal, (enc.encoded + 7) / 8) != 0);
+
+  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &msg);
+}
+
+static void test_illegal_measurement_digits_encode_with_patch(void)
+{
+  if (NR_UE_FUZZ_HOOK_AUTO_GENERATED_ADAPTER_COUNT == 0)
+    return;
+
+  NR_UE_RRC_INST_t rrc;
+  reset(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, NR_UE_HOOK_ACTION_MUTATE_FIELD, true);
+  illegal_measurement_digit_contract(&rrc, 0, "542325a40db0b07b");
+  illegal_measurement_digit_contract(&rrc, 1, "d694c6f6dcba1682");
+
+  uint8_t bytes[4096] = {0};
+  int size = do_nrMeasurementReport_SA(1,
+                                       NR_MeasTriggerQuantityOffset_PR_rsrp,
+                                       NR_NR_RS_Type_ssb,
+                                       1,
+                                       90,
+                                       true,
+                                       2,
+                                       80,
+                                       bytes,
+                                       sizeof(bytes),
+                                       &rrc,
+                                       nr_ue_fuzz_hook_mutate_ul_dcch);
+  CHECK(size > 0);
+  CHECK(rrc.fuzz_hook.hook_fire_count == 1);
+  CHECK(rrc.fuzz_hook.last_hook_msg == NR_UE_HOOK_MSG_MEASUREMENT_REPORT);
+  CHECK(rrc.fuzz_hook.last_hook_action == NR_UE_HOOK_ACTION_MUTATE_FIELD);
+  CHECK(rrc.fuzz_hook.field_mutation_applied_count == 2);
+  CHECK(!strcmp(rrc.fuzz_hook.field_mutation_result, "applied"));
+  CHECK(!strcmp(rrc.fuzz_hook.context_result, "illegal_integer_per_codepoint_patched"));
+  CHECK(rrc.fuzz_hook.integer_encode_patch_count == 0);
 }
 
 static void test_legacy_control_and_ul_callback(void)
@@ -431,7 +589,11 @@ int main(int argc, char **argv)
   CHECK(mkdtemp(test_root));
   test_dl_lifecycle();
   test_ul_transport();
+  test_setup_request_ccch_mutation();
   test_transactions();
+  test_illegal_integer_override_is_applied_for_fuzzing();
+  test_illegal_integer_override_repairs_uper_encoding();
+  test_illegal_measurement_digits_encode_with_patch();
   test_legacy_control_and_ul_callback();
   test_nas_and_measurement_fields();
   test_review_regressions();
