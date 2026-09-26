@@ -18,6 +18,10 @@ typedef struct nr_ue_fuzz_hook_field_adapter_s {
 static const char *nr_ue_fuzz_hook_msg_name(nr_ue_fuzz_hook_msg_t msg)
 {
   switch (msg) {
+    case NR_UE_HOOK_MSG_RRC_SETUP:
+      return "RRCSetup";
+    case NR_UE_HOOK_MSG_RRC_REJECT:
+      return "RRCReject";
     case NR_UE_HOOK_MSG_RRC_RECONFIGURATION:
       return "RRCReconfiguration";
     case NR_UE_HOOK_MSG_SECURITY_MODE_COMMAND:
@@ -68,6 +72,10 @@ static nr_ue_fuzz_hook_msg_t nr_ue_fuzz_hook_msg_from_name(const char *name)
 {
   if (!name || *name == '\0')
     return NR_UE_HOOK_MSG_NONE;
+  if (!strcasecmp(name, "RRCSetup") || !strcasecmp(name, "DL_RRCSetup"))
+    return NR_UE_HOOK_MSG_RRC_SETUP;
+  if (!strcasecmp(name, "RRCReject") || !strcasecmp(name, "DL_RRCReject"))
+    return NR_UE_HOOK_MSG_RRC_REJECT;
   if (!strcasecmp(name, "RRCReconfiguration") || !strcasecmp(name, "DL_RRCReconfiguration"))
     return NR_UE_HOOK_MSG_RRC_RECONFIGURATION;
   if (!strcasecmp(name, "SecurityModeCommand") || !strcasecmp(name, "DL_SecurityModeCommand"))
@@ -488,6 +496,7 @@ static bool nr_ue_fuzz_hook_apply_txn_value(NR_UE_RRC_INST_t *ue, long *value, c
     return payload && nr_ue_fuzz_hook_apply_txn_value(ue, &((type *)payload)->rrc_TransactionIdentifier, mode);  \
   }
 
+NR_GNB_TXN_ADAPTER(nr_gnb_txn_setup, NR_RRCSetup_t)
 NR_GNB_TXN_ADAPTER(nr_gnb_txn_reconfiguration, NR_RRCReconfiguration_t)
 NR_GNB_TXN_ADAPTER(nr_gnb_txn_security, NR_SecurityModeCommand_t)
 NR_GNB_TXN_ADAPTER(nr_gnb_txn_capability, NR_UECapabilityEnquiry_t)
@@ -496,6 +505,11 @@ NR_GNB_TXN_ADAPTER(nr_gnb_txn_release, NR_RRCRelease_t)
 #undef NR_GNB_TXN_ADAPTER
 
 static const nr_ue_fuzz_hook_field_adapter_t builtin_field_adapters[] = {
+    {.target_msg = NR_UE_HOOK_MSG_RRC_SETUP,
+     .message_name = "RRCSetup",
+     .field_name = "transactionIdentifier",
+     .operator_family = "integer_transform",
+     .apply = nr_gnb_txn_setup},
     {.target_msg = NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
      .message_name = "RRCReconfiguration",
      .field_name = "transactionIdentifier",
@@ -608,11 +622,31 @@ static void *nr_gnb_fuzz_hook_message_payload(NR_DL_DCCH_Message_t *pdu, nr_ue_f
 #undef NR_GNB_PAYLOAD_CASE
 }
 
+static void *nr_gnb_fuzz_hook_ccch_message_payload(NR_DL_CCCH_Message_t *pdu, nr_ue_fuzz_hook_msg_t *msg)
+{
+  *msg = NR_UE_HOOK_MSG_NONE;
+  if (!pdu || pdu->message.present != NR_DL_CCCH_MessageType_PR_c1 || !pdu->message.choice.c1)
+    return NULL;
+  struct NR_DL_CCCH_MessageType__c1 *c1 = pdu->message.choice.c1;
+  switch (c1->present) {
+    case NR_DL_CCCH_MessageType__c1_PR_rrcReject:
+      *msg = NR_UE_HOOK_MSG_RRC_REJECT;
+      return c1->choice.rrcReject;
+    case NR_DL_CCCH_MessageType__c1_PR_rrcSetup:
+      *msg = NR_UE_HOOK_MSG_RRC_SETUP;
+      return c1->choice.rrcSetup;
+    default:
+      return NULL;
+  }
+}
+
 static int nr_gnb_fuzz_hook_payload_txn(nr_ue_fuzz_hook_msg_t msg, void *payload)
 {
   if (!payload)
     return -1;
   switch (msg) {
+    case NR_UE_HOOK_MSG_RRC_SETUP:
+      return ((NR_RRCSetup_t *)payload)->rrc_TransactionIdentifier;
     case NR_UE_HOOK_MSG_RRC_RECONFIGURATION:
       return ((NR_RRCReconfiguration_t *)payload)->rrc_TransactionIdentifier;
     case NR_UE_HOOK_MSG_SECURITY_MODE_COMMAND:
@@ -623,6 +657,7 @@ static int nr_gnb_fuzz_hook_payload_txn(nr_ue_fuzz_hook_msg_t msg, void *payload
       return ((NR_RRCReestablishment_t *)payload)->rrc_TransactionIdentifier;
     case NR_UE_HOOK_MSG_RRC_RELEASE:
       return ((NR_RRCRelease_t *)payload)->rrc_TransactionIdentifier;
+    case NR_UE_HOOK_MSG_RRC_REJECT:
     default:
       return -1;
   }
@@ -848,5 +883,121 @@ static bool nr_gnb_fuzz_hook_process_dl_dcch(NR_UE_RRC_INST_t *ue,
 
 done:
   ASN_STRUCT_FREE(asn_DEF_NR_DL_DCCH_Message, dl_dcch_msg);
+  return should_send;
+}
+
+static bool nr_gnb_fuzz_hook_process_dl_ccch(NR_UE_RRC_INST_t *ue,
+                                             int srb_id,
+                                             const uint8_t *buffer,
+                                             int size,
+                                             uint8_t *mutated_buffer,
+                                             int mutated_buffer_size,
+                                             int *mutated_size,
+                                             uint8_t *repeat_buffer,
+                                             int repeat_buffer_size,
+                                             int *repeat_size)
+{
+  *mutated_size = 0;
+  *repeat_size = 0;
+  nr_ue_fuzz_hook_reload_config(ue);
+
+  nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
+  uint8_t previous_buffer[NR_RRC_BUF_SIZE] = {0};
+  const int previous_size = hook->last_dl_size > 0 && hook->last_dl_size <= NR_RRC_BUF_SIZE ? hook->last_dl_size : 0;
+  if (previous_size > 0)
+    memcpy(previous_buffer, hook->last_dl_pdu, previous_size);
+
+  NR_DL_CCCH_Message_t *dl_ccch_msg = NULL;
+  asn_dec_rval_t dec = uper_decode(NULL, &asn_DEF_NR_DL_CCCH_Message, (void **)&dl_ccch_msg, buffer, size, 0, 0);
+  if (dec.code != RC_OK || !dl_ccch_msg) {
+    nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "decode_failed");
+    nr_ue_fuzz_hook_write_state(ue);
+    return true;
+  }
+
+  nr_ue_fuzz_hook_msg_t msg = NR_UE_HOOK_MSG_NONE;
+  void *payload = nr_gnb_fuzz_hook_ccch_message_payload(dl_ccch_msg, &msg);
+  const int txn = nr_gnb_fuzz_hook_payload_txn(msg, payload);
+  nr_gnb_fuzz_hook_record_dl(ue, msg, txn, buffer, size);
+
+  bool should_send = true;
+  const bool hit_target = hook->enabled && hook->target_msg == msg;
+  if (!hit_target)
+    goto done;
+
+  if (hook->action == NR_UE_HOOK_ACTION_DROP) {
+    LOG_W(NR_RRC, "[gNB][HOOK] UE %u drop %s on DL-CCCH\n", ue->rrc_ue_id, nr_ue_fuzz_hook_msg_name(msg));
+    nr_ue_fuzz_hook_record_fire(ue, msg, NR_UE_HOOK_ACTION_DROP, srb_id);
+    should_send = false;
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(ue);
+    nr_ue_fuzz_hook_write_state(ue);
+    goto done;
+  }
+
+  if (hook->action == NR_UE_HOOK_ACTION_DELAY) {
+    const int delay_ms = hook->delay_ms > 0 ? hook->delay_ms : 50;
+    LOG_W(NR_RRC, "[gNB][HOOK] UE %u delay %s on DL-CCCH by %d ms\n", ue->rrc_ue_id, nr_ue_fuzz_hook_msg_name(msg), delay_ms);
+    usleep((useconds_t)delay_ms * 1000);
+    nr_ue_fuzz_hook_record_fire(ue, msg, NR_UE_HOOK_ACTION_DELAY, srb_id);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(ue);
+    nr_ue_fuzz_hook_write_state(ue);
+    goto done;
+  }
+
+  if (hook->action == NR_UE_HOOK_ACTION_DUPLICATE) {
+    const int copy_size = size < repeat_buffer_size ? size : repeat_buffer_size;
+    if (copy_size > 0) {
+      memcpy(repeat_buffer, buffer, copy_size);
+      *repeat_size = copy_size;
+    }
+    LOG_W(NR_RRC, "[gNB][HOOK] UE %u duplicate %s on DL-CCCH\n", ue->rrc_ue_id, nr_ue_fuzz_hook_msg_name(msg));
+    nr_ue_fuzz_hook_record_fire(ue, msg, NR_UE_HOOK_ACTION_DUPLICATE, srb_id);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(ue);
+    nr_ue_fuzz_hook_write_state(ue);
+    goto done;
+  }
+
+  if (hook->action == NR_UE_HOOK_ACTION_REPLAY) {
+    const int copy_size = previous_size < repeat_buffer_size ? previous_size : repeat_buffer_size;
+    if (copy_size > 0) {
+      memcpy(repeat_buffer, previous_buffer, copy_size);
+      *repeat_size = copy_size;
+      LOG_W(NR_RRC, "[gNB][HOOK] UE %u replay previous DL PDU after %s on DL-CCCH\n", ue->rrc_ue_id, nr_ue_fuzz_hook_msg_name(msg));
+      nr_ue_fuzz_hook_record_fire(ue, msg, NR_UE_HOOK_ACTION_REPLAY, srb_id);
+      if (hook->arm_once)
+        nr_ue_fuzz_hook_disarm_persistent(ue);
+      nr_ue_fuzz_hook_write_state(ue);
+    }
+    goto done;
+  }
+
+  if (hook->action == NR_UE_HOOK_ACTION_MUTATE_FIELD || hook->action == NR_UE_HOOK_ACTION_MUTATE_TXN) {
+    if (!nr_gnb_fuzz_hook_apply_mutations(ue, msg, payload))
+      goto done;
+    memset(mutated_buffer, 0, mutated_buffer_size);
+    asn_enc_rval_t enc = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message, NULL, dl_ccch_msg, mutated_buffer, mutated_buffer_size);
+    if (enc.encoded <= 0) {
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "encode_failed");
+      nr_ue_fuzz_hook_write_state(ue);
+      goto done;
+    }
+    *mutated_size = (enc.encoded + 7) / 8;
+    nr_ue_fuzz_hook_record_fire(ue, msg, hook->action, srb_id);
+    LOG_W(NR_RRC,
+          "[gNB][HOOK] UE %u mutated %s on DL-CCCH bytes %d -> %d\n",
+          ue->rrc_ue_id,
+          nr_ue_fuzz_hook_msg_name(msg),
+          size,
+          *mutated_size);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(ue);
+    nr_ue_fuzz_hook_write_state(ue);
+  }
+
+done:
+  ASN_STRUCT_FREE(asn_DEF_NR_DL_CCCH_Message, dl_ccch_msg);
   return should_send;
 }

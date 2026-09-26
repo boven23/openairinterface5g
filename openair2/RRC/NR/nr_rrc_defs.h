@@ -180,6 +180,8 @@ typedef struct nr_handover_context_s nr_handover_context_t;
 
 typedef enum nr_ue_fuzz_hook_msg_e {
   NR_UE_HOOK_MSG_NONE = 0,
+  NR_UE_HOOK_MSG_RRC_SETUP,
+  NR_UE_HOOK_MSG_RRC_REJECT,
   NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
   NR_UE_HOOK_MSG_SECURITY_MODE_COMMAND,
   NR_UE_HOOK_MSG_UE_CAPABILITY_ENQUIRY,

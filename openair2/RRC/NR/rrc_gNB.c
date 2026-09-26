@@ -80,6 +80,7 @@
 #include "xer_encoder.h"
 #include "E1AP/lib/e1ap_bearer_context_management.h"
 #include "E1AP/lib/e1ap_interface_management.h"
+#include "NR_DL-CCCH-Message.h"
 #include "NR_DL-DCCH-Message.h"
 #include "ds/byte_array.h"
 #include "alg/find.h"
@@ -366,6 +367,58 @@ static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
 #endif
 }
 
+static void nr_rrc_transfer_dl_ccch_message(const gNB_RRC_INST *rrc,
+                                            const gNB_RRC_UE_t *ue_p,
+                                            const uint8_t *buffer,
+                                            int size)
+{
+  DevAssert(size > 0);
+  f1_ue_data_t ue_data = cu_get_f1_ue_data(ue_p->rrc_ue_id);
+  RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
+  uint8_t mutated_buffer[NR_RRC_BUF_SIZE] = {0};
+  uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
+  int mutated_size = 0;
+  int repeat_size = 0;
+  const uint8_t *tx_buffer = buffer;
+  int tx_size = size;
+  gNB_RRC_UE_t *mutable_ue = (gNB_RRC_UE_t *)ue_p;
+  const bool send_primary = nr_gnb_fuzz_hook_process_dl_ccch(mutable_ue,
+                                                             0,
+                                                             buffer,
+                                                             size,
+                                                             mutated_buffer,
+                                                             sizeof(mutated_buffer),
+                                                             &mutated_size,
+                                                             repeat_buffer,
+                                                             sizeof(repeat_buffer),
+                                                             &repeat_size);
+  if (!send_primary)
+    return;
+  if (mutated_size > 0) {
+    tx_buffer = mutated_buffer;
+    tx_size = mutated_size;
+  }
+  f1ap_dl_rrc_message_t dl_rrc = {
+    .gNB_CU_ue_id = ue_p->rrc_ue_id,
+    .gNB_DU_ue_id = ue_data.secondary_ue,
+    .rrc_container = (uint8_t *)tx_buffer,
+    .rrc_container_length = tx_size,
+    .srb_id = 0,
+  };
+  rrc->mac_rrc.dl_rrc_message_transfer(ue_data.du_assoc_id, &dl_rrc);
+
+  if (repeat_size > 0) {
+    f1ap_dl_rrc_message_t repeat_dl_rrc = {
+      .gNB_CU_ue_id = ue_p->rrc_ue_id,
+      .gNB_DU_ue_id = ue_data.secondary_ue,
+      .rrc_container = repeat_buffer,
+      .rrc_container_length = repeat_size,
+      .srb_id = 0,
+    };
+    rrc->mac_rrc.dl_rrc_message_transfer(ue_data.du_assoc_id, &repeat_dl_rrc);
+  }
+}
+
 static void rrc_gNB_CU_DU_init(gNB_RRC_INST *rrc)
 {
   switch (rrc->node_type) {
@@ -628,17 +681,7 @@ static void rrc_gNB_generate_RRCSetup(instance_t instance,
 
   LOG_DUMPMSG(NR_RRC, DEBUG_RRC, (char *)buf, size, "[MSG] RRC Setup\n");
   freeSRBlist(SRBs);
-  f1_ue_data_t ue_data = cu_get_f1_ue_data(ue_p->rrc_ue_id);
-  RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
-  int srbid = 0;
-  f1ap_dl_rrc_message_t dl_rrc = {
-    .gNB_CU_ue_id = ue_p->rrc_ue_id,
-    .gNB_DU_ue_id = ue_data.secondary_ue,
-    .rrc_container = buf,
-    .rrc_container_length = size,
-    .srb_id = srbid
-  };
-  rrc->mac_rrc.dl_rrc_message_transfer(ue_data.du_assoc_id, &dl_rrc);
+  nr_rrc_transfer_dl_ccch_message(rrc, ue_p, buf, size);
 }
 
 static void rrc_gNB_generate_RRCReject(gNB_RRC_INST *rrc, rrc_gNB_ue_context_t *const ue_context_pP)
@@ -658,17 +701,7 @@ static void rrc_gNB_generate_RRCReject(gNB_RRC_INST *rrc, rrc_gNB_ue_context_t *
               "[MSG] RRCReject \n");
   LOG_I(NR_RRC, " [RAPROC] ue %04x Logical Channel DL-CCCH, Generating NR_RRCReject (bytes %d)\n", ue_p->rnti, size);
 
-  f1_ue_data_t ue_data = cu_get_f1_ue_data(ue_p->rrc_ue_id);
-  RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
-  int srbid = 0;
-  f1ap_dl_rrc_message_t dl_rrc = {
-    .gNB_CU_ue_id = ue_p->rrc_ue_id,
-    .gNB_DU_ue_id = ue_data.secondary_ue,
-    .rrc_container = buf,
-    .rrc_container_length = size,
-    .srb_id = srbid,
-  };
-  rrc->mac_rrc.dl_rrc_message_transfer(ue_data.du_assoc_id, &dl_rrc);
+  nr_rrc_transfer_dl_ccch_message(rrc, ue_p, buf, size);
   /* release the created UE context, we rejected the UE */
   rrc_remove_ue(rrc, ue_context_pP);
 }
