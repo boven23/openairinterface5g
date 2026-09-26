@@ -4,6 +4,8 @@
 static const char *nr_ue_fuzz_hook_msg_name(nr_ue_fuzz_hook_msg_t msg)
 {
   switch (msg) {
+    case NR_UE_HOOK_MSG_RRC_SETUP_REQUEST:
+      return "RRCSetupRequest";
     case NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE:
       return "RRCSetupComplete";
     case NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE:
@@ -79,6 +81,8 @@ static nr_ue_fuzz_hook_msg_t nr_ue_fuzz_hook_msg_from_name(const char *name)
 {
   if (!name || *name == '\0')
     return NR_UE_HOOK_MSG_NONE;
+  if (!strcasecmp(name, "RRCSetupRequest"))
+    return NR_UE_HOOK_MSG_RRC_SETUP_REQUEST;
   if (!strcasecmp(name, "RRCSetupComplete"))
     return NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE;
   if (!strcasecmp(name, "SecurityModeComplete"))
@@ -177,6 +181,229 @@ static unsigned long nr_ue_fuzz_hook_now_ms(const NR_UE_RRC_INST_t *rrc)
 
 #include "nr_ue_fuzz_hook_context.inc.c"
 
+static void nr_ue_fuzz_hook_clear_integer_encode_patches(NR_UE_RRC_INST_t *rrc)
+{
+  if (!rrc)
+    return;
+  rrc->fuzz_hook.integer_encode_patch_count = 0;
+  memset(rrc->fuzz_hook.integer_encode_patches, 0, sizeof(rrc->fuzz_hook.integer_encode_patches));
+}
+
+static bool nr_ue_fuzz_hook_register_integer_encode_patch(NR_UE_RRC_INST_t *rrc,
+                                                          long *target,
+                                                          long requested_value,
+                                                          long min_value,
+                                                          long max_value)
+{
+  if (!rrc || !target || min_value > max_value)
+    return false;
+  if (requested_value >= min_value && requested_value <= max_value)
+    return true;
+
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  if (hook->integer_encode_patch_count >= NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS)
+    return false;
+  nr_ue_fuzz_hook_integer_encode_patch_t *patch = &hook->integer_encode_patches[hook->integer_encode_patch_count++];
+  patch->active = true;
+  patch->target = target;
+  patch->requested_value = requested_value;
+  patch->min_value = min_value;
+  patch->max_value = max_value;
+  patch->placeholder_value = min_value;
+  return true;
+}
+
+void nr_ue_fuzz_hook_materialize_integer_encode_placeholders(void *context)
+{
+  NR_UE_RRC_INST_t *rrc = context;
+  if (!rrc)
+    return;
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  for (unsigned int i = 0; i < hook->integer_encode_patch_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i) {
+    nr_ue_fuzz_hook_integer_encode_patch_t *patch = &hook->integer_encode_patches[i];
+    if (patch->active && patch->target)
+      *patch->target = patch->placeholder_value;
+  }
+}
+
+static int nr_ue_fuzz_hook_bit_width_for_range(long min_value, long max_value)
+{
+  if (min_value >= max_value)
+    return 0;
+  unsigned long long span = (unsigned long long)(max_value - min_value);
+  int width = 0;
+  while (span > 0) {
+    width++;
+    span >>= 1;
+  }
+  return width;
+}
+
+static int nr_ue_fuzz_hook_get_encoded_bit(const uint8_t *buffer, size_t bit)
+{
+  return (buffer[bit / 8] >> (7 - (bit % 8))) & 1;
+}
+
+static void nr_ue_fuzz_hook_set_encoded_bit(uint8_t *buffer, size_t bit, bool value)
+{
+  const uint8_t mask = (uint8_t)(1u << (7 - (bit % 8)));
+  if (value)
+    buffer[bit / 8] |= mask;
+  else
+    buffer[bit / 8] &= (uint8_t)~mask;
+}
+
+static bool nr_ue_fuzz_hook_find_single_changed_bit(const uint8_t *baseline,
+                                                    const uint8_t *probe,
+                                                    size_t encoded_bits,
+                                                    size_t *changed_bit)
+{
+  bool found = false;
+  for (size_t bit = 0; bit < encoded_bits; ++bit) {
+    if (nr_ue_fuzz_hook_get_encoded_bit(baseline, bit) == nr_ue_fuzz_hook_get_encoded_bit(probe, bit))
+      continue;
+    if (found)
+      return false;
+    found = true;
+    *changed_bit = bit;
+  }
+  return found;
+}
+
+static bool nr_ue_fuzz_hook_patch_one_integer_codepoint(NR_UE_RRC_INST_t *rrc,
+                                                        asn_TYPE_descriptor_t *td,
+                                                        void *message,
+                                                        const uint8_t *baseline,
+                                                        uint8_t *patched,
+                                                        uint8_t *probe,
+                                                        size_t buffer_size,
+                                                        size_t encoded_bits,
+                                                        nr_ue_fuzz_hook_integer_encode_patch_t *patch)
+{
+  if (!patch || !patch->active || !patch->target)
+    return true;
+
+  const int width = nr_ue_fuzz_hook_bit_width_for_range(patch->min_value, patch->max_value);
+  if (width <= 0 || width >= 63)
+    return false;
+  const unsigned long long mask = (1ULL << width) - 1ULL;
+  const unsigned long long max_offset = (unsigned long long)(patch->max_value - patch->min_value);
+  const unsigned long long requested_offset = (unsigned long long)(patch->requested_value - patch->min_value) & mask;
+  if (requested_offset <= max_offset) {
+    nr_ue_hook_context_result(rrc, "illegal_integer_unrepresentable_placeholder");
+    return true;
+  }
+
+  size_t bit_positions[64] = {0};
+  for (int bit = 0; bit < width; ++bit) {
+    *patch->target = patch->min_value + (long)(1ULL << bit);
+    memset(probe, 0, buffer_size);
+    asn_enc_rval_t probe_rval = uper_encode_to_buffer(td, NULL, message, probe, buffer_size);
+    if (probe_rval.encoded <= 0 || (size_t)probe_rval.encoded != encoded_bits)
+      return false;
+    if (!nr_ue_fuzz_hook_find_single_changed_bit(baseline, probe, encoded_bits, &bit_positions[bit]))
+      return false;
+  }
+
+  for (int bit = 0; bit < width; ++bit)
+    nr_ue_fuzz_hook_set_encoded_bit(patched, bit_positions[bit], ((requested_offset >> bit) & 1ULL) != 0);
+  nr_ue_hook_context_result(rrc, "illegal_integer_per_codepoint_patched");
+  return true;
+}
+
+static bool nr_ue_fuzz_hook_repair_uper_integer_encoding(NR_UE_RRC_INST_t *rrc,
+                                                         asn_TYPE_descriptor_t *td,
+                                                         void *message,
+                                                         uint8_t *buffer,
+                                                         size_t buffer_size,
+                                                         asn_enc_rval_t *enc_rval)
+{
+  if (!rrc || !td || !message || !buffer || buffer_size == 0 || !enc_rval)
+    return false;
+
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  const unsigned int patch_count = hook->integer_encode_patch_count;
+  if (patch_count == 0)
+    return false;
+
+  long saved_values[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS] = {0};
+  for (unsigned int i = 0; i < patch_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i) {
+    nr_ue_fuzz_hook_integer_encode_patch_t *patch = &hook->integer_encode_patches[i];
+    if (!patch->active || !patch->target)
+      continue;
+    saved_values[i] = *patch->target;
+    *patch->target = patch->placeholder_value;
+  }
+
+  uint8_t *baseline = calloc(buffer_size, sizeof(*baseline));
+  uint8_t *probe = calloc(buffer_size, sizeof(*probe));
+  if (!baseline || !probe)
+    goto fail;
+
+  memset(buffer, 0, buffer_size);
+  asn_enc_rval_t base_rval = uper_encode_to_buffer(td, NULL, message, buffer, buffer_size);
+  if (base_rval.encoded <= 0)
+    goto fail;
+  const size_t encoded_bits = (size_t)base_rval.encoded;
+  const size_t encoded_bytes = (encoded_bits + 7) / 8;
+  memcpy(baseline, buffer, encoded_bytes);
+
+  for (unsigned int i = 0; i < patch_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i) {
+    nr_ue_fuzz_hook_integer_encode_patch_t *patch = &hook->integer_encode_patches[i];
+    if (!patch->active || !patch->target)
+      continue;
+    *patch->target = patch->placeholder_value;
+    if (!nr_ue_fuzz_hook_patch_one_integer_codepoint(rrc, td, message, baseline, buffer, probe, buffer_size, encoded_bits, patch))
+      goto fail;
+    *patch->target = patch->placeholder_value;
+  }
+
+  *enc_rval = base_rval;
+  for (unsigned int i = 0; i < patch_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i) {
+    nr_ue_fuzz_hook_integer_encode_patch_t *patch = &hook->integer_encode_patches[i];
+    if (patch->active && patch->target)
+      *patch->target = saved_values[i];
+  }
+  free(probe);
+  free(baseline);
+  nr_ue_fuzz_hook_clear_integer_encode_patches(rrc);
+  return true;
+
+fail:
+  for (unsigned int i = 0; i < patch_count && i < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++i) {
+    nr_ue_fuzz_hook_integer_encode_patch_t *patch = &hook->integer_encode_patches[i];
+    if (patch->active && patch->target)
+      *patch->target = saved_values[i];
+  }
+  free(probe);
+  free(baseline);
+  nr_ue_fuzz_hook_clear_integer_encode_patches(rrc);
+  return false;
+}
+
+bool nr_ue_fuzz_hook_repair_ul_dcch_encoding(void *context,
+                                             NR_UL_DCCH_Message_t *message,
+                                             uint8_t *buffer,
+                                             size_t buffer_size,
+                                             asn_enc_rval_t *enc_rval)
+{
+  return nr_ue_fuzz_hook_repair_uper_integer_encoding(context, &asn_DEF_NR_UL_DCCH_Message, message, buffer, buffer_size, enc_rval);
+}
+
+bool nr_ue_fuzz_hook_repair_ul_ccch_encoding(void *context,
+                                             NR_UL_CCCH_Message_t *message,
+                                             uint8_t *buffer,
+                                             size_t buffer_size,
+                                             asn_enc_rval_t *enc_rval)
+{
+  return nr_ue_fuzz_hook_repair_uper_integer_encoding(context, &asn_DEF_NR_UL_CCCH_Message, message, buffer, buffer_size, enc_rval);
+}
+
+void nr_ue_fuzz_hook_discard_integer_encode_patches(void *context)
+{
+  nr_ue_fuzz_hook_clear_integer_encode_patches(context);
+}
+
 static void nr_ue_fuzz_hook_write_timer_state(FILE *fp, const char *name, const NR_timer_t *timer)
 {
   if (!fp || !name || !timer)
@@ -208,8 +435,13 @@ static void nr_ue_fuzz_hook_ensure_paths(NR_UE_RRC_INST_t *rrc)
   nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
   if (hook->control_path[0] != '\0')
     return;
-  snprintf(hook->control_path, sizeof(hook->control_path), "/tmp/oai_nr_ue_hook_%ld.ctl", rrc->ue_id);
-  snprintf(hook->state_path, sizeof(hook->state_path), "/tmp/oai_nr_ue_hook_%ld.state", rrc->ue_id);
+  const char *root = getenv("OAI_NR_UE_HOOK_ROOT");
+  if (!root || root[0] == '\0')
+    root = "/tmp";
+  const size_t root_len = strlen(root);
+  const char *separator = root_len > 0 && root[root_len - 1] == '/' ? "" : "/";
+  snprintf(hook->control_path, sizeof(hook->control_path), "%s%soai_nr_ue_hook_%ld.ctl", root, separator, rrc->ue_id);
+  snprintf(hook->state_path, sizeof(hook->state_path), "%s%soai_nr_ue_hook_%ld.state", root, separator, rrc->ue_id);
   hook->control_mtime = -1;
   hook->control_mtime_nsec = -1;
   hook->last_dl_txn = -1;
@@ -252,9 +484,7 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "procedure_trigger_target=%s\n", nr_ue_fuzz_hook_msg_name(hook->procedure_trigger_msg));
   fprintf(fp, "procedure_trigger_action=%s\n", nr_ue_fuzz_hook_action_name(hook->procedure_trigger_action));
   fprintf(fp, "procedure_trigger_delay_ms=%d\n", hook->procedure_trigger_delay_ms);
-  fprintf(fp,
-          "rrc_reconfiguration_complete_submit_time_valid=%d\n",
-          hook->rrc_reconfiguration_complete_submit_time_valid ? 1 : 0);
+  fprintf(fp, "rrc_reconfiguration_complete_submit_time_valid=%d\n", hook->rrc_reconfiguration_complete_submit_time_valid ? 1 : 0);
   fprintf(fp, "rrc_reconfiguration_complete_submit_time_ms=%lu\n", hook->rrc_reconfiguration_complete_submit_time_ms);
   fprintf(fp, "procedure_trigger_waited_ms=%lu\n", hook->procedure_trigger_waited_ms);
   fprintf(fp, "procedure_trigger_count=%lu\n", hook->procedure_trigger_count);
@@ -271,7 +501,7 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   fprintf(fp, "mutation_generation=%lu\n", hook->mutation_generation);
   fprintf(fp, "original_meas_id=%d\n", hook->original_meas_id);
   fprintf(fp, "mutated_meas_id=%d\n", hook->mutated_meas_id);
-  for (int msg = NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE; msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT; msg++)
+  for (int msg = NR_UE_HOOK_MSG_RRC_SETUP_REQUEST; msg <= NR_UE_HOOK_MSG_MEASUREMENT_REPORT; msg++)
     fprintf(fp, "submitted.%s=%lu\n", nr_ue_fuzz_hook_msg_name(msg), hook->submitted[msg]);
   for (int gnb = 0; gnb < NB_CNX_UE; gnb++) {
     const nr_ue_hook_meas_context_t *ctx = &rrc->perNB[gnb].hook_meas;
@@ -304,6 +534,7 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
   nr_ue_fuzz_hook_write_timer_state(fp, "T321", &timers->T321);
   fprintf(fp, "last_dl_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_dl_msg));
   fprintf(fp, "last_dl_txn=%d\n", hook->last_dl_txn);
+  fprintf(fp, "seen_rrc_setup_request=%d\n", hook->seen_rrc_setup_request ? 1 : 0);
   fprintf(fp, "seen_rrc_setup_complete=%d\n", hook->seen_rrc_setup_complete ? 1 : 0);
   fprintf(fp, "seen_security_mode_complete=%d\n", hook->seen_security_mode_complete ? 1 : 0);
   fprintf(fp, "seen_rrc_reconfiguration_complete=%d\n", hook->seen_rrc_reconfiguration_complete ? 1 : 0);
@@ -343,14 +574,8 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *rrc)
     fprintf(fp, "field_mutation_%u_operator_family=%s\n", i, mutation->operator_family);
     fprintf(fp, "field_mutation_%u_transform=%s\n", i, mutation->transform_name);
     fprintf(fp, "field_mutation_%u_selected_mode=%s\n", i, mutation->selected_mode);
-    fprintf(fp,
-            "field_mutation_%u_value_space_minimum=%d\n",
-            i,
-            mutation->has_range_min ? mutation->range_min : 0);
-    fprintf(fp,
-            "field_mutation_%u_value_space_maximum=%d\n",
-            i,
-            mutation->has_range_max ? mutation->range_max : 0);
+    fprintf(fp, "field_mutation_%u_value_space_minimum=%d\n", i, mutation->has_range_min ? mutation->range_min : 0);
+    fprintf(fp, "field_mutation_%u_value_space_maximum=%d\n", i, mutation->has_range_max ? mutation->range_max : 0);
   }
   fclose(fp);
 }
@@ -404,9 +629,7 @@ static void nr_ue_fuzz_hook_record_fire(NR_UE_RRC_INST_t *rrc,
   hook->last_hook_srb_id = srb_id;
 }
 
-static bool nr_ue_fuzz_hook_parse_field_mutation_key(nr_ue_fuzz_hook_field_mutation_t *mutation,
-                                                     const char *key,
-                                                     const char *value)
+static bool nr_ue_fuzz_hook_parse_field_mutation_key(nr_ue_fuzz_hook_field_mutation_t *mutation, const char *key, const char *value)
 {
   if (!mutation || !key || !value)
     return false;
@@ -672,6 +895,9 @@ static void nr_ue_fuzz_hook_record_dl(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg
 static void nr_ue_fuzz_hook_record_seen_ul(nr_ue_fuzz_hook_state_t *hook, nr_ue_fuzz_hook_msg_t msg)
 {
   switch (msg) {
+    case NR_UE_HOOK_MSG_RRC_SETUP_REQUEST:
+      hook->seen_rrc_setup_request = true;
+      break;
     case NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE:
       hook->seen_rrc_setup_complete = true;
       break;
@@ -865,6 +1091,76 @@ static void nr_ue_fuzz_hook_send_srb(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_
       nr_ue_fuzz_hook_write_state(rrc);
       return;
     }
+    nr_ue_rrc_trace_signal(rrc, "TX", nr_ue_fuzz_hook_msg_name(msg), srb_id);
+    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_REPLAY, srb_id);
+    nr_ue_hook_record_submission(rrc, msg);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(rrc);
+    nr_ue_fuzz_hook_write_state(rrc);
+  }
+  nr_ue_fuzz_hook_write_state(rrc);
+}
+
+static void nr_ue_fuzz_hook_send_ccch(NR_UE_RRC_INST_t *rrc, nr_ue_fuzz_hook_msg_t msg, uint8_t *buffer, int size)
+{
+  const int srb_id = 0;
+  nr_ue_fuzz_hook_reload_config(rrc);
+  nr_ue_fuzz_hook_state_t *hook = &rrc->fuzz_hook;
+  const bool hit_target = hook->enabled && hook->target_msg == msg && nr_ue_hook_gates_ready(rrc);
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DROP) {
+    LOG_W(NR_RRC, "[UE %ld][HOOK] drop %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
+    nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
+    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DROP, srb_id);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(rrc);
+    nr_ue_fuzz_hook_write_state(rrc);
+    return;
+  }
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DELAY) {
+    const int delay_ms = hook->delay_ms > 0 ? hook->delay_ms : 50;
+    LOG_W(NR_RRC, "[UE %ld][HOOK] delay %s on SRB%d by %d ms\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id, delay_ms);
+    nr_ue_fuzz_hook_sleep_ms(delay_ms);
+  }
+
+  nr_rlc_srb_recv_sdu(rrc->ue_id, srb_id, buffer, size);
+  nr_ue_rrc_trace_signal(rrc, "TX", nr_ue_fuzz_hook_msg_name(msg), srb_id);
+  nr_ue_hook_record_submission(rrc, msg);
+  nr_ue_fuzz_hook_cache_ul(rrc, msg, srb_id, buffer, size);
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DELAY) {
+    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DELAY, srb_id);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(rrc);
+    nr_ue_fuzz_hook_write_state(rrc);
+    return;
+  }
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_DUPLICATE) {
+    LOG_W(NR_RRC, "[UE %ld][HOOK] duplicate %s on SRB%d\n", rrc->ue_id, nr_ue_fuzz_hook_msg_name(msg), srb_id);
+    nr_rlc_srb_recv_sdu(rrc->ue_id, srb_id, buffer, size);
+    nr_ue_rrc_trace_signal(rrc, "TX", nr_ue_fuzz_hook_msg_name(msg), srb_id);
+    nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_DUPLICATE, srb_id);
+    nr_ue_hook_record_submission(rrc, msg);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(rrc);
+    nr_ue_fuzz_hook_write_state(rrc);
+    return;
+  }
+
+  if (hit_target && hook->action == NR_UE_HOOK_ACTION_REPLAY) {
+    const int replay_delay_ms = hook->replay_delay_ms > 0 ? hook->replay_delay_ms : 0;
+    const char *replay_mode = hook->replay_mode[0] != '\0' ? hook->replay_mode : "immediate_replay";
+    LOG_W(NR_RRC,
+          "[UE %ld][HOOK] replay %s on SRB%d mode=%s delay_ms=%d\n",
+          rrc->ue_id,
+          nr_ue_fuzz_hook_msg_name(msg),
+          srb_id,
+          replay_mode,
+          replay_delay_ms);
+    nr_ue_fuzz_hook_sleep_ms(replay_delay_ms);
+    nr_rlc_srb_recv_sdu(rrc->ue_id, srb_id, hook->last_ul_pdu, hook->last_ul_size);
     nr_ue_rrc_trace_signal(rrc, "TX", nr_ue_fuzz_hook_msg_name(msg), srb_id);
     nr_ue_fuzz_hook_record_fire(rrc, msg, NR_UE_HOOK_ACTION_REPLAY, srb_id);
     nr_ue_hook_record_submission(rrc, msg);

@@ -81,6 +81,7 @@ typedef enum RA_trigger_e {
 
 typedef enum nr_ue_fuzz_hook_msg_e {
   NR_UE_HOOK_MSG_NONE = 0,
+  NR_UE_HOOK_MSG_RRC_SETUP_REQUEST,
   NR_UE_HOOK_MSG_RRC_SETUP_COMPLETE,
   NR_UE_HOOK_MSG_SECURITY_MODE_COMPLETE,
   NR_UE_HOOK_MSG_RRC_RECONFIGURATION_COMPLETE,
@@ -107,6 +108,15 @@ typedef enum nr_ue_fuzz_hook_action_e {
 } nr_ue_fuzz_hook_action_t;
 
 #define NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS 4
+
+typedef struct nr_ue_fuzz_hook_integer_encode_patch_s {
+  bool active;
+  long *target;
+  long requested_value;
+  long min_value;
+  long max_value;
+  long placeholder_value;
+} nr_ue_fuzz_hook_integer_encode_patch_t;
 
 typedef struct nr_ue_fuzz_hook_field_mutation_s {
   bool enabled;
@@ -160,6 +170,7 @@ typedef struct nr_ue_fuzz_hook_state_s {
   int last_hook_srb_id;
   nr_ue_fuzz_hook_msg_t last_dl_msg;
   int last_dl_txn;
+  bool seen_rrc_setup_request;
   bool seen_rrc_setup_complete;
   bool seen_security_mode_complete;
   bool seen_rrc_reconfiguration_complete;
@@ -181,6 +192,8 @@ typedef struct nr_ue_fuzz_hook_state_s {
   unsigned int field_mutation_failed_index;
   char field_mutation_result[64];
   nr_ue_fuzz_hook_field_mutation_t field_mutations[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS];
+  unsigned int integer_encode_patch_count;
+  nr_ue_fuzz_hook_integer_encode_patch_t integer_encode_patches[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS];
   long control_mtime;
   long control_mtime_nsec;
   char control_path[128];

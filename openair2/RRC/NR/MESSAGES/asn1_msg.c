@@ -12,7 +12,7 @@
 #include <unistd.h> /* for getopt(3) */
 #include <string.h> /* for strerror(3) */
 #include <sysexits.h> /* for EX_* exit codes */
-#include <errno.h>  /* for errno */
+#include <errno.h> /* for errno */
 #include "common/utils/LOG/log.h"
 #include "oai_asn1.h"
 #include <asn_application.h>
@@ -68,61 +68,130 @@
 #include "NR_HandoverCommand.h"
 #include "NR_UE-CapabilityRAT-ContainerList.h"
 #include "common/utils/nr/nr_common.h"
+
+__attribute__((weak)) bool nr_ue_fuzz_hook_repair_ul_dcch_encoding(void *context,
+                                                                   NR_UL_DCCH_Message_t *message,
+                                                                   uint8_t *buffer,
+                                                                   size_t buffer_size,
+                                                                   asn_enc_rval_t *enc_rval)
+{
+  (void)context;
+  (void)message;
+  (void)buffer;
+  (void)buffer_size;
+  (void)enc_rval;
+  return false;
+}
+
+__attribute__((weak)) bool nr_ue_fuzz_hook_repair_ul_ccch_encoding(void *context,
+                                                                   NR_UL_CCCH_Message_t *message,
+                                                                   uint8_t *buffer,
+                                                                   size_t buffer_size,
+                                                                   asn_enc_rval_t *enc_rval)
+{
+  (void)context;
+  (void)message;
+  (void)buffer;
+  (void)buffer_size;
+  (void)enc_rval;
+  return false;
+}
+
+__attribute__((weak)) void nr_ue_fuzz_hook_discard_integer_encode_patches(void *context)
+{
+  (void)context;
+}
+
+__attribute__((weak)) void nr_ue_fuzz_hook_materialize_integer_encode_placeholders(void *context)
+{
+  (void)context;
+}
+
+static asn_enc_rval_t nr_rrc_encode_ul_dcch_with_hook_repair(NR_UL_DCCH_Message_t *message,
+                                                             uint8_t *buffer,
+                                                             size_t buffer_size,
+                                                             void *mutation_context,
+                                                             nr_rrc_ul_dcch_mutator_t mutate_fn)
+{
+  if (mutate_fn)
+    nr_ue_fuzz_hook_materialize_integer_encode_placeholders(mutation_context);
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)message, buffer, buffer_size);
+  if (mutate_fn && !nr_ue_fuzz_hook_repair_ul_dcch_encoding(mutation_context, message, buffer, buffer_size, &enc_rval)
+      && enc_rval.encoded > 0)
+    nr_ue_fuzz_hook_discard_integer_encode_patches(mutation_context);
+  return enc_rval;
+}
+
+static asn_enc_rval_t nr_rrc_encode_ul_ccch_with_hook_repair(NR_UL_CCCH_Message_t *message,
+                                                             uint8_t *buffer,
+                                                             size_t buffer_size,
+                                                             void *mutation_context,
+                                                             nr_rrc_ul_ccch_mutator_t mutate_fn)
+{
+  if (mutate_fn)
+    nr_ue_fuzz_hook_materialize_integer_encode_placeholders(mutation_context);
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_CCCH_Message, NULL, (void *)message, buffer, buffer_size);
+  if (mutate_fn && !nr_ue_fuzz_hook_repair_ul_ccch_encoding(mutation_context, message, buffer, buffer_size, &enc_rval)
+      && enc_rval.encoded > 0)
+    nr_ue_fuzz_hook_discard_integer_encode_patches(mutation_context);
+  return enc_rval;
+}
+
 #if defined(NR_Rel16)
-  #include "NR_SCS-SpecificCarrier.h"
-  #include "NR_TDD-UL-DL-ConfigCommon.h"
-  #include "NR_FrequencyInfoUL.h"
-  #include "NR_FrequencyInfoDL.h"
-  #include "NR_RACH-ConfigGeneric.h"
-  #include "NR_RACH-ConfigCommon.h"
-  #include "NR_PUSCH-TimeDomainResourceAllocation.h"
-  #include "NR_PUSCH-ConfigCommon.h"
-  #include "NR_PUCCH-ConfigCommon.h"
-  #include "NR_PDSCH-TimeDomainResourceAllocation.h"
-  #include "NR_PDSCH-ConfigCommon.h"
-  #include "NR_RateMatchPattern.h"
-  #include "NR_RateMatchPatternLTE-CRS.h"
-  #include "NR_SearchSpace.h"
-  #include "NR_ControlResourceSet.h"
-  #include "NR_EUTRA-MBSFN-SubframeConfig.h"
-  #include "NR_BWP-DownlinkCommon.h"
-  #include "NR_BWP-DownlinkDedicated.h"
-  #include "NR_UplinkConfigCommon.h"
-  #include "NR_SetupRelease.h"
-  #include "NR_PDCCH-ConfigCommon.h"
-  #include "NR_BWP-UplinkCommon.h"
+#include "NR_SCS-SpecificCarrier.h"
+#include "NR_TDD-UL-DL-ConfigCommon.h"
+#include "NR_FrequencyInfoUL.h"
+#include "NR_FrequencyInfoDL.h"
+#include "NR_RACH-ConfigGeneric.h"
+#include "NR_RACH-ConfigCommon.h"
+#include "NR_PUSCH-TimeDomainResourceAllocation.h"
+#include "NR_PUSCH-ConfigCommon.h"
+#include "NR_PUCCH-ConfigCommon.h"
+#include "NR_PDSCH-TimeDomainResourceAllocation.h"
+#include "NR_PDSCH-ConfigCommon.h"
+#include "NR_RateMatchPattern.h"
+#include "NR_RateMatchPatternLTE-CRS.h"
+#include "NR_SearchSpace.h"
+#include "NR_ControlResourceSet.h"
+#include "NR_EUTRA-MBSFN-SubframeConfig.h"
+#include "NR_BWP-DownlinkCommon.h"
+#include "NR_BWP-DownlinkDedicated.h"
+#include "NR_UplinkConfigCommon.h"
+#include "NR_SetupRelease.h"
+#include "NR_PDCCH-ConfigCommon.h"
+#include "NR_BWP-UplinkCommon.h"
 
-  #include "assertions.h"
-  //#include "RRCConnectionRequest.h"
-  //#include "UL-CCCH-Message.h"
-  #include "NR_UL-DCCH-Message.h"
-  //#include "DL-CCCH-Message.h"
-  #include "NR_DL-DCCH-Message.h"
-  //#include "EstablishmentCause.h"
-  //#include "RRCConnectionSetup.h"
-  #include "NR_SRB-ToAddModList.h"
-  #include "NR_DRB-ToAddModList.h"
-  //#include "MCCH-Message.h"
-  //#define MRB1 1
+#include "assertions.h"
+// #include "RRCConnectionRequest.h"
+// #include "UL-CCCH-Message.h"
+#include "NR_UL-DCCH-Message.h"
+// #include "DL-CCCH-Message.h"
+#include "NR_DL-DCCH-Message.h"
+// #include "EstablishmentCause.h"
+// #include "RRCConnectionSetup.h"
+#include "NR_SRB-ToAddModList.h"
+#include "NR_DRB-ToAddModList.h"
+// #include "MCCH-Message.h"
+// #define MRB1 1
 
-  //#include "RRCConnectionSetupComplete.h"
-  //#include "RRCConnectionReconfigurationComplete.h"
-  //#include "RRCConnectionReconfiguration.h"
-  #include "NR_MIB.h"
-  //#include "SystemInformation.h"
+// #include "RRCConnectionSetupComplete.h"
+// #include "RRCConnectionReconfigurationComplete.h"
+// #include "RRCConnectionReconfiguration.h"
+#include "NR_MIB.h"
+// #include "SystemInformation.h"
 
-  #include "NR_SIB1.h"
-  #include "NR_ServingCellConfigCommon.h"
-  //#include "SIB-Type.h"
+#include "NR_SIB1.h"
+#include "NR_ServingCellConfigCommon.h"
+// #include "SIB-Type.h"
 
-  //#include "BCCH-DL-SCH-Message.h"
+// #include "BCCH-DL-SCH-Message.h"
 
-  //#include "PHY/defs.h"
+// #include "PHY/defs.h"
 
-  #include "NR_MeasObjectToAddModList.h"
-  #include "NR_ReportConfigToAddModList.h"
-  #include "NR_MeasIdToAddModList.h"
-  #include "gnb_config.h"
+#include "NR_MeasObjectToAddModList.h"
+#include "NR_ReportConfigToAddModList.h"
+#include "NR_MeasIdToAddModList.h"
+#include "gnb_config.h"
 #endif
 
 #include "intertask_interface.h"
@@ -131,7 +200,7 @@
 #include "conversions.h"
 #include "ds/byte_array.h"
 
-//#define XER_PRINT
+// #define XER_PRINT
 
 typedef struct xer_sprint_string_s {
   char *string;
@@ -145,7 +214,7 @@ typedef struct xer_sprint_string_s {
  */
 static int xer__nr_print2s(const void *buffer, size_t size, void *app_key)
 {
-  xer_sprint_string_t *string_buffer = (xer_sprint_string_t *) app_key;
+  xer_sprint_string_t *string_buffer = (xer_sprint_string_t *)app_key;
   size_t string_remaining = string_buffer->string_size - string_buffer->string_index;
 
   if (string_remaining > 0) {
@@ -184,11 +253,11 @@ int xer_nr_sprint(char *string, size_t string_size, asn_TYPE_descriptor_t *td, v
 
 struct NR_UE_NR_Capability *get_ue_nr_capability(int rnti, uint8_t *buf, uint32_t len)
 {
-  if (!buf || len == 0) return NULL;
+  if (!buf || len == 0)
+    return NULL;
 
   NR_UE_CapabilityRAT_ContainerList_t *clist = NULL;
-  asn_dec_rval_t rval = uper_decode(NULL, &asn_DEF_NR_UE_CapabilityRAT_ContainerList,
-                                    (void **)&clist, buf, len, 0, 0);
+  asn_dec_rval_t rval = uper_decode(NULL, &asn_DEF_NR_UE_CapabilityRAT_ContainerList, (void **)&clist, buf, len, 0, 0);
 
   if (rval.code != RC_OK) {
     LOG_W(NR_MAC, "UE RNTI %04x: Failed to decode container list\n", rnti);
@@ -202,7 +271,8 @@ struct NR_UE_NR_Capability *get_ue_nr_capability(int rnti, uint8_t *buf, uint32_
 
 NR_UE_NR_Capability_t *decode_nr_ue_capability(int rnti, const NR_UE_CapabilityRAT_ContainerList_t *clist)
 {
-  if (!clist) return NULL;
+  if (!clist)
+    return NULL;
 
   for (int i = 0; i < clist->list.count; i++) {
     const NR_UE_CapabilityRAT_Container_t *c = clist->list.array[i];
@@ -210,11 +280,13 @@ NR_UE_NR_Capability_t *decode_nr_ue_capability(int rnti, const NR_UE_CapabilityR
       continue;
 
     NR_UE_NR_Capability_t *cap = NULL;
-    asn_dec_rval_t rval = uper_decode(NULL, &asn_DEF_NR_UE_NR_Capability,
+    asn_dec_rval_t rval = uper_decode(NULL,
+                                      &asn_DEF_NR_UE_NR_Capability,
                                       (void **)&cap,
                                       c->ue_CapabilityRAT_Container.buf,
                                       c->ue_CapabilityRAT_Container.size,
-                                      0, 0);
+                                      0,
+                                      0);
     if (rval.code == RC_OK)
       return cap;
 
@@ -289,41 +361,35 @@ byte_array_t do_SIB4_NR(NR_SIB4_t *sib4)
 
 int do_RRCReject(uint8_t *const buffer)
 {
-    asn_enc_rval_t                                   enc_rval;
-    NR_DL_CCCH_Message_t                             dl_ccch_msg;
-    NR_RRCReject_t                                   *rrcReject;
+  asn_enc_rval_t enc_rval;
+  NR_DL_CCCH_Message_t dl_ccch_msg;
+  NR_RRCReject_t *rrcReject;
 
-    memset((void *)&dl_ccch_msg, 0, sizeof(NR_DL_CCCH_Message_t));
-    dl_ccch_msg.message.present = NR_DL_CCCH_MessageType_PR_c1;
-    dl_ccch_msg.message.choice.c1          = CALLOC(1, sizeof(struct NR_DL_CCCH_MessageType__c1));
-    dl_ccch_msg.message.choice.c1->present = NR_DL_CCCH_MessageType__c1_PR_rrcReject;
+  memset((void *)&dl_ccch_msg, 0, sizeof(NR_DL_CCCH_Message_t));
+  dl_ccch_msg.message.present = NR_DL_CCCH_MessageType_PR_c1;
+  dl_ccch_msg.message.choice.c1 = CALLOC(1, sizeof(struct NR_DL_CCCH_MessageType__c1));
+  dl_ccch_msg.message.choice.c1->present = NR_DL_CCCH_MessageType__c1_PR_rrcReject;
 
-    dl_ccch_msg.message.choice.c1->choice.rrcReject = CALLOC(1,sizeof(NR_RRCReject_t));
-    rrcReject = dl_ccch_msg.message.choice.c1->choice.rrcReject;
+  dl_ccch_msg.message.choice.c1->choice.rrcReject = CALLOC(1, sizeof(NR_RRCReject_t));
+  rrcReject = dl_ccch_msg.message.choice.c1->choice.rrcReject;
 
-    rrcReject->criticalExtensions.choice.rrcReject           = CALLOC(1, sizeof(struct NR_RRCReject_IEs));
-    rrcReject->criticalExtensions.choice.rrcReject->waitTime = CALLOC(1, sizeof(NR_RejectWaitTime_t));
-    *rrcReject->criticalExtensions.choice.rrcReject->waitTime = 10;
+  rrcReject->criticalExtensions.choice.rrcReject = CALLOC(1, sizeof(struct NR_RRCReject_IEs));
+  rrcReject->criticalExtensions.choice.rrcReject->waitTime = CALLOC(1, sizeof(NR_RejectWaitTime_t));
+  *rrcReject->criticalExtensions.choice.rrcReject->waitTime = 10;
 
-    rrcReject->criticalExtensions.present = NR_RRCReject__criticalExtensions_PR_rrcReject;
+  rrcReject->criticalExtensions.present = NR_RRCReject__criticalExtensions_PR_rrcReject;
 
-    if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
-        xer_fprint(stdout, &asn_DEF_NR_DL_CCCH_Message, (void *)&dl_ccch_msg);
-    }
+  if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
+    xer_fprint(stdout, &asn_DEF_NR_DL_CCCH_Message, (void *)&dl_ccch_msg);
+  }
 
-    enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message,
-                                    NULL,
-                                    (void *)&dl_ccch_msg,
-                                    buffer,
-                                    100);
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message, NULL, (void *)&dl_ccch_msg, buffer, 100);
 
-    AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n",
-                enc_rval.failed_type->name, enc_rval.encoded);
-    ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_CCCH_Message, &dl_ccch_msg);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
+  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_CCCH_Message, &dl_ccch_msg);
 
-    LOG_D(NR_RRC,"RRCReject Encoded %zd bits (%zd bytes)\n",
-            enc_rval.encoded,(enc_rval.encoded+7)/8);
-    return (enc_rval.encoded + 7) / 8;
+  LOG_D(NR_RRC, "RRCReject Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
+  return (enc_rval.encoded + 7) / 8;
 }
 
 //------------------------------------------------------------------------------
@@ -379,38 +445,32 @@ int do_NR_SecurityModeCommand(uint8_t *const buffer,
                               NR_IntegrityProtAlgorithm_t integrityProtAlgorithm)
 //------------------------------------------------------------------------------
 {
-  NR_DL_DCCH_Message_t dl_dcch_msg={0};
+  NR_DL_DCCH_Message_t dl_dcch_msg = {0};
   asn_enc_rval_t enc_rval;
-  dl_dcch_msg.message.present           = NR_DL_DCCH_MessageType_PR_c1;
+  dl_dcch_msg.message.present = NR_DL_DCCH_MessageType_PR_c1;
   asn1cCalloc(dl_dcch_msg.message.choice.c1, c1);
   c1->present = NR_DL_DCCH_MessageType__c1_PR_securityModeCommand;
-  asn1cCalloc(c1->choice.securityModeCommand,scm);
+  asn1cCalloc(c1->choice.securityModeCommand, scm);
   scm->rrc_TransactionIdentifier = Transaction_id;
   scm->criticalExtensions.present = NR_SecurityModeCommand__criticalExtensions_PR_securityModeCommand;
 
-  asn1cCalloc(scm->criticalExtensions.choice.securityModeCommand,scmIE);
+  asn1cCalloc(scm->criticalExtensions.choice.securityModeCommand, scmIE);
   // the two following information could be based on the mod_id
-  scmIE->securityConfigSMC.securityAlgorithmConfig.cipheringAlgorithm
-    = (NR_CipheringAlgorithm_t)cipheringAlgorithm;
+  scmIE->securityConfigSMC.securityAlgorithmConfig.cipheringAlgorithm = (NR_CipheringAlgorithm_t)cipheringAlgorithm;
   asn1cCallocOne(scmIE->securityConfigSMC.securityAlgorithmConfig.integrityProtAlgorithm, integrityProtAlgorithm);
 
-  if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
+  if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message,
-                                   NULL,
-                                   (void *)&dl_dcch_msg,
-                                   buffer,
-                                   100);
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, 100);
 
-  AssertFatal(enc_rval.encoded >0 , "ASN1 message encoding failed (%s, %lu)!\n",
-              enc_rval.failed_type->name, enc_rval.encoded);
-  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_DCCH_Message,&dl_dcch_msg);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
+  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_DCCH_Message, &dl_dcch_msg);
 
   //  rrc_ue_process_ueCapabilityEnquiry(0,1000,&dl_dcch_msg.message.choice.c1.choice.ueCapabilityEnquiry,0);
   //  exit(-1);
-  return((enc_rval.encoded+7)/8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer, const uint8_t Transaction_id)
@@ -423,59 +483,61 @@ int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer, const uint8_t Transactio
   NR_DL_DCCH_Message_t dl_dcch_msg;
   NR_UE_CapabilityRAT_Request_t *ue_capabilityrat_request;
 
-  memset(&dl_dcch_msg,0,sizeof(NR_DL_DCCH_Message_t));
-  dl_dcch_msg.message.present           = NR_DL_DCCH_MessageType_PR_c1;
-  dl_dcch_msg.message.choice.c1 = CALLOC(1,sizeof(struct NR_DL_DCCH_MessageType__c1));
+  memset(&dl_dcch_msg, 0, sizeof(NR_DL_DCCH_Message_t));
+  dl_dcch_msg.message.present = NR_DL_DCCH_MessageType_PR_c1;
+  dl_dcch_msg.message.choice.c1 = CALLOC(1, sizeof(struct NR_DL_DCCH_MessageType__c1));
   dl_dcch_msg.message.choice.c1->present = NR_DL_DCCH_MessageType__c1_PR_ueCapabilityEnquiry;
-  dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry = CALLOC(1,sizeof(struct NR_UECapabilityEnquiry));
+  dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry = CALLOC(1, sizeof(struct NR_UECapabilityEnquiry));
   dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry->rrc_TransactionIdentifier = Transaction_id;
-  dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry->criticalExtensions.present = NR_UECapabilityEnquiry__criticalExtensions_PR_ueCapabilityEnquiry;
-  dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry->criticalExtensions.choice.ueCapabilityEnquiry = CALLOC(1,sizeof(struct NR_UECapabilityEnquiry_IEs));
-  ue_capabilityrat_request =  CALLOC(1,sizeof(NR_UE_CapabilityRAT_Request_t));
-  memset(ue_capabilityrat_request,0,sizeof(NR_UE_CapabilityRAT_Request_t));
+  dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry->criticalExtensions.present =
+      NR_UECapabilityEnquiry__criticalExtensions_PR_ueCapabilityEnquiry;
+  dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry->criticalExtensions.choice.ueCapabilityEnquiry =
+      CALLOC(1, sizeof(struct NR_UECapabilityEnquiry_IEs));
+  ue_capabilityrat_request = CALLOC(1, sizeof(NR_UE_CapabilityRAT_Request_t));
+  memset(ue_capabilityrat_request, 0, sizeof(NR_UE_CapabilityRAT_Request_t));
   ue_capabilityrat_request->rat_Type = NR_RAT_Type_nr;
 
-  sa_band_infoNR = (NR_FreqBandInformationNR_t*)calloc(1,sizeof(NR_FreqBandInformationNR_t));
+  sa_band_infoNR = (NR_FreqBandInformationNR_t *)calloc(1, sizeof(NR_FreqBandInformationNR_t));
   sa_band_infoNR->bandNR = 78;
-  sa_band_info = (NR_FreqBandInformation_t*)calloc(1,sizeof(NR_FreqBandInformation_t));
+  sa_band_info = (NR_FreqBandInformation_t *)calloc(1, sizeof(NR_FreqBandInformation_t));
   sa_band_info->present = NR_FreqBandInformation_PR_bandInformationNR;
   sa_band_info->choice.bandInformationNR = sa_band_infoNR;
-  
+
   sa_band_list = (NR_FreqBandList_t *)calloc(1, sizeof(NR_FreqBandList_t));
   asn1cSeqAdd(&sa_band_list->list, sa_band_info);
 
-  sa_band_filter = (NR_UE_CapabilityRequestFilterNR_t*)calloc(1,sizeof(NR_UE_CapabilityRequestFilterNR_t));
+  sa_band_filter = (NR_UE_CapabilityRequestFilterNR_t *)calloc(1, sizeof(NR_UE_CapabilityRequestFilterNR_t));
   sa_band_filter->frequencyBandListFilter = sa_band_list;
 
   OCTET_STRING_t *req_freq = calloc(1, sizeof(*req_freq));
   AssertFatal(req_freq != NULL, "out of memory\n");
-  req_freq->size = uper_encode_to_new_buffer(&asn_DEF_NR_UE_CapabilityRequestFilterNR, NULL, sa_band_filter, (void **)&req_freq->buf);
+  req_freq->size =
+      uper_encode_to_new_buffer(&asn_DEF_NR_UE_CapabilityRequestFilterNR, NULL, sa_band_filter, (void **)&req_freq->buf);
   AssertFatal(req_freq->size > 0, "ASN1 message encoding failed (encoded %lu bytes)!\n", req_freq->size);
 
-  if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
+  if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_UE_CapabilityRequestFilterNR, (void *)sa_band_filter);
   }
   ASN_STRUCT_FREE(asn_DEF_NR_UE_CapabilityRequestFilterNR, sa_band_filter);
 
   ue_capabilityrat_request->capabilityRequestFilter = req_freq;
 
-  asn1cSeqAdd(&dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry->criticalExtensions.choice.ueCapabilityEnquiry->ue_CapabilityRAT_RequestList.list,
-                   ue_capabilityrat_request);
+  asn1cSeqAdd(&dl_dcch_msg.message.choice.c1->choice.ueCapabilityEnquiry->criticalExtensions.choice.ueCapabilityEnquiry
+                   ->ue_CapabilityRAT_RequestList.list,
+              ue_capabilityrat_request);
 
-
-  if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
+  if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
   }
 
   asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, 100);
 
-  AssertFatal(enc_rval.encoded >0, "ASN1 message encoding failed (%s, %lu)!\n",
-              enc_rval.failed_type->name, enc_rval.encoded);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_DCCH_Message, &dl_dcch_msg);
 
   LOG_D(NR_RRC, "NR UECapabilityRequestEncoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
 
-  return((enc_rval.encoded+7)/8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 int do_NR_RRCRelease(uint8_t *buffer, size_t buffer_size, uint8_t Transaction_id)
@@ -483,9 +545,9 @@ int do_NR_RRCRelease(uint8_t *buffer, size_t buffer_size, uint8_t Transaction_id
   asn_enc_rval_t enc_rval;
   NR_DL_DCCH_Message_t dl_dcch_msg;
   NR_RRCRelease_t *rrcConnectionRelease;
-  memset(&dl_dcch_msg,0,sizeof(NR_DL_DCCH_Message_t));
-  dl_dcch_msg.message.present           = NR_DL_DCCH_MessageType_PR_c1;
-  dl_dcch_msg.message.choice.c1=CALLOC(1,sizeof(struct NR_DL_DCCH_MessageType__c1));
+  memset(&dl_dcch_msg, 0, sizeof(NR_DL_DCCH_Message_t));
+  dl_dcch_msg.message.present = NR_DL_DCCH_MessageType_PR_c1;
+  dl_dcch_msg.message.choice.c1 = CALLOC(1, sizeof(struct NR_DL_DCCH_MessageType__c1));
   dl_dcch_msg.message.choice.c1->present = NR_DL_DCCH_MessageType__c1_PR_rrcRelease;
   dl_dcch_msg.message.choice.c1->choice.rrcRelease = CALLOC(1, sizeof(NR_RRCRelease_t));
   rrcConnectionRelease = dl_dcch_msg.message.choice.c1->choice.rrcRelease;
@@ -500,15 +562,10 @@ int do_NR_RRCRelease(uint8_t *buffer, size_t buffer_size, uint8_t Transaction_id
   rrcConnectionRelease->criticalExtensions.choice.rrcRelease->deprioritisationReq->deprioritisationTimer =
       NR_RRCRelease_IEs__deprioritisationReq__deprioritisationTimer_min10;
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message,
-                                   NULL,
-                                   (void *)&dl_dcch_msg,
-                                   buffer,
-                                   buffer_size);
-  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n",
-              enc_rval.failed_type->name, enc_rval.encoded);
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, buffer_size);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_DCCH_Message, &dl_dcch_msg);
-  return((enc_rval.encoded+7)/8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 /** @brief Build RRCReconfiguration message (3GPP TS 38.331) */
@@ -635,10 +692,8 @@ static void dump_mcg(const NR_DL_DCCH_Message_t *dl_dcch_msg)
   const NR_RRCReconfiguration_IEs_t *reconf_ies = NULL;
   const struct NR_DL_DCCH_MessageType__c1 *c1 = NULL;
 
-  if (dl_dcch_msg->message.present == NR_DL_DCCH_MessageType_PR_c1
-      && (c1 = dl_dcch_msg->message.choice.c1)
-      && c1->present == NR_DL_DCCH_MessageType__c1_PR_rrcReconfiguration
-      && c1->choice.rrcReconfiguration
+  if (dl_dcch_msg->message.present == NR_DL_DCCH_MessageType_PR_c1 && (c1 = dl_dcch_msg->message.choice.c1)
+      && c1->present == NR_DL_DCCH_MessageType__c1_PR_rrcReconfiguration && c1->choice.rrcReconfiguration
       && c1->choice.rrcReconfiguration->criticalExtensions.present
              == NR_RRCReconfiguration__criticalExtensions_PR_rrcReconfiguration
       && c1->choice.rrcReconfiguration->criticalExtensions.choice.rrcReconfiguration) {
@@ -702,10 +757,15 @@ byte_array_t do_RRCReconfiguration(const nr_rrc_reconfig_param_t *params)
   return msg;
 }
 
-int do_RRCSetupRequest(uint8_t *buffer, size_t buffer_size, uint8_t *rv, uint64_t fiveG_S_TMSI)
+int do_RRCSetupRequest(uint8_t *buffer,
+                       size_t buffer_size,
+                       uint8_t *rv,
+                       uint64_t fiveG_S_TMSI,
+                       void *mutation_context,
+                       nr_rrc_ul_ccch_mutator_t mutate_fn)
 {
   NR_UL_CCCH_Message_t ul_ccch_msg = {0};
-  ul_ccch_msg.message.present           = NR_UL_CCCH_MessageType_PR_c1;
+  ul_ccch_msg.message.present = NR_UL_CCCH_MessageType_PR_c1;
   asn1cCalloc(ul_ccch_msg.message.choice.c1, c1);
   c1->present = NR_UL_CCCH_MessageType__c1_PR_rrcSetupRequest;
   asn1cCalloc(c1->choice.rrcSetupRequest, rrcSetupRequest);
@@ -740,62 +800,59 @@ int do_RRCSetupRequest(uint8_t *buffer, size_t buffer_size, uint8_t *rv, uint64_
     str->buf[4] = (fiveG_S_TMSI_part1 << 1) & 0xff;
   }
 
-  rrcSetupRequest->rrcSetupRequest.establishmentCause = NR_EstablishmentCause_mo_Signalling; //EstablishmentCause_mo_Data;
+  rrcSetupRequest->rrcSetupRequest.establishmentCause = NR_EstablishmentCause_mo_Signalling; // EstablishmentCause_mo_Data;
   rrcSetupRequest->rrcSetupRequest.spare.buf = CALLOC(1, 1);
   rrcSetupRequest->rrcSetupRequest.spare.buf[0] = 0; // spare not used
-  rrcSetupRequest->rrcSetupRequest.spare.size=1;
+  rrcSetupRequest->rrcSetupRequest.spare.size = 1;
   rrcSetupRequest->rrcSetupRequest.spare.bits_unused = 7;
 
-  if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &ul_ccch_msg);
+  if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_UL_CCCH_Message, (void *)&ul_ccch_msg);
   }
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_CCCH_Message, NULL, (void *)&ul_ccch_msg, buffer, buffer_size);
-  AssertFatal (enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
-  LOG_D(NR_RRC,"[UE] RRCSetupRequest Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded+7)/8);
+  asn_enc_rval_t enc_rval = nr_rrc_encode_ul_ccch_with_hook_repair(&ul_ccch_msg, buffer, buffer_size, mutation_context, mutate_fn);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
+  LOG_D(NR_RRC, "[UE] RRCSetupRequest Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_CCCH_Message, &ul_ccch_msg);
-  return((enc_rval.encoded+7)/8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 //------------------------------------------------------------------------------
-int do_NR_RRCReconfigurationComplete_for_nsa(
-  uint8_t *buffer,
-  size_t buffer_size,
-  NR_RRC_TransactionIdentifier_t Transaction_id)
+int do_NR_RRCReconfigurationComplete_for_nsa(uint8_t *buffer, size_t buffer_size, NR_RRC_TransactionIdentifier_t Transaction_id)
 //------------------------------------------------------------------------------
 {
   NR_RRCReconfigurationComplete_t rrc_complete_msg;
   memset(&rrc_complete_msg, 0, sizeof(rrc_complete_msg));
   rrc_complete_msg.rrc_TransactionIdentifier = Transaction_id;
   rrc_complete_msg.criticalExtensions.choice.rrcReconfigurationComplete =
-        CALLOC(1, sizeof(*rrc_complete_msg.criticalExtensions.choice.rrcReconfigurationComplete));
-  rrc_complete_msg.criticalExtensions.present =
-	NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete;
+      CALLOC(1, sizeof(*rrc_complete_msg.criticalExtensions.choice.rrcReconfigurationComplete));
+  rrc_complete_msg.criticalExtensions.present = NR_RRCReconfigurationComplete__criticalExtensions_PR_rrcReconfigurationComplete;
   rrc_complete_msg.criticalExtensions.choice.rrcReconfigurationComplete->nonCriticalExtension = NULL;
   rrc_complete_msg.criticalExtensions.choice.rrcReconfigurationComplete->lateNonCriticalExtension = NULL;
   if (0) {
     xer_fprint(stdout, &asn_DEF_NR_RRCReconfigurationComplete, (void *)&rrc_complete_msg);
   }
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_RRCReconfigurationComplete,
-                                                  NULL,
-                                                  (void *)&rrc_complete_msg,
-                                                  buffer,
-                                                  buffer_size);
-  AssertFatal (enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n",
-               enc_rval.failed_type->name, enc_rval.encoded);
+  asn_enc_rval_t enc_rval =
+      uper_encode_to_buffer(&asn_DEF_NR_RRCReconfigurationComplete, NULL, (void *)&rrc_complete_msg, buffer, buffer_size);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_RRCReconfigurationComplete, &rrc_complete_msg);
-  LOG_A(NR_RRC, "rrcReconfigurationComplete Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded+7)/8);
-  return((enc_rval.encoded+7)/8);
+  LOG_A(NR_RRC, "rrcReconfigurationComplete Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 //------------------------------------------------------------------------------
-int do_NR_RRCReconfigurationComplete(uint8_t *buffer, size_t buffer_size, const uint8_t Transaction_id,
-                                    void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn)
+int do_NR_RRCReconfigurationComplete(uint8_t *buffer,
+                                     size_t buffer_size,
+                                     const uint8_t Transaction_id,
+                                     void *mutation_context,
+                                     nr_rrc_ul_dcch_mutator_t mutate_fn)
 //------------------------------------------------------------------------------
 {
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
-  ul_dcch_msg.message.present                     = NR_UL_DCCH_MessageType_PR_c1;
+  ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
   asn1cCalloc(ul_dcch_msg.message.choice.c1, c1);
   c1->present = NR_UL_DCCH_MessageType__c1_PR_rrcReconfigurationComplete;
   asn1cCalloc(c1->choice.rrcReconfigurationComplete, reconfComplete);
@@ -806,16 +863,15 @@ int do_NR_RRCReconfigurationComplete(uint8_t *buffer, size_t buffer_size, const 
   extension->lateNonCriticalExtension = NULL;
   if (mutate_fn)
     (void)mutate_fn(mutation_context, &ul_dcch_msg);
-  if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
+  if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_UL_DCCH_Message, (void *)&ul_dcch_msg);
   }
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, buffer_size);
-  AssertFatal (enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n",
-               enc_rval.failed_type->name, enc_rval.encoded);
-  LOG_I(NR_RRC,"rrcReconfigurationComplete Encoded %zd bits (%zd bytes)\n",enc_rval.encoded,(enc_rval.encoded+7)/8);
+  asn_enc_rval_t enc_rval = nr_rrc_encode_ul_dcch_with_hook_repair(&ul_dcch_msg, buffer, buffer_size, mutation_context, mutate_fn);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
+  LOG_I(NR_RRC, "rrcReconfigurationComplete Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
-  return((enc_rval.encoded+7)/8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 int do_RRCSetupComplete(uint8_t *buffer,
@@ -831,7 +887,7 @@ int do_RRCSetupComplete(uint8_t *buffer,
 {
   NR_UL_DCCH_Message_t ul_dcch_msg = {0};
   ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
-  ul_dcch_msg.message.choice.c1 = CALLOC(1,sizeof(struct NR_UL_DCCH_MessageType__c1));
+  ul_dcch_msg.message.choice.c1 = CALLOC(1, sizeof(struct NR_UL_DCCH_MessageType__c1));
   ul_dcch_msg.message.choice.c1->present = NR_UL_DCCH_MessageType__c1_PR_rrcSetupComplete;
   ul_dcch_msg.message.choice.c1->choice.rrcSetupComplete = CALLOC(1, sizeof(NR_RRCSetupComplete_t));
   NR_RRCSetupComplete_t *RrcSetupComplete = ul_dcch_msg.message.choice.c1->choice.rrcSetupComplete;
@@ -867,25 +923,20 @@ int do_RRCSetupComplete(uint8_t *buffer,
     ies->ng_5G_S_TMSI_Value = NULL;
   }
 
-  memset(&ies->dedicatedNAS_Message,0,sizeof(OCTET_STRING_t));
+  memset(&ies->dedicatedNAS_Message, 0, sizeof(OCTET_STRING_t));
   OCTET_STRING_fromBuf(&ies->dedicatedNAS_Message, dedicatedInfoNAS, dedicatedInfoNASLength);
   if (mutate_fn)
     (void)mutate_fn(mutation_context, &ul_dcch_msg);
-  if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
+  if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_UL_DCCH_Message, (void *)&ul_dcch_msg);
   }
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message,
-                                                  NULL,
-                                                  (void *)&ul_dcch_msg,
-                                                  buffer,
-                                                  buffer_size);
-  AssertFatal(enc_rval.encoded > 0,"ASN1 message encoding failed (%s, %lu)!\n",
-              enc_rval.failed_type->name,enc_rval.encoded);
-  LOG_D(NR_RRC,"RRCSetupComplete Encoded %zd bits (%zd bytes)\n",enc_rval.encoded,(enc_rval.encoded+7)/8);
+  asn_enc_rval_t enc_rval = nr_rrc_encode_ul_dcch_with_hook_repair(&ul_dcch_msg, buffer, buffer_size, mutation_context, mutate_fn);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
+  LOG_D(NR_RRC, "RRCSetupComplete Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
 
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
-  return((enc_rval.encoded+7)/8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 // TODO: This function is only implemented for event A2/A3
@@ -961,7 +1012,7 @@ int do_nrMeasurementReport_SA(long trigger_to_measid,
   if (mutate_fn)
     (void)mutate_fn(mutation_context, &ul_dcch_msg);
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, buffer, buffer_size);
+  enc_rval = nr_rrc_encode_ul_dcch_with_hook_repair(&ul_dcch_msg, buffer, buffer_size, mutation_context, mutate_fn);
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
 
   if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
@@ -1004,48 +1055,50 @@ int do_NR_DLInformationTransfer(uint8_t *buffer,
   return (r.encoded + 7) / 8;
 }
 
-int do_NR_ULInformationTransfer(uint8_t **buffer, uint32_t pdu_length, uint8_t *pdu_buffer,
-                               void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn)
+int do_NR_ULInformationTransfer(uint8_t **buffer,
+                                uint32_t pdu_length,
+                                uint8_t *pdu_buffer,
+                                void *mutation_context,
+                                nr_rrc_ul_dcch_mutator_t mutate_fn)
 {
-    ssize_t encoded;
-    NR_UL_DCCH_Message_t ul_dcch_msg;
-    memset(&ul_dcch_msg, 0, sizeof(NR_UL_DCCH_Message_t));
-    ul_dcch_msg.message.present           = NR_UL_DCCH_MessageType_PR_c1;
-    ul_dcch_msg.message.choice.c1          = CALLOC(1,sizeof(struct NR_UL_DCCH_MessageType__c1));
-    ul_dcch_msg.message.choice.c1->present = NR_UL_DCCH_MessageType__c1_PR_ulInformationTransfer;
-    ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer = CALLOC(1,sizeof(struct NR_ULInformationTransfer));
-    ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer->criticalExtensions.present = NR_ULInformationTransfer__criticalExtensions_PR_ulInformationTransfer;
-    ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer->criticalExtensions.choice.ulInformationTransfer = CALLOC(1,sizeof(struct NR_ULInformationTransfer_IEs));
-    struct NR_ULInformationTransfer_IEs *ulInformationTransfer = ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer->criticalExtensions.choice.ulInformationTransfer;
-    ulInformationTransfer->dedicatedNAS_Message = CALLOC(1,sizeof(NR_DedicatedNAS_Message_t));
-    /* Adapters may replace fields; keep the ASN tree independent of the caller's NAS buffer. */
-    int copied = OCTET_STRING_fromBuf(ulInformationTransfer->dedicatedNAS_Message, (const char *)pdu_buffer, pdu_length);
-    AssertFatal(copied == 0, "Failed to copy ULInformationTransfer NAS payload\n");
-    ulInformationTransfer->lateNonCriticalExtension = NULL;
-    if (mutate_fn)
-      (void)mutate_fn(mutation_context, &ul_dcch_msg);
-    encoded = uper_encode_to_new_buffer (&asn_DEF_NR_UL_DCCH_Message, NULL, (void *) &ul_dcch_msg, (void **) buffer);
-    AssertFatal(encoded > 0,"ASN1 message encoding failed (%s, %ld)!\n",
-                "ULInformationTransfer",encoded);
-    ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
-    LOG_D(NR_RRC,"ULInformationTransfer Encoded %zd bytes\n",encoded);
+  ssize_t encoded;
+  NR_UL_DCCH_Message_t ul_dcch_msg;
+  memset(&ul_dcch_msg, 0, sizeof(NR_UL_DCCH_Message_t));
+  ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
+  ul_dcch_msg.message.choice.c1 = CALLOC(1, sizeof(struct NR_UL_DCCH_MessageType__c1));
+  ul_dcch_msg.message.choice.c1->present = NR_UL_DCCH_MessageType__c1_PR_ulInformationTransfer;
+  ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer = CALLOC(1, sizeof(struct NR_ULInformationTransfer));
+  ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer->criticalExtensions.present =
+      NR_ULInformationTransfer__criticalExtensions_PR_ulInformationTransfer;
+  ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer->criticalExtensions.choice.ulInformationTransfer =
+      CALLOC(1, sizeof(struct NR_ULInformationTransfer_IEs));
+  struct NR_ULInformationTransfer_IEs *ulInformationTransfer =
+      ul_dcch_msg.message.choice.c1->choice.ulInformationTransfer->criticalExtensions.choice.ulInformationTransfer;
+  ulInformationTransfer->dedicatedNAS_Message = CALLOC(1, sizeof(NR_DedicatedNAS_Message_t));
+  /* Adapters may replace fields; keep the ASN tree independent of the caller's NAS buffer. */
+  int copied = OCTET_STRING_fromBuf(ulInformationTransfer->dedicatedNAS_Message, (const char *)pdu_buffer, pdu_length);
+  AssertFatal(copied == 0, "Failed to copy ULInformationTransfer NAS payload\n");
+  ulInformationTransfer->lateNonCriticalExtension = NULL;
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &ul_dcch_msg);
+  encoded = uper_encode_to_new_buffer(&asn_DEF_NR_UL_DCCH_Message, NULL, (void *)&ul_dcch_msg, (void **)buffer);
+  AssertFatal(encoded > 0, "ASN1 message encoding failed (%s, %ld)!\n", "ULInformationTransfer", encoded);
+  ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
+  LOG_D(NR_RRC, "ULInformationTransfer Encoded %zd bytes\n", encoded);
 
-    return encoded;
+  return encoded;
 }
 
-int do_RRCReestablishmentRequest(uint8_t *buffer,
-                                 NR_ReestablishmentCause_t cause,
-                                 uint32_t cell_id,
-                                 uint16_t c_rnti)
+int do_RRCReestablishmentRequest(uint8_t *buffer, NR_ReestablishmentCause_t cause, uint32_t cell_id, uint16_t c_rnti)
 {
   asn_enc_rval_t enc_rval;
   NR_UL_CCCH_Message_t ul_ccch_msg;
   NR_RRCReestablishmentRequest_t *rrcReestablishmentRequest;
   uint8_t buf[2];
 
-  memset((void *)&ul_ccch_msg,0,sizeof(NR_UL_CCCH_Message_t));
-  ul_ccch_msg.message.present            = NR_UL_CCCH_MessageType_PR_c1;
-  ul_ccch_msg.message.choice.c1          = CALLOC(1, sizeof(struct NR_UL_CCCH_MessageType__c1));
+  memset((void *)&ul_ccch_msg, 0, sizeof(NR_UL_CCCH_Message_t));
+  ul_ccch_msg.message.present = NR_UL_CCCH_MessageType_PR_c1;
+  ul_ccch_msg.message.choice.c1 = CALLOC(1, sizeof(struct NR_UL_CCCH_MessageType__c1));
   ul_ccch_msg.message.choice.c1->present = NR_UL_CCCH_MessageType__c1_PR_rrcReestablishmentRequest;
   ul_ccch_msg.message.choice.c1->choice.rrcReestablishmentRequest = CALLOC(1, sizeof(NR_RRCReestablishmentRequest_t));
 
@@ -1064,17 +1117,13 @@ int do_RRCReestablishmentRequest(uint8_t *buffer,
     xer_fprint(stdout, &asn_DEF_NR_UL_CCCH_Message, (void *)&ul_ccch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_CCCH_Message,
-                                   NULL,
-                                   (void *)&ul_ccch_msg,
-                                   buffer,
-                                   100);
-  AssertFatal (enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_CCCH_Message, NULL, (void *)&ul_ccch_msg, buffer, 100);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   // shortMAC_I.buf is on the stack, cannot free useing ASN_STRUCT_FREE macro
   rrcReestablishmentRequest->rrcReestablishmentRequest.ue_Identity.shortMAC_I.buf = NULL;
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_CCCH_Message, &ul_ccch_msg);
-  LOG_D(NR_RRC,"[UE] RRCReestablishmentRequest Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded+7)/8);
-  return((enc_rval.encoded+7)/8);
+  LOG_D(NR_RRC, "[UE] RRCReestablishmentRequest Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 //------------------------------------------------------------------------------
@@ -1106,49 +1155,52 @@ int do_RRCReestablishment(int8_t nh_ncc, uint8_t *const buffer, size_t buffer_si
 
   enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, buffer_size);
 
-  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n",
-              enc_rval.failed_type->name, enc_rval.encoded);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_DCCH_Message, &dl_dcch_msg);
 
-  LOG_D(NR_RRC, "RRCReestablishment Encoded %u bits (%u bytes)\n", (uint32_t)enc_rval.encoded, (uint32_t)(enc_rval.encoded + 7) / 8);
+  LOG_D(NR_RRC,
+        "RRCReestablishment Encoded %u bits (%u bytes)\n",
+        (uint32_t)enc_rval.encoded,
+        (uint32_t)(enc_rval.encoded + 7) / 8);
   return ((enc_rval.encoded + 7) / 8);
 }
 
-int do_RRCReestablishmentComplete(uint8_t *buffer, size_t buffer_size, int64_t rrc_TransactionIdentifier,
-                                 void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn)
+int do_RRCReestablishmentComplete(uint8_t *buffer,
+                                  size_t buffer_size,
+                                  int64_t rrc_TransactionIdentifier,
+                                  void *mutation_context,
+                                  nr_rrc_ul_dcch_mutator_t mutate_fn)
 {
   asn_enc_rval_t enc_rval;
   NR_UL_DCCH_Message_t ul_dcch_msg;
   NR_RRCReestablishmentComplete_t *rrcReestablishmentComplete;
 
-  memset((void *)&ul_dcch_msg,0,sizeof(NR_UL_DCCH_Message_t));
-  ul_dcch_msg.message.present            = NR_UL_DCCH_MessageType_PR_c1;
-  ul_dcch_msg.message.choice.c1          = CALLOC(1, sizeof(struct NR_UL_DCCH_MessageType__c1));
+  memset((void *)&ul_dcch_msg, 0, sizeof(NR_UL_DCCH_Message_t));
+  ul_dcch_msg.message.present = NR_UL_DCCH_MessageType_PR_c1;
+  ul_dcch_msg.message.choice.c1 = CALLOC(1, sizeof(struct NR_UL_DCCH_MessageType__c1));
   ul_dcch_msg.message.choice.c1->present = NR_UL_DCCH_MessageType__c1_PR_rrcReestablishmentComplete;
   ul_dcch_msg.message.choice.c1->choice.rrcReestablishmentComplete = CALLOC(1, sizeof(NR_RRCReestablishmentComplete_t));
 
   rrcReestablishmentComplete = ul_dcch_msg.message.choice.c1->choice.rrcReestablishmentComplete;
   rrcReestablishmentComplete->rrc_TransactionIdentifier = rrc_TransactionIdentifier;
-  rrcReestablishmentComplete->criticalExtensions.present = NR_RRCReestablishmentComplete__criticalExtensions_PR_rrcReestablishmentComplete;
-  rrcReestablishmentComplete->criticalExtensions.choice.rrcReestablishmentComplete = CALLOC(1, sizeof(NR_RRCReestablishmentComplete_IEs_t));
+  rrcReestablishmentComplete->criticalExtensions.present =
+      NR_RRCReestablishmentComplete__criticalExtensions_PR_rrcReestablishmentComplete;
+  rrcReestablishmentComplete->criticalExtensions.choice.rrcReestablishmentComplete =
+      CALLOC(1, sizeof(NR_RRCReestablishmentComplete_IEs_t));
   rrcReestablishmentComplete->criticalExtensions.choice.rrcReestablishmentComplete->lateNonCriticalExtension = NULL;
   rrcReestablishmentComplete->criticalExtensions.choice.rrcReestablishmentComplete->nonCriticalExtension = NULL;
   if (mutate_fn)
     (void)mutate_fn(mutation_context, &ul_dcch_msg);
 
-  if ( LOG_DEBUGFLAG(DEBUG_ASN1) ) {
+  if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_UL_CCCH_Message, (void *)&ul_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_UL_DCCH_Message,
-                                   NULL,
-                                   (void *)&ul_dcch_msg,
-                                   buffer,
-                                   buffer_size);
-  AssertFatal (enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
-  LOG_D(NR_RRC,"[UE] RRCReestablishmentComplete Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded+7)/8);
+  enc_rval = nr_rrc_encode_ul_dcch_with_hook_repair(&ul_dcch_msg, buffer, buffer_size, mutation_context, mutate_fn);
+  AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
+  LOG_D(NR_RRC, "[UE] RRCReestablishmentComplete Encoded %zd bits (%zd bytes)\n", enc_rval.encoded, (enc_rval.encoded + 7) / 8);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_UL_DCCH_Message, &ul_dcch_msg);
-  return((enc_rval.encoded+7)/8);
+  return ((enc_rval.encoded + 7) / 8);
 }
 
 static NR_MeasObjectToAddMod_t *get_MeasObject(const struct NR_MeasTiming__frequencyAndTiming *ft,
@@ -1242,8 +1294,8 @@ NR_MeasConfig_t *get_MeasConfig(const NR_MeasTiming_t *mt,
   // Neighbour cells
   if (neigh_seq) {
     int mo_id = 2;
-    FOR_EACH_SEQ_ARR(nr_neighbour_cell_t *, neigh_cell, neigh_seq) {
-      NR_MeasObjectToAddMod_t *mo_neighbour = get_MeasObject(ft,  neigh_cell->band, neigh_cell->absoluteFrequencySSB, mo_id);
+    FOR_EACH_SEQ_ARR (nr_neighbour_cell_t *, neigh_cell, neigh_seq) {
+      NR_MeasObjectToAddMod_t *mo_neighbour = get_MeasObject(ft, neigh_cell->band, neigh_cell->absoluteFrequencySSB, mo_id);
       NR_MeasObjectNR_t *monr = mo_neighbour->measObject.choice.measObjectNR;
       monr->cellsToAddModList = calloc_or_fail(1, sizeof(*monr->cellsToAddModList));
       NR_CellsToAddMod_t *cell = calloc_or_fail(1, sizeof(*cell));
@@ -1279,7 +1331,7 @@ NR_MeasConfig_t *get_MeasConfig(const NR_MeasTiming_t *mt,
   // MeasId for Event A3
   if (neigh_seq) {
     int i = 0;
-    FOR_EACH_SEQ_ARR(nr_neighbour_cell_t *, neigh_cell, neigh_seq) {
+    FOR_EACH_SEQ_ARR (nr_neighbour_cell_t *, neigh_cell, neigh_seq) {
       NR_ReportConfigId_t reportConfigId = neigh_a3_id[i];
       /* check that there is a A3 configured for this neighbour */
       if (reportConfigId == -1) {
@@ -1404,7 +1456,8 @@ byte_array_t doRRCReconfiguration_from_HandoverCommand(const byte_array_t handov
 
   // Decode Handover Command
   NR_HandoverCommand_t *hoCommand = NULL;
-  asn_dec_rval_t dec_rval = uper_decode_complete(NULL, &asn_DEF_NR_HandoverCommand, (void **)&hoCommand, handoverCommand.buf, handoverCommand.len);
+  asn_dec_rval_t dec_rval =
+      uper_decode_complete(NULL, &asn_DEF_NR_HandoverCommand, (void **)&hoCommand, handoverCommand.buf, handoverCommand.len);
 
   if (dec_rval.code != RC_OK || !hoCommand) {
     LOG_E(NR_RRC, "Failed to decode Handover Command (dec_rval.code=%d)!\n", dec_rval.code);
@@ -1526,7 +1579,8 @@ byte_array_t get_HandoverPreparationInformation(nr_rrc_reconfig_param_t *params)
     xer_fprint(stdout, &asn_DEF_NR_HandoverPreparationInformation, (void **)&hoPrepInfo);
 
   /* encode */
-  buffer.len = uper_encode_to_new_buffer(&asn_DEF_NR_HandoverPreparationInformation, NULL, (void *)&hoPrepInfo, (void *)&buffer.buf);
+  buffer.len =
+      uper_encode_to_new_buffer(&asn_DEF_NR_HandoverPreparationInformation, NULL, (void *)&hoPrepInfo, (void *)&buffer.buf);
   AssertFatal(buffer.len > 0, "ASN1 message encoding failed (%ld)!\n", buffer.len);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_HandoverPreparationInformation, &hoPrepInfo);
   return buffer;
