@@ -18,6 +18,11 @@ static unsigned nr_ue_hook_quantities(const NR_MeasReportQuantity_t *q)
   return (q->rsrp ? 1 : 0) | (q->rsrq ? 2 : 0) | (q->sinr ? 4 : 0);
 }
 
+static unsigned nr_ue_hook_present_quantities(const NR_MeasQuantityResults_t *q)
+{
+  return q ? (q->rsrp ? 1u : 0u) | (q->rsrq ? 2u : 0u) | (q->sinr ? 4u : 0u) : 0u;
+}
+
 /* The bootstrap constructor can materialize an RSRP report whenever the live
  * measurement binding requests RSRP. Other requested quantities remain outside
  * this synthetic trigger and are handled by context checks separately. */
@@ -164,7 +169,7 @@ static NR_MeasResults_t *nr_ue_hook_meas_results(NR_MeasurementReport_t *report)
  * outside this predicate), but prevents caching already-inconsistent seeds. */
 static bool nr_ue_hook_report_matches(const NR_MeasResults_t *results, const nr_ue_hook_meas_binding_t *binding)
 {
-  if (!binding->supported || results->measResultServingMOList.list.count < 1)
+  if (!results || !binding->supported || results->measResultServingMOList.list.count < 1)
     return false;
   for (int i = 0; i < results->measResultServingMOList.list.count; i++) {
     const NR_MeasResultServMO_t *serving = results->measResultServingMOList.list.array[i];
@@ -175,7 +180,8 @@ static bool nr_ue_hook_report_matches(const NR_MeasResults_t *results, const nr_
                                                                               : cell->measResult.cellResults.resultsCSI_RS_Cell;
     const NR_MeasQuantityResults_t *other = binding->rs_type == NR_NR_RS_Type_ssb ? cell->measResult.cellResults.resultsCSI_RS_Cell
                                                                                   : cell->measResult.cellResults.resultsSSB_Cell;
-    if (!q || other || ((q->rsrp ? 1u : 0u) | (q->rsrq ? 2u : 0u) | (q->sinr ? 4u : 0u)) != binding->quantities)
+    const unsigned present_quantities = nr_ue_hook_present_quantities(q);
+    if (!q || other || (present_quantities & binding->quantities) == 0)
       return false;
   }
   return true;
