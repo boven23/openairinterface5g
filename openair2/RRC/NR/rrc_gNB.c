@@ -10,10 +10,15 @@
 #include <netinet/sctp.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <ctype.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
+#include <sys/stat.h>
 #include <time.h>
+#include <unistd.h>
 #include "5g_platform_types.h"
 #include "openair2/RRC/NR/nr_rrc_proto.h"
 #include "openair2/RRC/NR/rrc_gNB_UE_context.h"
@@ -300,6 +305,8 @@ static void rrc_deliver_dl_rrc_message(void *deliver_pdu_data, ue_id_t ue_id, in
   data->rrc->mac_rrc.dl_rrc_message_transfer(data->assoc_id, data->dl_rrc);
 }
 
+#include "nr_gnb_fuzz_hook.inc.c"
+
 static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
                                                   const gNB_RRC_UE_t *ue_p,
                                                   uint8_t srb_id,
@@ -312,16 +319,48 @@ static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
   RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
   f1ap_dl_rrc_message_t dl_rrc = {.gNB_CU_ue_id = ue_p->rrc_ue_id, .gNB_DU_ue_id = ue_data.secondary_ue, .srb_id = srb_id};
   deliver_dl_rrc_message_data_t data = {.rrc = rrc, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
+  uint8_t mutated_buffer[NR_RRC_BUF_SIZE] = {0};
+  uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
+  int mutated_size = 0;
+  int repeat_size = 0;
+  const uint8_t *tx_buffer = buffer;
+  int tx_size = size;
+  gNB_RRC_UE_t *mutable_ue = (gNB_RRC_UE_t *)ue_p;
+  const bool send_primary = nr_gnb_fuzz_hook_process_dl_dcch(mutable_ue,
+                                                             srb_id,
+                                                             buffer,
+                                                             size,
+                                                             mutated_buffer,
+                                                             sizeof(mutated_buffer),
+                                                             &mutated_size,
+                                                             repeat_buffer,
+                                                             sizeof(repeat_buffer),
+                                                             &repeat_size);
+  if (!send_primary)
+    return;
+  if (mutated_size > 0) {
+    tx_buffer = mutated_buffer;
+    tx_size = mutated_size;
+  }
   nr_pdcp_data_req_srb(ue_p->rrc_ue_id,
                        srb_id,
                        rrc_gNB_mui++,
-                       size,
-                       (unsigned char *const)buffer,
+                       tx_size,
+                       (unsigned char *const)tx_buffer,
                        rrc_deliver_dl_rrc_message,
                        &data);
+  if (repeat_size > 0) {
+    nr_pdcp_data_req_srb(ue_p->rrc_ue_id,
+                         srb_id,
+                         rrc_gNB_mui++,
+                         repeat_size,
+                         (unsigned char *const)repeat_buffer,
+                         rrc_deliver_dl_rrc_message,
+                         &data);
+  }
 
 #ifdef E2_AGENT
-  E2_AGENT_SIGNAL_DL_DCCH_RRC_MSG(buffer, size, message_id);
+  E2_AGENT_SIGNAL_DL_DCCH_RRC_MSG(tx_buffer, tx_size, message_id);
 #else
   UNUSED(message_id);
 #endif

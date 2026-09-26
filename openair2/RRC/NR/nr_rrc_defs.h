@@ -178,6 +178,85 @@ typedef struct {
 /* forward declaration */
 typedef struct nr_handover_context_s nr_handover_context_t;
 
+typedef enum nr_ue_fuzz_hook_msg_e {
+  NR_UE_HOOK_MSG_NONE = 0,
+  NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
+  NR_UE_HOOK_MSG_SECURITY_MODE_COMMAND,
+  NR_UE_HOOK_MSG_UE_CAPABILITY_ENQUIRY,
+  NR_UE_HOOK_MSG_DL_INFORMATION_TRANSFER,
+  NR_UE_HOOK_MSG_RRC_REESTABLISHMENT,
+  NR_UE_HOOK_MSG_RRC_RELEASE,
+} nr_ue_fuzz_hook_msg_t;
+
+typedef enum nr_ue_fuzz_hook_action_e {
+  NR_UE_HOOK_ACTION_NONE = 0,
+  NR_UE_HOOK_ACTION_DROP,
+  NR_UE_HOOK_ACTION_DUPLICATE,
+  NR_UE_HOOK_ACTION_REPLAY,
+  NR_UE_HOOK_ACTION_DELAY,
+  NR_UE_HOOK_ACTION_MUTATE_TXN,
+  NR_UE_HOOK_ACTION_MUTATE_FIELD,
+} nr_ue_fuzz_hook_action_t;
+
+#define NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS 4
+
+typedef struct nr_ue_fuzz_hook_integer_encode_patch_s {
+  bool active;
+  long *target;
+  long requested_value;
+  long min_value;
+  long max_value;
+  long placeholder_value;
+} nr_ue_fuzz_hook_integer_encode_patch_t;
+
+typedef struct nr_ue_fuzz_hook_field_mutation_s {
+  bool enabled;
+  char message[64];
+  char adapter_key[32];
+  char domain_id[256];
+  char field[64];
+  char operator_family[64];
+  char transform_name[64];
+  char selected_mode[64];
+  char override_value[128];
+  bool has_range_min;
+  int range_min;
+  bool has_range_max;
+  int range_max;
+} nr_ue_fuzz_hook_field_mutation_t;
+
+typedef struct nr_ue_fuzz_hook_state_s {
+  bool enabled;
+  bool arm_once;
+  nr_ue_fuzz_hook_msg_t target_msg;
+  nr_ue_fuzz_hook_action_t action;
+  int txn_offset;
+  int delay_ms;
+  int replay_delay_ms;
+  unsigned long hook_fire_count;
+  nr_ue_fuzz_hook_msg_t last_hook_msg;
+  nr_ue_fuzz_hook_action_t last_hook_action;
+  int last_hook_srb_id;
+  unsigned long procedure_trigger_count;
+  nr_ue_fuzz_hook_msg_t last_dl_msg;
+  int last_dl_txn;
+  int last_dl_size;
+  uint8_t last_dl_pdu[NR_RRC_BUF_SIZE];
+  unsigned long submitted[NR_UE_HOOK_MSG_RRC_RELEASE + 1];
+  unsigned int field_mutation_count;
+  unsigned int field_mutation_applied_count;
+  unsigned int field_mutation_failed_index;
+  char field_mutation_result[64];
+  nr_ue_fuzz_hook_field_mutation_t field_mutations[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS];
+  unsigned int integer_encode_patch_count;
+  nr_ue_fuzz_hook_integer_encode_patch_t integer_encode_patches[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS];
+  long control_mtime;
+  long control_mtime_nsec;
+  char control_path[128];
+  char state_path[128];
+  nr_ue_fuzz_hook_field_mutation_t field_mutation;
+} nr_ue_fuzz_hook_state_t;
+
 typedef struct gNB_RRC_UE_s {
   time_t last_seen; // last time this UE has been accessed
 
@@ -265,6 +344,7 @@ typedef struct gNB_RRC_UE_s {
   delayed_action_state_t delayed_action;
 
   nr_redcap_ue_cap_t *redcap_cap;
+  nr_ue_fuzz_hook_state_t fuzz_hook;
 } gNB_RRC_UE_t;
 
 typedef struct rrc_gNB_ue_context_s {
