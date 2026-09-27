@@ -128,6 +128,17 @@ static void test_context_modes(void)
     }
   }
   reset(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, NR_UE_HOOK_ACTION_MUTATE_FIELD, false);
+  context_contract(&rrc, "measResults", "field_assignment", "rsType_shape_mismatch");
+  configure_binding(&rrc.perNB[0], 1, 1, 1, NR_NR_RS_Type_ssb, 7);
+  nr_ue_hook_snapshot_meas(&rrc, 0);
+  NR_MeasurementReport_t *partial_quantity_report = make_report(1, NR_NR_RS_Type_ssb, 1);
+  CHECK(nr_ue_hook_report_matches(nr_ue_hook_meas_results(partial_quantity_report), &rrc.perNB[0].hook_meas.binding[1]));
+  CHECK(mutate_report(&rrc, partial_quantity_report));
+  CHECK(rrc.fuzz_hook.hook_fire_count == 1);
+  ASN_STRUCT_FREE(asn_DEF_NR_MeasurementReport, partial_quantity_report);
+  nr_ue_hook_clear_context(&rrc);
+
+  reset(&rrc, NR_UE_HOOK_MSG_MEASUREMENT_REPORT, NR_UE_HOOK_ACTION_MUTATE_FIELD, false);
   context_contract(&rrc, "measId", "integer_transform", "configured_measId_mismatch");
   for (int id = 1; id <= 64; id++)
     configure_binding(&rrc.perNB[0], id, 1, 1, NR_NR_RS_Type_ssb, 1);
