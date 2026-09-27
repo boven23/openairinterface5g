@@ -295,94 +295,42 @@ typedef struct deliver_dl_rrc_message_data_s {
   sctp_assoc_t assoc_id;
 } deliver_dl_rrc_message_data_t;
 
-static bool nr_gnb_fuzz_hook_apply_dl_dcch_delivery(const gNB_RRC_INST *rrc,
-                                                    gNB_RRC_UE_t *ue,
-                                                    int srb_id,
-                                                    char **buf,
-                                                    int *size,
-                                                    uint8_t *mutated_buffer,
-                                                    int mutated_buffer_size,
-                                                    uint8_t *repeat_buffer,
-                                                    int repeat_buffer_size,
-                                                    int *repeat_size);
-
 static void rrc_deliver_dl_rrc_message(void *deliver_pdu_data, ue_id_t ue_id, int srb_id, char *buf, int size, int sdu_id)
 {
   UNUSED(ue_id);
   UNUSED(sdu_id);
   DevAssert(deliver_pdu_data != NULL);
   deliver_dl_rrc_message_data_t *data = (deliver_dl_rrc_message_data_t *)deliver_pdu_data;
-  uint8_t mutated_buffer[NR_RRC_BUF_SIZE] = {0};
-  uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
-  int repeat_size = 0;
-  if (!nr_gnb_fuzz_hook_apply_dl_dcch_delivery(data->rrc,
-                                               data->ue,
-                                               srb_id,
-                                               &buf,
-                                               &size,
-                                               mutated_buffer,
-                                               sizeof(mutated_buffer),
-                                               repeat_buffer,
-                                               sizeof(repeat_buffer),
-                                               &repeat_size))
-    return;
   data->dl_rrc->rrc_container = (uint8_t *)buf;
   data->dl_rrc->rrc_container_length = size;
   DevAssert(data->dl_rrc->srb_id == srb_id);
   data->rrc->mac_rrc.dl_rrc_message_transfer(data->assoc_id, data->dl_rrc);
-  if (repeat_size > 0) {
-    data->dl_rrc->rrc_container = repeat_buffer;
-    data->dl_rrc->rrc_container_length = repeat_size;
-    data->rrc->mac_rrc.dl_rrc_message_transfer(data->assoc_id, data->dl_rrc);
-  }
 }
 
 #include "nr_gnb_fuzz_hook.inc.c"
-
-static bool nr_gnb_fuzz_hook_apply_dl_dcch_delivery(const gNB_RRC_INST *rrc,
-                                                    gNB_RRC_UE_t *ue,
-                                                    int srb_id,
-                                                    char **buf,
-                                                    int *size,
-                                                    uint8_t *mutated_buffer,
-                                                    int mutated_buffer_size,
-                                                    uint8_t *repeat_buffer,
-                                                    int repeat_buffer_size,
-                                                    int *repeat_size)
-{
-  *repeat_size = 0;
-  if (!rrc || !buf || !*buf || !size || *size <= 0)
-    return true;
-  if (!ue)
-    return true;
-  int mutated_size = 0;
-  const bool send_primary = nr_gnb_fuzz_hook_process_dl_dcch(ue,
-                                                             srb_id,
-                                                             (const uint8_t *)*buf,
-                                                             *size,
-                                                             mutated_buffer,
-                                                             mutated_buffer_size,
-                                                             &mutated_size,
-                                                             repeat_buffer,
-                                                             repeat_buffer_size,
-                                                             repeat_size);
-  if (!send_primary)
-    return false;
-  if (mutated_size > 0) {
-    *buf = (char *)mutated_buffer;
-    *size = mutated_size;
-  }
-  return true;
-}
 
 static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
                                                   const gNB_RRC_UE_t *ue_p,
                                                   uint8_t srb_id,
                                                   const uint32_t message_id,
+                                                  nr_ue_fuzz_hook_msg_t hook_msg,
+                                                  int txn,
                                                   const uint8_t *buffer,
                                                   int size)
 {
   DevAssert(size > 0);
+  uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
+  int repeat_size = 0;
+  if (!nr_gnb_fuzz_hook_prepare_dl_srb_send((gNB_RRC_UE_t *)ue_p,
+                                            hook_msg,
+                                            txn,
+                                            srb_id,
+                                            buffer,
+                                            size,
+                                            repeat_buffer,
+                                            sizeof(repeat_buffer),
+                                            &repeat_size))
+    return;
   f1_ue_data_t ue_data = cu_get_f1_ue_data(ue_p->rrc_ue_id);
   RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
   f1ap_dl_rrc_message_t dl_rrc = {.gNB_CU_ue_id = ue_p->rrc_ue_id, .gNB_DU_ue_id = ue_data.secondary_ue, .srb_id = srb_id};
@@ -394,6 +342,14 @@ static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
                        (unsigned char *const)buffer,
                        rrc_deliver_dl_rrc_message,
                        &data);
+  if (repeat_size > 0)
+    nr_pdcp_data_req_srb(ue_p->rrc_ue_id,
+                         srb_id,
+                         rrc_gNB_mui++,
+                         repeat_size,
+                         repeat_buffer,
+                         rrc_deliver_dl_rrc_message,
+                         &data);
 
 #ifdef E2_AGENT
   E2_AGENT_SIGNAL_DL_DCCH_RRC_MSG(buffer, size, message_id);
@@ -410,48 +366,14 @@ static void nr_rrc_transfer_dl_ccch_message(const gNB_RRC_INST *rrc,
   DevAssert(size > 0);
   f1_ue_data_t ue_data = cu_get_f1_ue_data(ue_p->rrc_ue_id);
   RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
-  uint8_t mutated_buffer[NR_RRC_BUF_SIZE] = {0};
-  uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
-  int mutated_size = 0;
-  int repeat_size = 0;
-  const uint8_t *tx_buffer = buffer;
-  int tx_size = size;
-  gNB_RRC_UE_t *mutable_ue = (gNB_RRC_UE_t *)ue_p;
-  const bool send_primary = nr_gnb_fuzz_hook_process_dl_ccch(mutable_ue,
-                                                             0,
-                                                             buffer,
-                                                             size,
-                                                             mutated_buffer,
-                                                             sizeof(mutated_buffer),
-                                                             &mutated_size,
-                                                             repeat_buffer,
-                                                             sizeof(repeat_buffer),
-                                                             &repeat_size);
-  if (!send_primary)
-    return;
-  if (mutated_size > 0) {
-    tx_buffer = mutated_buffer;
-    tx_size = mutated_size;
-  }
   f1ap_dl_rrc_message_t dl_rrc = {
     .gNB_CU_ue_id = ue_p->rrc_ue_id,
     .gNB_DU_ue_id = ue_data.secondary_ue,
-    .rrc_container = (uint8_t *)tx_buffer,
-    .rrc_container_length = tx_size,
+    .rrc_container = (uint8_t *)buffer,
+    .rrc_container_length = size,
     .srb_id = 0,
   };
   rrc->mac_rrc.dl_rrc_message_transfer(ue_data.du_assoc_id, &dl_rrc);
-
-  if (repeat_size > 0) {
-    f1ap_dl_rrc_message_t repeat_dl_rrc = {
-      .gNB_CU_ue_id = ue_p->rrc_ue_id,
-      .gNB_DU_ue_id = ue_data.secondary_ue,
-      .rrc_container = repeat_buffer,
-      .rrc_container_length = repeat_size,
-      .srb_id = 0,
-    };
-    rrc->mac_rrc.dl_rrc_message_transfer(ue_data.du_assoc_id, &repeat_dl_rrc);
-  }
 }
 
 static void rrc_gNB_CU_DU_init(gNB_RRC_INST *rrc)
@@ -1124,7 +1046,14 @@ static void rrc_gNB_generate_dedicatedRRCReconfiguration(gNB_RRC_INST *rrc, gNB_
                   msg.len,
                   params.transaction_id);
   const uint32_t msg_id = NR_DL_DCCH_MessageType__c1_PR_rrcReconfiguration;
-  nr_rrc_transfer_protected_rrc_message(rrc, ue_p, DL_SCH_LCID_DCCH, msg_id, msg.buf, msg.len);
+  nr_rrc_transfer_protected_rrc_message(rrc,
+                                        ue_p,
+                                        DL_SCH_LCID_DCCH,
+                                        msg_id,
+                                        NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
+                                        params.transaction_id,
+                                        msg.buf,
+                                        msg.len);
   free_RRCReconfiguration_params(params);
   free_byte_array(msg);
 }
@@ -1381,7 +1310,14 @@ int nr_rrc_reconfiguration_req(gNB_RRC_INST *rrc, gNB_RRC_UE_t *ue_p)
     return -1;
   }
   const uint32_t msg_id = NR_DL_DCCH_MessageType__c1_PR_rrcReconfiguration;
-  nr_rrc_transfer_protected_rrc_message(rrc, ue_p, DL_SCH_LCID_DCCH, msg_id, msg.buf, msg.len);
+  nr_rrc_transfer_protected_rrc_message(rrc,
+                                        ue_p,
+                                        DL_SCH_LCID_DCCH,
+                                        msg_id,
+                                        NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
+                                        xid,
+                                        msg.buf,
+                                        msg.len);
   free_byte_array(msg);
   free_RRCReconfiguration_params(params);
   return 0;
@@ -2026,7 +1962,14 @@ void rrc_forward_ue_nas_message(gNB_RRC_INST *rrc, gNB_RRC_UE_t *UE)
   LOG_DUMPMSG(NR_RRC, DEBUG_RRC, buffer, length, "[MSG] RRC DL Information Transfer\n");
   rb_id_t srb_id = UE->Srb[2].Active ? DL_SCH_LCID_DCCH1 : DL_SCH_LCID_DCCH;
   const uint32_t msg_id = NR_DL_DCCH_MessageType__c1_PR_dlInformationTransfer;
-  nr_rrc_transfer_protected_rrc_message(rrc, UE, srb_id, msg_id, buffer, length);
+  nr_rrc_transfer_protected_rrc_message(rrc,
+                                        UE,
+                                        srb_id,
+                                        msg_id,
+                                        NR_UE_HOOK_MSG_DL_INFORMATION_TRANSFER,
+                                        xid,
+                                        buffer,
+                                        length);
   // no need to free UE->nas_pdu.buf, do_NR_DLInformationTransfer() did that
   UE->nas_pdu.buf = NULL;
   UE->nas_pdu.len = 0;
@@ -2311,7 +2254,14 @@ static void rrc_gNB_generate_UECapabilityEnquiry(gNB_RRC_INST *rrc, gNB_RRC_UE_t
   AssertFatal(!NODE_IS_DU(rrc->node_type), "illegal node type DU!\n");
 
   const uint32_t msg_id = NR_DL_DCCH_MessageType__c1_PR_ueCapabilityEnquiry;
-  nr_rrc_transfer_protected_rrc_message(rrc, ue, DL_SCH_LCID_DCCH, msg_id, buffer, size);
+  nr_rrc_transfer_protected_rrc_message(rrc,
+                                        ue,
+                                        DL_SCH_LCID_DCCH,
+                                        msg_id,
+                                        NR_UE_HOOK_MSG_UE_CAPABILITY_ENQUIRY,
+                                        xid,
+                                        buffer,
+                                        size);
 }
 
 static int rrc_gNB_decode_dcch(gNB_RRC_INST *rrc, const f1ap_ul_rrc_message_t *msg)
@@ -3897,15 +3847,26 @@ void rrc_gNB_generate_SecurityModeCommand(gNB_RRC_INST *rrc, gNB_RRC_UE_t *ue_p)
 
   T(T_ENB_RRC_SECURITY_MODE_COMMAND, T_INT(0), T_INT(0), T_INT(0), T_INT(ue_p->rrc_ue_id));
   NR_IntegrityProtAlgorithm_t integrity_algorithm = (NR_IntegrityProtAlgorithm_t)ue_p->integrity_algorithm;
+  const uint8_t xid = rrc_gNB_get_next_transaction_identifier(rrc->module_id);
   int size = do_NR_SecurityModeCommand(buffer,
-                                       rrc_gNB_get_next_transaction_identifier(rrc->module_id),
+                                       sizeof(buffer),
+                                       xid,
                                        ue_p->ciphering_algorithm,
-                                       integrity_algorithm);
+                                       integrity_algorithm,
+                                       ue_p,
+                                       nr_gnb_fuzz_hook_mutate_dl_dcch);
   LOG_DUMPMSG(NR_RRC, DEBUG_RRC, (char *)buffer, size, "[MSG] RRC Security Mode Command\n");
   LOG_I(NR_RRC, "UE %u Logical Channel DL-DCCH, Generate SecurityModeCommand (bytes %d)\n", ue_p->rrc_ue_id, size);
 
   const uint32_t msg_id = NR_DL_DCCH_MessageType__c1_PR_securityModeCommand;
-  nr_rrc_transfer_protected_rrc_message(rrc, ue_p, DL_SCH_LCID_DCCH, msg_id, buffer, size);
+  nr_rrc_transfer_protected_rrc_message(rrc,
+                                        ue_p,
+                                        DL_SCH_LCID_DCCH,
+                                        msg_id,
+                                        NR_UE_HOOK_MSG_SECURITY_MODE_COMMAND,
+                                        xid,
+                                        buffer,
+                                        size);
 }
 
 //-----------------------------------------------------------------------------

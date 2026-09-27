@@ -440,9 +440,12 @@ int do_RRCSetup(uint8_t *const buffer,
 }
 
 int do_NR_SecurityModeCommand(uint8_t *const buffer,
+                              size_t buffer_size,
                               const uint8_t Transaction_id,
                               const uint8_t cipheringAlgorithm,
-                              NR_IntegrityProtAlgorithm_t integrityProtAlgorithm)
+                              NR_IntegrityProtAlgorithm_t integrityProtAlgorithm,
+                              void *mutation_context,
+                              nr_rrc_dl_dcch_mutator_t mutate_fn)
 //------------------------------------------------------------------------------
 {
   NR_DL_DCCH_Message_t dl_dcch_msg = {0};
@@ -459,11 +462,14 @@ int do_NR_SecurityModeCommand(uint8_t *const buffer,
   scmIE->securityConfigSMC.securityAlgorithmConfig.cipheringAlgorithm = (NR_CipheringAlgorithm_t)cipheringAlgorithm;
   asn1cCallocOne(scmIE->securityConfigSMC.securityAlgorithmConfig.integrityProtAlgorithm, integrityProtAlgorithm);
 
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &dl_dcch_msg);
+
   if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, 100);
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, buffer_size);
 
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_DCCH_Message, &dl_dcch_msg);

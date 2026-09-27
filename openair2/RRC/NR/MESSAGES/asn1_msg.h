@@ -45,10 +45,14 @@
 struct asn_TYPE_descriptor_s;
 struct NR_UL_CCCH_Message;
 struct NR_UL_DCCH_Message;
+struct NR_DL_CCCH_Message;
+struct NR_DL_DCCH_Message;
 
 /* Optional pre-encode callback. The constructor retains ownership of the ASN tree. */
 typedef bool (*nr_rrc_ul_ccch_mutator_t)(void *context, struct NR_UL_CCCH_Message *message);
 typedef bool (*nr_rrc_ul_dcch_mutator_t)(void *context, struct NR_UL_DCCH_Message *message);
+typedef bool (*nr_rrc_dl_ccch_mutator_t)(void *context, struct NR_DL_CCCH_Message *message);
+typedef bool (*nr_rrc_dl_dcch_mutator_t)(void *context, struct NR_DL_DCCH_Message *message);
 
 typedef struct {
   uint8_t transaction_id;
@@ -90,9 +94,12 @@ int do_RRCSetup(uint8_t *const buffer,
                 NR_SRB_ToAddModList_t *SRBs);
 
 int do_NR_SecurityModeCommand(uint8_t *const buffer,
+                              size_t buffer_size,
                               const uint8_t Transaction_id,
                               const uint8_t cipheringAlgorithm,
-                              NR_IntegrityProtAlgorithm_t integrityProtAlgorithm);
+                              NR_IntegrityProtAlgorithm_t integrityProtAlgorithm,
+                              void *mutation_context,
+                              nr_rrc_dl_dcch_mutator_t mutate_fn);
 
 int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer, const uint8_t Transaction_id);
 
