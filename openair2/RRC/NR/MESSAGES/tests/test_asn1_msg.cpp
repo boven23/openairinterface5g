@@ -83,7 +83,7 @@ TEST(nr_asn1, rrc_reject)
 TEST(nr_asn1, sa_capability_enquiry)
 {
   unsigned char buf[1000];
-  EXPECT_GT(do_NR_SA_UECapabilityEnquiry(buf, 0), 0);
+  EXPECT_GT(do_NR_SA_UECapabilityEnquiry(buf, sizeof(buf), 0, nullptr, nullptr), 0);
 }
 
 TEST(nr_asn1, rrc_reconfiguration_complete_for_nsa)
@@ -113,7 +113,7 @@ TEST(nr_asn1, rrc_reestablishment)
 {
   unsigned char buf[1000];
   const uint8_t nh_ncc = 0;
-  EXPECT_GT(do_RRCReestablishment(nh_ncc, buf, 1000, 0), 0);
+  EXPECT_GT(do_RRCReestablishment(nh_ncc, buf, 1000, 0, nullptr, nullptr), 0);
 }
 
 static void encode_decode_paging(nr_paging_params_t params, nr_paging_params_t *decoded_params)

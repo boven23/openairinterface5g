@@ -68,6 +68,8 @@ typedef struct {
   bool masterKeyUpdate;
   int nextHopChainingCount;
   byte_array_t ue_cap;
+  void *mutation_context;
+  nr_rrc_dl_dcch_mutator_t mutate_fn;
 } nr_rrc_reconfig_param_t;
 
 /*
@@ -91,7 +93,9 @@ int do_RRCSetup(uint8_t *const buffer,
                 const uint8_t transaction_id,
                 const uint8_t *masterCellGroup,
                 int masterCellGroup_len,
-                NR_SRB_ToAddModList_t *SRBs);
+                NR_SRB_ToAddModList_t *SRBs,
+                void *mutation_context,
+                nr_rrc_dl_ccch_mutator_t mutate_fn);
 
 int do_NR_SecurityModeCommand(uint8_t *const buffer,
                               size_t buffer_size,
@@ -101,7 +105,11 @@ int do_NR_SecurityModeCommand(uint8_t *const buffer,
                               void *mutation_context,
                               nr_rrc_dl_dcch_mutator_t mutate_fn);
 
-int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer, const uint8_t Transaction_id);
+int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer,
+                                 size_t buffer_size,
+                                 const uint8_t Transaction_id,
+                                 void *mutation_context,
+                                 nr_rrc_dl_dcch_mutator_t mutate_fn);
 
 int do_NR_RRCRelease(uint8_t *buffer, size_t buffer_size, uint8_t Transaction_id);
 
@@ -153,7 +161,9 @@ int do_NR_DLInformationTransfer(uint8_t *buffer,
                                 size_t buffer_len,
                                 uint8_t transaction_id,
                                 uint32_t pdu_length,
-                                uint8_t *pdu_buffer);
+                                uint8_t *pdu_buffer,
+                                void *mutation_context,
+                                nr_rrc_dl_dcch_mutator_t mutate_fn);
 
 int do_NR_ULInformationTransfer(uint8_t **buffer,
                                 uint32_t pdu_length,
@@ -166,7 +176,12 @@ int do_RRCReestablishmentRequest(uint8_t *buffer,
                                  uint32_t cell_id,
                                  uint16_t c_rnti);
 
-int do_RRCReestablishment(int8_t nh_ncc, uint8_t *const buffer, size_t buffer_size, const uint8_t Transaction_id);
+int do_RRCReestablishment(int8_t nh_ncc,
+                          uint8_t *const buffer,
+                          size_t buffer_size,
+                          const uint8_t Transaction_id,
+                          void *mutation_context,
+                          nr_rrc_dl_dcch_mutator_t mutate_fn);
 
 int do_RRCReestablishmentComplete(uint8_t *buffer, size_t buffer_size, int64_t rrc_TransactionIdentifier,
                                  void *mutation_context, nr_rrc_ul_dcch_mutator_t mutate_fn);

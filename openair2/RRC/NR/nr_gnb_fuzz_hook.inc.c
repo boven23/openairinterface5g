@@ -962,6 +962,41 @@ static bool nr_gnb_fuzz_hook_mutate_dl_dcch(void *context, NR_DL_DCCH_Message_t 
   return changed;
 }
 
+static bool nr_gnb_fuzz_hook_mutate_dl_ccch(void *context, NR_DL_CCCH_Message_t *pdu)
+{
+  NR_UE_RRC_INST_t *ue = context;
+  if (!ue || !pdu)
+    return false;
+  nr_ue_fuzz_hook_reload_config(ue);
+  nr_ue_fuzz_hook_write_state(ue);
+
+  nr_ue_fuzz_hook_msg_t msg = NR_UE_HOOK_MSG_NONE;
+  void *payload = NULL;
+  if (pdu->message.present == NR_DL_CCCH_MessageType_PR_c1 && pdu->message.choice.c1) {
+    struct NR_DL_CCCH_MessageType__c1 *c1 = pdu->message.choice.c1;
+    if (c1->present == NR_DL_CCCH_MessageType__c1_PR_rrcSetup) {
+      msg = NR_UE_HOOK_MSG_RRC_SETUP;
+      payload = c1->choice.rrcSetup;
+    }
+  }
+
+  const int txn = nr_gnb_fuzz_hook_payload_txn(msg, payload);
+  nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
+  hook->last_dl_msg = msg;
+  hook->last_dl_txn = txn;
+  nr_ue_fuzz_hook_write_state(ue);
+
+  const bool changed = nr_gnb_fuzz_hook_apply_mutations(ue, msg, payload);
+  if (changed) {
+    LOG_W(NR_RRC,
+          "[gNB][HOOK] UE %u mutated %s before DL-CCCH encode txn=%d\n",
+          ue->rrc_ue_id,
+          nr_ue_fuzz_hook_msg_name(msg),
+          txn);
+  }
+  return changed;
+}
+
 static bool nr_gnb_fuzz_hook_prepare_dl_srb_send(NR_UE_RRC_INST_t *ue,
                                                  nr_ue_fuzz_hook_msg_t msg,
                                                  int txn,

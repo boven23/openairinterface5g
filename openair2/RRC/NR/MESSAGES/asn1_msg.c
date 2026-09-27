@@ -398,7 +398,9 @@ int do_RRCSetup(uint8_t *const buffer,
                 const uint8_t transaction_id,
                 const uint8_t *masterCellGroup,
                 int masterCellGroup_len,
-                NR_SRB_ToAddModList_t *SRBs)
+                NR_SRB_ToAddModList_t *SRBs,
+                void *mutation_context,
+                nr_rrc_dl_ccch_mutator_t mutate_fn)
 //------------------------------------------------------------------------------
 {
   NR_DL_CCCH_Message_t dl_ccch_msg = {0};
@@ -424,6 +426,9 @@ int do_RRCSetup(uint8_t *const buffer,
   AssertFatal(ie->masterCellGroup.buf != NULL, "could not allocate memory for masterCellGroup\n");
   memcpy(ie->masterCellGroup.buf, masterCellGroup, masterCellGroup_len);
   ie->masterCellGroup.size = masterCellGroup_len;
+
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &dl_ccch_msg);
 
   if (LOG_DEBUGFLAG(DEBUG_ASN1))
     xer_fprint(stdout, &asn_DEF_NR_DL_CCCH_Message, (void *)&dl_ccch_msg);
@@ -479,7 +484,11 @@ int do_NR_SecurityModeCommand(uint8_t *const buffer,
   return ((enc_rval.encoded + 7) / 8);
 }
 
-int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer, const uint8_t Transaction_id)
+int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer,
+                                 size_t buffer_size,
+                                 const uint8_t Transaction_id,
+                                 void *mutation_context,
+                                 nr_rrc_dl_dcch_mutator_t mutate_fn)
 {
   NR_UE_CapabilityRequestFilterNR_t *sa_band_filter;
   NR_FreqBandList_t *sa_band_list;
@@ -532,11 +541,14 @@ int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer, const uint8_t Transactio
                    ->ue_CapabilityRAT_RequestList.list,
               ue_capabilityrat_request);
 
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &dl_dcch_msg);
+
   if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
   }
 
-  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, 100);
+  asn_enc_rval_t enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, buffer_size);
 
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_DCCH_Message, &dl_dcch_msg);
@@ -734,6 +746,9 @@ byte_array_t do_RRCReconfiguration(const nr_rrc_reconfig_param_t *params)
   rrcReconf->rrc_TransactionIdentifier = params->transaction_id;
   rrcReconf->criticalExtensions.present = NR_RRCReconfiguration__criticalExtensions_PR_rrcReconfiguration;
   rrcReconf->criticalExtensions.choice.rrcReconfiguration = ie;
+
+  if (params->mutate_fn)
+    (void)params->mutate_fn(params->mutation_context, &dl_dcch_msg);
 
   if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
@@ -1035,7 +1050,9 @@ int do_NR_DLInformationTransfer(uint8_t *buffer,
                                 size_t buffer_len,
                                 uint8_t transaction_id,
                                 uint32_t pdu_length,
-                                uint8_t *pdu_buffer)
+                                uint8_t *pdu_buffer,
+                                void *mutation_context,
+                                nr_rrc_dl_dcch_mutator_t mutate_fn)
 {
   NR_DL_DCCH_Message_t dl_dcch_msg = {0};
   dl_dcch_msg.message.present = NR_DL_DCCH_MessageType_PR_c1;
@@ -1052,6 +1069,9 @@ int do_NR_DLInformationTransfer(uint8_t *buffer,
   // comprehensive code design
   msg->buf = pdu_buffer;
   msg->size = pdu_length;
+
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &dl_dcch_msg);
 
   asn_enc_rval_t r = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, buffer_len);
   AssertFatal(r.encoded > 0, "ASN1 message encoding failed (%s, %ld)!\n", "DLInformationTransfer", r.encoded);
@@ -1133,7 +1153,12 @@ int do_RRCReestablishmentRequest(uint8_t *buffer, NR_ReestablishmentCause_t caus
 }
 
 //------------------------------------------------------------------------------
-int do_RRCReestablishment(int8_t nh_ncc, uint8_t *const buffer, size_t buffer_size, const uint8_t Transaction_id)
+int do_RRCReestablishment(int8_t nh_ncc,
+                          uint8_t *const buffer,
+                          size_t buffer_size,
+                          const uint8_t Transaction_id,
+                          void *mutation_context,
+                          nr_rrc_dl_dcch_mutator_t mutate_fn)
 {
   asn_enc_rval_t enc_rval;
   NR_DL_DCCH_Message_t dl_dcch_msg = {0};
@@ -1154,6 +1179,9 @@ int do_RRCReestablishment(int8_t nh_ncc, uint8_t *const buffer, size_t buffer_si
   rrcReestablishment->criticalExtensions.choice.rrcReestablishment->nextHopChainingCount = nh_ncc;
   rrcReestablishment->criticalExtensions.choice.rrcReestablishment->lateNonCriticalExtension = NULL;
   rrcReestablishment->criticalExtensions.choice.rrcReestablishment->nonCriticalExtension = NULL;
+
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &dl_dcch_msg);
 
   if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_DL_DCCH_Message, (void *)&dl_dcch_msg);
