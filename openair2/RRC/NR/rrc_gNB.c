@@ -2378,16 +2378,19 @@ static int rrc_gNB_decode_dcch(gNB_RRC_INST *rrc, const f1ap_ul_rrc_message_t *m
         break;
 
       case NR_UL_DCCH_MessageType__c1_PR_rrcReconfigurationComplete:
+        nr_gnb_rrc_trace_signal(UE, "RX", "RRCReconfigurationComplete", msg->srb_id);
         LOG_UE_UL_EVENT(UE, "Received RRCReconfigurationComplete\n");
         handle_rrcReconfigurationComplete(rrc, UE, ul_dcch_msg->message.choice.c1->choice.rrcReconfigurationComplete);
         break;
 
       case NR_UL_DCCH_MessageType__c1_PR_rrcSetupComplete:
+        nr_gnb_rrc_trace_signal(UE, "RX", "RRCSetupComplete", msg->srb_id);
         LOG_UE_UL_EVENT(UE, "Received RRCSetupComplete (RRC_CONNECTED reached)\n");
         handle_rrcSetupComplete(rrc, UE, ul_dcch_msg->message.choice.c1->choice.rrcSetupComplete);
         break;
 
       case NR_UL_DCCH_MessageType__c1_PR_measurementReport:
+        nr_gnb_rrc_trace_signal(UE, "RX", "MeasurementReport", msg->srb_id);
         if (ul_dcch_msg->message.choice.c1->choice.measurementReport != NULL) {
           rrc_gNB_process_MeasurementReport(rrc, UE, ul_dcch_msg->message.choice.c1->choice.measurementReport);
         } else {
@@ -2396,11 +2399,13 @@ static int rrc_gNB_decode_dcch(gNB_RRC_INST *rrc, const f1ap_ul_rrc_message_t *m
         break;
 
       case NR_UL_DCCH_MessageType__c1_PR_ulInformationTransfer:
+        nr_gnb_rrc_trace_signal(UE, "RX", "ULInformationTransfer", msg->srb_id);
         LOG_UE_UL_EVENT(UE, "Received RRC UL Information Transfer [%d bytes]\n", msg->rrc_container_length);
         rrc_gNB_send_NGAP_UPLINK_NAS(rrc, UE, ul_dcch_msg);
         break;
 
       case NR_UL_DCCH_MessageType__c1_PR_securityModeComplete:
+        nr_gnb_rrc_trace_signal(UE, "RX", "SecurityModeComplete", msg->srb_id);
         LOG_UE_UL_EVENT(UE, "Received Security Mode Complete\n");
         /* configure ciphering */
         nr_rrc_pdcp_config_security(UE, true);
@@ -2434,15 +2439,18 @@ static int rrc_gNB_decode_dcch(gNB_RRC_INST *rrc, const f1ap_ul_rrc_message_t *m
         break;
 
       case NR_UL_DCCH_MessageType__c1_PR_securityModeFailure:
+        nr_gnb_rrc_trace_signal(UE, "RX", "SecurityModeFailure", msg->srb_id);
         LOG_E(NR_RRC, "UE %d: received securityModeFailure\n", ue_context_p->ue_context.rrc_ue_id);
         LOG_W(NR_RRC, "Cannot continue as no AS security is activated (implementation missing)\n");
         break;
 
       case NR_UL_DCCH_MessageType__c1_PR_ueCapabilityInformation:
+        nr_gnb_rrc_trace_signal(UE, "RX", "UECapabilityInformation", msg->srb_id);
         handle_ueCapabilityInformation(rrc, UE, ul_dcch_msg->message.choice.c1->choice.ueCapabilityInformation);
         break;
 
       case NR_UL_DCCH_MessageType__c1_PR_rrcReestablishmentComplete:
+        nr_gnb_rrc_trace_signal(UE, "RX", "RRCReestablishmentComplete", msg->srb_id);
         LOG_UE_UL_EVENT(UE, "Received RRCReestablishmentComplete\n");
         const NR_RRCReestablishmentComplete_t *rc = ul_dcch_msg->message.choice.c1->choice.rrcReestablishmentComplete;
         handle_rrcReestablishmentComplete(rrc, UE, rc);
@@ -2482,15 +2490,18 @@ void rrc_gNB_process_initial_ul_rrc_message(sctp_assoc_t assoc_id, const f1ap_in
         break;
 
       case NR_UL_CCCH_MessageType__c1_PR_rrcSetupRequest:
+        nr_gnb_rrc_trace_signal(NULL, "RX", "RRCSetupRequest", 0);
         LOG_D(NR_RRC, "Received RRCSetupRequest on UL-CCCH-Message (UE rnti %04x)\n", ul_rrc->crnti);
         rrc_handle_RRCSetupRequest(rrc, assoc_id, &ul_ccch_msg->message.choice.c1->choice.rrcSetupRequest->rrcSetupRequest, ul_rrc);
         break;
 
       case NR_UL_CCCH_MessageType__c1_PR_rrcResumeRequest:
+        nr_gnb_rrc_trace_signal(NULL, "RX", "RRCResumeRequest", 0);
         LOG_E(NR_RRC, "Received rrcResumeRequest message, but handling is not implemented\n");
         break;
 
       case NR_UL_CCCH_MessageType__c1_PR_rrcReestablishmentRequest: {
+        nr_gnb_rrc_trace_signal(NULL, "RX", "RRCReestablishmentRequest", 0);
         LOG_D(NR_RRC, "Received RRCReestablishmentRequest on UL-CCCH-Message (UE RNTI %04x)\n", ul_rrc->crnti);
         rrc_handle_RRCReestablishmentRequest(
             rrc,
@@ -2500,6 +2511,7 @@ void rrc_gNB_process_initial_ul_rrc_message(sctp_assoc_t assoc_id, const f1ap_in
       } break;
 
       case NR_UL_CCCH_MessageType__c1_PR_rrcSystemInfoRequest:
+        nr_gnb_rrc_trace_signal(NULL, "RX", "RRCSystemInfoRequest", 0);
         LOG_I(NR_RRC, "UE %04x receive rrcSystemInfoRequest message \n", ul_rrc->crnti);
         /* TODO */
         break;
