@@ -977,6 +977,9 @@ static bool nr_gnb_fuzz_hook_mutate_dl_ccch(void *context, NR_DL_CCCH_Message_t 
     if (c1->present == NR_DL_CCCH_MessageType__c1_PR_rrcSetup) {
       msg = NR_UE_HOOK_MSG_RRC_SETUP;
       payload = c1->choice.rrcSetup;
+    } else if (c1->present == NR_DL_CCCH_MessageType__c1_PR_rrcReject) {
+      msg = NR_UE_HOOK_MSG_RRC_REJECT;
+      payload = c1->choice.rrcReject;
     }
   }
 

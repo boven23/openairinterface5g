@@ -674,7 +674,7 @@ static void rrc_gNB_generate_RRCReject(gNB_RRC_INST *rrc, rrc_gNB_ue_context_t *
   LOG_A(NR_RRC, "Send RRCReject to RNTI %04x\n", ue_p->rnti);
 
   unsigned char buf[1024];
-  int size = do_RRCReject(buf);
+  int size = do_RRCReject(buf, sizeof(buf), ue_p, nr_gnb_fuzz_hook_mutate_dl_ccch);
   AssertFatal(size > 0, "do_RRCReject failed\n");
   AssertFatal(size <= 1024, "memory corruption\n");
 
@@ -684,7 +684,7 @@ static void rrc_gNB_generate_RRCReject(gNB_RRC_INST *rrc, rrc_gNB_ue_context_t *
               "[MSG] RRCReject \n");
   LOG_I(NR_RRC, " [RAPROC] ue %04x Logical Channel DL-CCCH, Generating NR_RRCReject (bytes %d)\n", ue_p->rnti, size);
 
-  nr_rrc_transfer_dl_ccch_message(rrc, ue_p, NR_UE_HOOK_MSG_NONE, -1, buf, size);
+  nr_rrc_transfer_dl_ccch_message(rrc, ue_p, NR_UE_HOOK_MSG_RRC_REJECT, -1, buf, size);
   /* release the created UE context, we rejected the UE */
   rrc_remove_ue(rrc, ue_context_pP);
 }
@@ -2811,7 +2811,7 @@ static void rrc_CU_process_ue_context_release_request(MessageDef *msg_p, sctp_as
   if (!ue_context_p) {
     LOG_W(RRC, "could not find UE context for CU UE ID %u: auto-generate release command\n", req->gNB_CU_ue_id);
     uint8_t buffer[NR_RRC_BUF_SIZE] = {0};
-    int size = do_NR_RRCRelease(buffer, NR_RRC_BUF_SIZE, rrc_gNB_get_next_transaction_identifier(0));
+    int size = do_NR_RRCRelease(buffer, NR_RRC_BUF_SIZE, rrc_gNB_get_next_transaction_identifier(0), NULL, NULL);
     RETURN_IF_INVALID_ASSOC_ID(assoc_id);
     f1ap_ue_context_rel_cmd_t ue_context_release_cmd = {
         .gNB_CU_ue_id = req->gNB_CU_ue_id,
@@ -3947,7 +3947,8 @@ void rrc_gNB_generate_SecurityModeCommand(gNB_RRC_INST *rrc, gNB_RRC_UE_t *ue_p)
 void rrc_gNB_generate_RRCRelease(gNB_RRC_INST *rrc, gNB_RRC_UE_t *UE)
 {
   uint8_t buffer[NR_RRC_BUF_SIZE] = {0};
-  int size = do_NR_RRCRelease(buffer, NR_RRC_BUF_SIZE, rrc_gNB_get_next_transaction_identifier(rrc->module_id));
+  uint8_t xid = rrc_gNB_get_next_transaction_identifier(rrc->module_id);
+  int size = do_NR_RRCRelease(buffer, NR_RRC_BUF_SIZE, xid, UE, nr_gnb_fuzz_hook_mutate_dl_dcch);
 
   LOG_UE_DL_EVENT(UE, "Send RRC Release\n");
   f1_ue_data_t ue_data = cu_get_f1_ue_data(UE->rrc_ue_id);
@@ -3961,7 +3962,33 @@ void rrc_gNB_generate_RRCRelease(gNB_RRC_INST *rrc, gNB_RRC_UE_t *UE)
     .srb_id = &srbid, // C-ifRRCContainer => is added below
   };
   deliver_ue_ctxt_release_data_t data = {.rrc = rrc, .release_cmd = &ue_context_release_cmd, .assoc_id = ue_data.du_assoc_id};
-  nr_pdcp_data_req_srb(UE->rrc_ue_id, DL_SCH_LCID_DCCH, rrc_gNB_mui++, size, buffer, rrc_deliver_ue_ctxt_release_cmd, &data);
+  uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
+  int repeat_size = 0;
+  const bool send_primary = nr_gnb_fuzz_hook_prepare_dl_srb_send(UE,
+                                                                 NR_UE_HOOK_MSG_RRC_RELEASE,
+                                                                 xid,
+                                                                 DL_SCH_LCID_DCCH,
+                                                                 buffer,
+                                                                 size,
+                                                                 repeat_buffer,
+                                                                 sizeof(repeat_buffer),
+                                                                 &repeat_size);
+  if (send_primary)
+    nr_pdcp_data_req_srb(UE->rrc_ue_id,
+                         DL_SCH_LCID_DCCH,
+                         rrc_gNB_mui++,
+                         size,
+                         buffer,
+                         rrc_deliver_ue_ctxt_release_cmd,
+                         &data);
+  if (repeat_size > 0)
+    nr_pdcp_data_req_srb(UE->rrc_ue_id,
+                         DL_SCH_LCID_DCCH,
+                         rrc_gNB_mui++,
+                         repeat_size,
+                         repeat_buffer,
+                         rrc_deliver_ue_ctxt_release_cmd,
+                         &data);
 
 #ifdef E2_AGENT
   E2_AGENT_SIGNAL_DL_DCCH_RRC_MSG(buffer, size, NR_DL_DCCH_MessageType__c1_PR_rrcRelease);

@@ -86,7 +86,10 @@ byte_array_t do_SIB2_NR(const NR_SIB2_t *sib2);
 byte_array_t do_SIB3_NR(const NR_SIB3_t *sib3);
 byte_array_t do_SIB4_NR(NR_SIB4_t *sib4);
 
-int do_RRCReject(uint8_t *const buffer);
+int do_RRCReject(uint8_t *const buffer,
+                 size_t buffer_size,
+                 void *mutation_context,
+                 nr_rrc_dl_ccch_mutator_t mutate_fn);
 
 int do_RRCSetup(uint8_t *const buffer,
                 size_t buffer_size,
@@ -111,7 +114,11 @@ int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer,
                                  void *mutation_context,
                                  nr_rrc_dl_dcch_mutator_t mutate_fn);
 
-int do_NR_RRCRelease(uint8_t *buffer, size_t buffer_size, uint8_t Transaction_id);
+int do_NR_RRCRelease(uint8_t *buffer,
+                     size_t buffer_size,
+                     uint8_t Transaction_id,
+                     void *mutation_context,
+                     nr_rrc_dl_dcch_mutator_t mutate_fn);
 
 byte_array_t do_RRCReconfiguration(const nr_rrc_reconfig_param_t *params);
 

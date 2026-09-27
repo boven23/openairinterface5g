@@ -359,7 +359,10 @@ byte_array_t do_SIB4_NR(NR_SIB4_t *sib4)
   return msg;
 }
 
-int do_RRCReject(uint8_t *const buffer)
+int do_RRCReject(uint8_t *const buffer,
+                 size_t buffer_size,
+                 void *mutation_context,
+                 nr_rrc_dl_ccch_mutator_t mutate_fn)
 {
   asn_enc_rval_t enc_rval;
   NR_DL_CCCH_Message_t dl_ccch_msg;
@@ -379,11 +382,14 @@ int do_RRCReject(uint8_t *const buffer)
 
   rrcReject->criticalExtensions.present = NR_RRCReject__criticalExtensions_PR_rrcReject;
 
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &dl_ccch_msg);
+
   if (LOG_DEBUGFLAG(DEBUG_ASN1)) {
     xer_fprint(stdout, &asn_DEF_NR_DL_CCCH_Message, (void *)&dl_ccch_msg);
   }
 
-  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message, NULL, (void *)&dl_ccch_msg, buffer, 100);
+  enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_CCCH_Message, NULL, (void *)&dl_ccch_msg, buffer, buffer_size);
 
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);
   ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_NR_DL_CCCH_Message, &dl_ccch_msg);
@@ -558,7 +564,11 @@ int do_NR_SA_UECapabilityEnquiry(uint8_t *const buffer,
   return ((enc_rval.encoded + 7) / 8);
 }
 
-int do_NR_RRCRelease(uint8_t *buffer, size_t buffer_size, uint8_t Transaction_id)
+int do_NR_RRCRelease(uint8_t *buffer,
+                     size_t buffer_size,
+                     uint8_t Transaction_id,
+                     void *mutation_context,
+                     nr_rrc_dl_dcch_mutator_t mutate_fn)
 {
   asn_enc_rval_t enc_rval;
   NR_DL_DCCH_Message_t dl_dcch_msg;
@@ -579,6 +589,9 @@ int do_NR_RRCRelease(uint8_t *buffer, size_t buffer_size, uint8_t Transaction_id
       NR_RRCRelease_IEs__deprioritisationReq__deprioritisationType_nr;
   rrcConnectionRelease->criticalExtensions.choice.rrcRelease->deprioritisationReq->deprioritisationTimer =
       NR_RRCRelease_IEs__deprioritisationReq__deprioritisationTimer_min10;
+
+  if (mutate_fn)
+    (void)mutate_fn(mutation_context, &dl_dcch_msg);
 
   enc_rval = uper_encode_to_buffer(&asn_DEF_NR_DL_DCCH_Message, NULL, (void *)&dl_dcch_msg, buffer, buffer_size);
   AssertFatal(enc_rval.encoded > 0, "ASN1 message encoding failed (%s, %lu)!\n", enc_rval.failed_type->name, enc_rval.encoded);

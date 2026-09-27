@@ -77,7 +77,7 @@ static NR_SIB4_t *encode_and_decode_sib4(NR_SIB4_t *sib4, byte_array_t *ba_out)
 TEST(nr_asn1, rrc_reject)
 {
   unsigned char buf[1000];
-  EXPECT_GT(do_RRCReject(buf), 0);
+  EXPECT_GT(do_RRCReject(buf, sizeof(buf), nullptr, nullptr), 0);
 }
 
 TEST(nr_asn1, sa_capability_enquiry)
