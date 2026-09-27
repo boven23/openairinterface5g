@@ -322,14 +322,18 @@ static void nr_gnb_rrc_trace_adapter(const NR_UE_RRC_INST_t *ue,
 static void nr_gnb_fuzz_hook_ensure_paths(gNB_RRC_UE_t *ue)
 {
   nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
-  if (hook->control_path[0] != '\0')
-    return;
+  char expected_control_path[sizeof(hook->control_path)] = "";
+  char expected_state_path[sizeof(hook->state_path)] = "";
   const char *root = nr_gnb_rrc_trace_root();
   const size_t root_len = strlen(root);
   const char *separator = root_len > 0 && root[root_len - 1] == '/' ? "" : "/";
   const long hook_id = nr_gnb_fuzz_hook_external_id(ue);
-  snprintf(hook->control_path, sizeof(hook->control_path), "%s%soai_nr_gnb_hook_%ld.ctl", root, separator, hook_id);
-  snprintf(hook->state_path, sizeof(hook->state_path), "%s%soai_nr_gnb_hook_%ld.state", root, separator, hook_id);
+  snprintf(expected_control_path, sizeof(expected_control_path), "%s%soai_nr_gnb_hook_%ld.ctl", root, separator, hook_id);
+  snprintf(expected_state_path, sizeof(expected_state_path), "%s%soai_nr_gnb_hook_%ld.state", root, separator, hook_id);
+  if (!strcmp(hook->control_path, expected_control_path) && !strcmp(hook->state_path, expected_state_path))
+    return;
+  snprintf(hook->control_path, sizeof(hook->control_path), "%s", expected_control_path);
+  snprintf(hook->state_path, sizeof(hook->state_path), "%s", expected_state_path);
   hook->control_mtime = -1;
   hook->control_mtime_nsec = -1;
   hook->txn_offset = 1;
@@ -341,8 +345,14 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *ue)
   nr_gnb_fuzz_hook_ensure_paths(ue);
   nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
   FILE *fp = fopen(hook->state_path, "w");
-  if (!fp)
+  if (!fp) {
+    static int state_open_error_reported = 0;
+    if (!state_open_error_reported) {
+      LOG_W(NR_RRC, "[gNB][HOOK] UE %u failed to open state %s: %s\n", ue ? ue->rrc_ue_id : 0, hook->state_path, strerror(errno));
+      state_open_error_reported = 1;
+    }
     return;
+  }
 
   fprintf(fp, "enabled=%d\n", hook->enabled ? 1 : 0);
   fprintf(fp, "target=%s\n", nr_ue_fuzz_hook_msg_name(hook->target_msg));
@@ -947,6 +957,7 @@ static bool nr_gnb_fuzz_hook_process_dl_dcch(NR_UE_RRC_INST_t *ue,
   *mutated_size = 0;
   *repeat_size = 0;
   nr_ue_fuzz_hook_reload_config(ue);
+  nr_ue_fuzz_hook_write_state(ue);
 
   nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
   uint8_t previous_buffer[NR_RRC_BUF_SIZE] = {0};
@@ -958,6 +969,7 @@ static bool nr_gnb_fuzz_hook_process_dl_dcch(NR_UE_RRC_INST_t *ue,
   asn_dec_rval_t dec = uper_decode(NULL, &asn_DEF_NR_DL_DCCH_Message, (void **)&dl_dcch_msg, buffer, size, 0, 0);
   if (dec.code != RC_OK || !dl_dcch_msg) {
     nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "decode_failed");
+    nr_gnb_rrc_trace_signal(ue, "TX", "DL-DCCH-DECODE_FAILED", srb_id);
     nr_ue_fuzz_hook_write_state(ue);
     return true;
   }
@@ -1064,6 +1076,7 @@ static bool nr_gnb_fuzz_hook_process_dl_ccch(NR_UE_RRC_INST_t *ue,
   *mutated_size = 0;
   *repeat_size = 0;
   nr_ue_fuzz_hook_reload_config(ue);
+  nr_ue_fuzz_hook_write_state(ue);
 
   nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
   uint8_t previous_buffer[NR_RRC_BUF_SIZE] = {0};
@@ -1075,6 +1088,7 @@ static bool nr_gnb_fuzz_hook_process_dl_ccch(NR_UE_RRC_INST_t *ue,
   asn_dec_rval_t dec = uper_decode(NULL, &asn_DEF_NR_DL_CCCH_Message, (void **)&dl_ccch_msg, buffer, size, 0, 0);
   if (dec.code != RC_OK || !dl_ccch_msg) {
     nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "decode_failed");
+    nr_gnb_rrc_trace_signal(ue, "TX", "DL-CCCH-DECODE_FAILED", srb_id);
     nr_ue_fuzz_hook_write_state(ue);
     return true;
   }
