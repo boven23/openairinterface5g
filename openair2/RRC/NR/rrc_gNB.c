@@ -290,12 +290,13 @@ const nr_neighbour_cell_t *get_neighbour_cell_by_pci(const neighbour_cell_config
 
 typedef struct deliver_dl_rrc_message_data_s {
   const gNB_RRC_INST *rrc;
+  gNB_RRC_UE_t *ue;
   f1ap_dl_rrc_message_t *dl_rrc;
   sctp_assoc_t assoc_id;
 } deliver_dl_rrc_message_data_t;
 
 static bool nr_gnb_fuzz_hook_apply_dl_dcch_delivery(const gNB_RRC_INST *rrc,
-                                                    ue_id_t ue_id,
+                                                    gNB_RRC_UE_t *ue,
                                                     int srb_id,
                                                     char **buf,
                                                     int *size,
@@ -307,6 +308,7 @@ static bool nr_gnb_fuzz_hook_apply_dl_dcch_delivery(const gNB_RRC_INST *rrc,
 
 static void rrc_deliver_dl_rrc_message(void *deliver_pdu_data, ue_id_t ue_id, int srb_id, char *buf, int size, int sdu_id)
 {
+  UNUSED(ue_id);
   UNUSED(sdu_id);
   DevAssert(deliver_pdu_data != NULL);
   deliver_dl_rrc_message_data_t *data = (deliver_dl_rrc_message_data_t *)deliver_pdu_data;
@@ -314,7 +316,7 @@ static void rrc_deliver_dl_rrc_message(void *deliver_pdu_data, ue_id_t ue_id, in
   uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
   int repeat_size = 0;
   if (!nr_gnb_fuzz_hook_apply_dl_dcch_delivery(data->rrc,
-                                               ue_id,
+                                               data->ue,
                                                srb_id,
                                                &buf,
                                                &size,
@@ -338,7 +340,7 @@ static void rrc_deliver_dl_rrc_message(void *deliver_pdu_data, ue_id_t ue_id, in
 #include "nr_gnb_fuzz_hook.inc.c"
 
 static bool nr_gnb_fuzz_hook_apply_dl_dcch_delivery(const gNB_RRC_INST *rrc,
-                                                    ue_id_t ue_id,
+                                                    gNB_RRC_UE_t *ue,
                                                     int srb_id,
                                                     char **buf,
                                                     int *size,
@@ -351,11 +353,10 @@ static bool nr_gnb_fuzz_hook_apply_dl_dcch_delivery(const gNB_RRC_INST *rrc,
   *repeat_size = 0;
   if (!rrc || !buf || !*buf || !size || *size <= 0)
     return true;
-  rrc_gNB_ue_context_t *ue_context = rrc_gNB_get_ue_context((gNB_RRC_INST *)rrc, ue_id);
-  if (!ue_context)
+  if (!ue)
     return true;
   int mutated_size = 0;
-  const bool send_primary = nr_gnb_fuzz_hook_process_dl_dcch(&ue_context->ue_context,
+  const bool send_primary = nr_gnb_fuzz_hook_process_dl_dcch(ue,
                                                              srb_id,
                                                              (const uint8_t *)*buf,
                                                              *size,
@@ -385,7 +386,7 @@ static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
   f1_ue_data_t ue_data = cu_get_f1_ue_data(ue_p->rrc_ue_id);
   RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
   f1ap_dl_rrc_message_t dl_rrc = {.gNB_CU_ue_id = ue_p->rrc_ue_id, .gNB_DU_ue_id = ue_data.secondary_ue, .srb_id = srb_id};
-  deliver_dl_rrc_message_data_t data = {.rrc = rrc, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
+  deliver_dl_rrc_message_data_t data = {.rrc = rrc, .ue = (gNB_RRC_UE_t *)ue_p, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
   nr_pdcp_data_req_srb(ue_p->rrc_ue_id,
                        srb_id,
                        rrc_gNB_mui++,
@@ -1308,7 +1309,7 @@ static void rrc_gNB_generate_RRCReestablishment(rrc_gNB_ue_context_t *ue_context
                                   .gNB_DU_ue_id = ue_data.secondary_ue,
                                   .srb_id = DL_SCH_LCID_DCCH,
                                   .old_gNB_DU_ue_id = &old_gNB_DU_ue_id};
-  deliver_dl_rrc_message_data_t data = {.rrc = rrc, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
+  deliver_dl_rrc_message_data_t data = {.rrc = rrc, .ue = ue_p, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
   nr_pdcp_data_req_srb(ue_p->rrc_ue_id, DL_SCH_LCID_DCCH, rrc_gNB_mui++, size, (unsigned char *const)buffer, rrc_deliver_dl_rrc_message, &data);
 
 #ifdef E2_AGENT
