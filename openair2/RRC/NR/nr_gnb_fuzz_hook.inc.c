@@ -1,7 +1,14 @@
 /* SPDX-License-Identifier: LicenseRef-CSSL-1.0 */
 /* gNB downlink hook control, state observation and post-encode mutation. */
 
+#include <pthread.h>
+
+#define NR_GNB_RRC_SIGNAL_FLOW_LOG "nr_gnb_rrc_signal_flow.log"
+#define NR_GNB_RRC_ADAPTER_FLOW_LOG "nr_gnb_rrc_adapter_flow.log"
+
 typedef gNB_RRC_UE_t NR_UE_RRC_INST_t;
+
+static bool nr_gnb_rrc_trace_enabled = true;
 
 typedef bool (*nr_ue_fuzz_hook_field_adapter_fn_t)(NR_UE_RRC_INST_t *rrc, void *payload, const char *mode);
 
@@ -156,14 +163,168 @@ static long nr_gnb_fuzz_hook_external_id(const gNB_RRC_UE_t *ue)
   return (long)ue->rrc_ue_id - 1;
 }
 
+static const char *nr_gnb_rrc_trace_root(void)
+{
+  const char *root = getenv("OAI_NR_GNB_HOOK_ROOT");
+  if (!root || root[0] == '\0')
+    root = "/tmp";
+  return root;
+}
+
+static char *nr_gnb_rrc_trace_path(const char *filename, char *buffer, size_t buffer_size)
+{
+  const char *root = nr_gnb_rrc_trace_root();
+  const size_t root_len = strlen(root);
+  const char *separator = root_len > 0 && root[root_len - 1] == '/' ? "" : "/";
+  snprintf(buffer, buffer_size, "%s%s%s", root, separator, filename);
+  return buffer;
+}
+
+static void nr_gnb_rrc_format_timestamp(char *buffer, size_t buffer_size, long *nsec)
+{
+  struct timespec ts = {0};
+  clock_gettime(CLOCK_REALTIME, &ts);
+  struct tm tm = {0};
+  localtime_r(&ts.tv_sec, &tm);
+  strftime(buffer, buffer_size, "%Y-%m-%d %H:%M:%S", &tm);
+  if (nsec)
+    *nsec = ts.tv_nsec;
+}
+
+static void nr_gnb_rrc_trace_signal(const NR_UE_RRC_INST_t *ue, const char *direction, const char *signal_name, int srb_id)
+{
+  if (!nr_gnb_rrc_trace_enabled)
+    return;
+
+  static pthread_mutex_t trace_lock = PTHREAD_MUTEX_INITIALIZER;
+  static FILE *fp = NULL;
+  static int open_error_reported = 0;
+  static int chmod_error_reported = 0;
+  static char log_path[512] = "";
+
+  pthread_mutex_lock(&trace_lock);
+
+  if (log_path[0] == '\0')
+    nr_gnb_rrc_trace_path(NR_GNB_RRC_SIGNAL_FLOW_LOG, log_path, sizeof(log_path));
+  if (fp == NULL)
+    fp = fopen(log_path, "a+");
+  if (fp == NULL) {
+    if (!open_error_reported) {
+      LOG_W(NR_RRC, "Could not open %s for gNB RRC signal tracing: %s\n", log_path, strerror(errno));
+      open_error_reported = 1;
+    }
+    pthread_mutex_unlock(&trace_lock);
+    return;
+  }
+  open_error_reported = 0;
+
+  if (chmod(log_path, 0666) != 0 && !chmod_error_reported) {
+    LOG_W(NR_RRC, "Could not chmod %s for shared gNB RRC signal tracing: %s\n", log_path, strerror(errno));
+    chmod_error_reported = 1;
+  }
+
+  char timestamp[40] = "";
+  long nsec = 0;
+  nr_gnb_rrc_format_timestamp(timestamp, sizeof(timestamp), &nsec);
+  char srb[16] = "";
+  if (srb_id >= 0)
+    snprintf(srb, sizeof(srb), "SRB%d", srb_id);
+  const char *direction_label = "未知";
+  if (direction && !strcmp(direction, "RX"))
+    direction_label = "接收";
+  else if (direction && !strcmp(direction, "TX"))
+    direction_label = "发送";
+
+  fseek(fp, 0, SEEK_END);
+  if (ftell(fp) == 0)
+    fprintf(fp, "%-30s  %-6s  %-6s  %-8s  %-40s  %-5s\n", "系统时间", "端点", "UE", "方向", "信令名", "SRB");
+  fprintf(fp,
+          "%s.%09ld  %-6s  UE%-3u  %-2s  %-40s  %-5s\n",
+          timestamp,
+          nsec,
+          "gNB",
+          ue ? ue->rrc_ue_id : 0,
+          direction_label,
+          signal_name ? signal_name : "UNKNOWN",
+          srb);
+  fflush(fp);
+  pthread_mutex_unlock(&trace_lock);
+}
+
+static void nr_gnb_rrc_trace_adapter(const NR_UE_RRC_INST_t *ue,
+                                     const char *message_name,
+                                     const char *field_name,
+                                     const char *operator_family,
+                                     const char *mode,
+                                     const char *result)
+{
+  if (!nr_gnb_rrc_trace_enabled)
+    return;
+
+  static pthread_mutex_t trace_lock = PTHREAD_MUTEX_INITIALIZER;
+  static FILE *fp = NULL;
+  static int open_error_reported = 0;
+  static int chmod_error_reported = 0;
+  static char log_path[512] = "";
+
+  pthread_mutex_lock(&trace_lock);
+
+  if (log_path[0] == '\0')
+    nr_gnb_rrc_trace_path(NR_GNB_RRC_ADAPTER_FLOW_LOG, log_path, sizeof(log_path));
+  if (fp == NULL)
+    fp = fopen(log_path, "a+");
+  if (fp == NULL) {
+    if (!open_error_reported) {
+      LOG_W(NR_RRC, "Could not open %s for gNB RRC adapter tracing: %s\n", log_path, strerror(errno));
+      open_error_reported = 1;
+    }
+    pthread_mutex_unlock(&trace_lock);
+    return;
+  }
+  open_error_reported = 0;
+
+  if (chmod(log_path, 0666) != 0 && !chmod_error_reported) {
+    LOG_W(NR_RRC, "Could not chmod %s for shared gNB RRC adapter tracing: %s\n", log_path, strerror(errno));
+    chmod_error_reported = 1;
+  }
+
+  char timestamp[40] = "";
+  long nsec = 0;
+  nr_gnb_rrc_format_timestamp(timestamp, sizeof(timestamp), &nsec);
+
+  fseek(fp, 0, SEEK_END);
+  if (ftell(fp) == 0)
+    fprintf(fp,
+            "%-30s  %-6s  %-6s  %-32s  %-40s  %-34s  %-24s  %-8s\n",
+            "系统时间",
+            "端点",
+            "UE",
+            "消息名",
+            "字段名",
+            "操作族",
+            "模式",
+            "结果");
+  fprintf(fp,
+          "%s.%09ld  %-6s  UE%-3u  %-32s  %-40s  %-34s  %-24s  %-8s\n",
+          timestamp,
+          nsec,
+          "gNB",
+          ue ? ue->rrc_ue_id : 0,
+          message_name ? message_name : "UNKNOWN",
+          field_name ? field_name : "UNKNOWN",
+          operator_family ? operator_family : "UNKNOWN",
+          mode && mode[0] ? mode : "-",
+          result ? result : "未知");
+  fflush(fp);
+  pthread_mutex_unlock(&trace_lock);
+}
+
 static void nr_gnb_fuzz_hook_ensure_paths(gNB_RRC_UE_t *ue)
 {
   nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
   if (hook->control_path[0] != '\0')
     return;
-  const char *root = getenv("OAI_NR_GNB_HOOK_ROOT");
-  if (!root || root[0] == '\0')
-    root = "/tmp";
+  const char *root = nr_gnb_rrc_trace_root();
   const size_t root_len = strlen(root);
   const char *separator = root_len > 0 && root[root_len - 1] == '/' ? "" : "/";
   const long hook_id = nr_gnb_fuzz_hook_external_id(ue);
@@ -388,7 +549,8 @@ static void nr_gnb_fuzz_hook_record_dl(NR_UE_RRC_INST_t *ue,
                                        nr_ue_fuzz_hook_msg_t msg,
                                        int txn,
                                        const uint8_t *buffer,
-                                       int size)
+                                       int size,
+                                       int srb_id)
 {
   nr_gnb_fuzz_hook_ensure_paths(ue);
   nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
@@ -399,6 +561,7 @@ static void nr_gnb_fuzz_hook_record_dl(NR_UE_RRC_INST_t *ue,
     memcpy(hook->last_dl_pdu, buffer, hook->last_dl_size);
   if (msg > NR_UE_HOOK_MSG_NONE && msg <= NR_UE_HOOK_MSG_RRC_RELEASE)
     hook->submitted[msg]++;
+  nr_gnb_rrc_trace_signal(ue, "TX", nr_ue_fuzz_hook_msg_name(msg), srb_id);
   nr_ue_fuzz_hook_write_state(ue);
 }
 
@@ -428,6 +591,7 @@ static void nr_ue_rrc_trace_adapter(NR_UE_RRC_INST_t *ue,
                                     const char *mode,
                                     const char *result)
 {
+  nr_gnb_rrc_trace_adapter(ue, message, field, operator_family, mode, result);
   LOG_I(NR_RRC,
         "[gNB][HOOK] UE %u adapter message=%s field=%s operator=%s mode=%s result=%s\n",
         ue ? ue->rrc_ue_id : 0,
@@ -801,7 +965,7 @@ static bool nr_gnb_fuzz_hook_process_dl_dcch(NR_UE_RRC_INST_t *ue,
   nr_ue_fuzz_hook_msg_t msg = NR_UE_HOOK_MSG_NONE;
   void *payload = nr_gnb_fuzz_hook_message_payload(dl_dcch_msg, &msg);
   const int txn = nr_gnb_fuzz_hook_payload_txn(msg, payload);
-  nr_gnb_fuzz_hook_record_dl(ue, msg, txn, buffer, size);
+  nr_gnb_fuzz_hook_record_dl(ue, msg, txn, buffer, size, srb_id);
 
   bool should_send = true;
   const bool hit_target = hook->enabled && hook->target_msg == msg;
@@ -918,7 +1082,7 @@ static bool nr_gnb_fuzz_hook_process_dl_ccch(NR_UE_RRC_INST_t *ue,
   nr_ue_fuzz_hook_msg_t msg = NR_UE_HOOK_MSG_NONE;
   void *payload = nr_gnb_fuzz_hook_ccch_message_payload(dl_ccch_msg, &msg);
   const int txn = nr_gnb_fuzz_hook_payload_txn(msg, payload);
-  nr_gnb_fuzz_hook_record_dl(ue, msg, txn, buffer, size);
+  nr_gnb_fuzz_hook_record_dl(ue, msg, txn, buffer, size, srb_id);
 
   bool should_send = true;
   const bool hit_target = hook->enabled && hook->target_msg == msg;
