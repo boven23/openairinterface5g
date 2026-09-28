@@ -12,6 +12,16 @@
 /* code for version 3.0 or greater */
 
 #include <openssl/core_names.h>
+#include <pthread.h>
+
+static EVP_MAC* hmac_implementation;
+static pthread_once_t hmac_implementation_once = PTHREAD_ONCE_INIT;
+
+static void init_hmac_implementation(void)
+{
+  hmac_implementation = EVP_MAC_fetch(NULL, "HMAC", NULL);
+  DevAssert(hmac_implementation != NULL);
+}
 
 void sha_256_hmac(const uint8_t key[32], byte_array_t data, size_t len, uint8_t out[len])
 {
@@ -20,17 +30,12 @@ void sha_256_hmac(const uint8_t key[32], byte_array_t data, size_t len, uint8_t 
   DevAssert(data.len != 0);
   DevAssert(len != 0);
 
-  OSSL_LIB_CTX* library_context = OSSL_LIB_CTX_new();
-  DevAssert(library_context != NULL);
-
-  // A property query used for selecting the MAC implementation.
-  const char* propq = NULL;
-  // Fetch the HMAC implementation
-  EVP_MAC* mac = EVP_MAC_fetch(library_context, "HMAC", propq);
-  DevAssert(mac != NULL);
+  int once_rc = pthread_once(&hmac_implementation_once, init_hmac_implementation);
+  DevAssert(once_rc == 0);
+  DevAssert(hmac_implementation != NULL);
 
   // Create a context for the HMAC operation
-  EVP_MAC_CTX* mctx = EVP_MAC_CTX_new(mac);
+  EVP_MAC_CTX* mctx = EVP_MAC_CTX_new(hmac_implementation);
   DevAssert(mctx != NULL);
 
   // The underlying digest to be used
@@ -53,8 +58,6 @@ void sha_256_hmac(const uint8_t key[32], byte_array_t data, size_t len, uint8_t 
 
   // OpenSSL free functions will ignore NULL arguments
   EVP_MAC_CTX_free(mctx);
-  EVP_MAC_free(mac);
-  OSSL_LIB_CTX_free(library_context);
 }
 
 #elif OPENSSL_VERSION_NUMBER >= 0x10100000L
