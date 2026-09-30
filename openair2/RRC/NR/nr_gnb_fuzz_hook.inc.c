@@ -62,6 +62,8 @@ static const char *nr_ue_fuzz_hook_action_name(nr_ue_fuzz_hook_action_t action)
       return "mutate_txn";
     case NR_UE_HOOK_ACTION_MUTATE_FIELD:
       return "mutate_field";
+    case NR_UE_HOOK_ACTION_CORRUPT_INTEGRITY:
+      return "corrupt_integrity";
     case NR_UE_HOOK_ACTION_NONE:
     default:
       return "none";
@@ -114,6 +116,8 @@ static nr_ue_fuzz_hook_action_t nr_ue_fuzz_hook_action_from_name(const char *nam
     return NR_UE_HOOK_ACTION_MUTATE_TXN;
   if (!strcasecmp(name, "mutate_field"))
     return NR_UE_HOOK_ACTION_MUTATE_FIELD;
+  if (!strcasecmp(name, "corrupt_integrity") || !strcasecmp(name, "corrupt_pdcp"))
+    return NR_UE_HOOK_ACTION_CORRUPT_INTEGRITY;
   return NR_UE_HOOK_ACTION_NONE;
 }
 
@@ -998,6 +1002,36 @@ static bool nr_gnb_fuzz_hook_mutate_dl_ccch(void *context, NR_DL_CCCH_Message_t 
           txn);
   }
   return changed;
+}
+
+
+static bool nr_gnb_fuzz_hook_corrupt_dl_pdcp_pdu(NR_UE_RRC_INST_t *ue,
+                                                 nr_ue_fuzz_hook_msg_t msg,
+                                                 int srb_id,
+                                                 uint8_t *buffer,
+                                                 int size)
+{
+  if (!ue || !buffer || size <= 0)
+    return false;
+  nr_ue_fuzz_hook_reload_config(ue);
+  nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
+  if (!hook->enabled || hook->target_msg != msg || hook->action != NR_UE_HOOK_ACTION_CORRUPT_INTEGRITY)
+    return false;
+
+  const int offset = size > 2 ? size - 2 : size - 1;
+  buffer[offset] ^= 0x01;
+  LOG_W(NR_RRC,
+        "[gNB][HOOK] UE %u corrupt integrity-protected %s PDU on SRB%d byte=%d size=%d\n",
+        ue->rrc_ue_id,
+        nr_ue_fuzz_hook_msg_name(msg),
+        srb_id,
+        offset,
+        size);
+  nr_ue_fuzz_hook_record_fire(ue, msg, NR_UE_HOOK_ACTION_CORRUPT_INTEGRITY, srb_id);
+  if (hook->arm_once)
+    nr_ue_fuzz_hook_disarm_persistent(ue);
+  nr_ue_fuzz_hook_write_state(ue);
+  return true;
 }
 
 static bool nr_gnb_fuzz_hook_prepare_dl_srb_send(NR_UE_RRC_INST_t *ue,

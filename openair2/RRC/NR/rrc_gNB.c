@@ -200,8 +200,16 @@ static bool rrc_delay_transaction(instance_t instance, MessageDef *msg_p)
   return false; /* not delayed */
 }
 
+static bool nr_gnb_fuzz_hook_corrupt_dl_pdcp_pdu(gNB_RRC_UE_t *ue,
+                                                 nr_ue_fuzz_hook_msg_t msg,
+                                                 int srb_id,
+                                                 uint8_t *buffer,
+                                                 int size);
+
 typedef struct {
   gNB_RRC_INST *rrc;
+  gNB_RRC_UE_t *ue;
+  nr_ue_fuzz_hook_msg_t hook_msg;
   f1ap_ue_context_rel_cmd_t *release_cmd;
   sctp_assoc_t assoc_id;
 } deliver_ue_ctxt_release_data_t;
@@ -241,6 +249,7 @@ static void rrc_deliver_ue_ctxt_release_cmd(void *deliver_pdu_data, ue_id_t ue_i
   UNUSED(sdu_id);
   DevAssert(deliver_pdu_data != NULL);
   deliver_ue_ctxt_release_data_t *data = deliver_pdu_data;
+  nr_gnb_fuzz_hook_corrupt_dl_pdcp_pdu(data->ue, data->hook_msg, srb_id, (uint8_t *)buf, size);
   byte_array_t rrc_cont = {.buf = (uint8_t *)buf, .len = size};
   data->release_cmd->rrc_container = &rrc_cont;
   data->rrc->mac_rrc.ue_context_release_command(data->assoc_id, data->release_cmd);
@@ -291,6 +300,7 @@ const nr_neighbour_cell_t *get_neighbour_cell_by_pci(const neighbour_cell_config
 typedef struct deliver_dl_rrc_message_data_s {
   const gNB_RRC_INST *rrc;
   gNB_RRC_UE_t *ue;
+  nr_ue_fuzz_hook_msg_t hook_msg;
   f1ap_dl_rrc_message_t *dl_rrc;
   sctp_assoc_t assoc_id;
 } deliver_dl_rrc_message_data_t;
@@ -301,6 +311,7 @@ static void rrc_deliver_dl_rrc_message(void *deliver_pdu_data, ue_id_t ue_id, in
   UNUSED(sdu_id);
   DevAssert(deliver_pdu_data != NULL);
   deliver_dl_rrc_message_data_t *data = (deliver_dl_rrc_message_data_t *)deliver_pdu_data;
+  nr_gnb_fuzz_hook_corrupt_dl_pdcp_pdu(data->ue, data->hook_msg, srb_id, (uint8_t *)buf, size);
   data->dl_rrc->rrc_container = (uint8_t *)buf;
   data->dl_rrc->rrc_container_length = size;
   DevAssert(data->dl_rrc->srb_id == srb_id);
@@ -334,7 +345,7 @@ static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
   f1_ue_data_t ue_data = cu_get_f1_ue_data(ue_p->rrc_ue_id);
   RETURN_IF_INVALID_ASSOC_ID(ue_data.du_assoc_id);
   f1ap_dl_rrc_message_t dl_rrc = {.gNB_CU_ue_id = ue_p->rrc_ue_id, .gNB_DU_ue_id = ue_data.secondary_ue, .srb_id = srb_id};
-  deliver_dl_rrc_message_data_t data = {.rrc = rrc, .ue = (gNB_RRC_UE_t *)ue_p, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
+  deliver_dl_rrc_message_data_t data = {.rrc = rrc, .ue = (gNB_RRC_UE_t *)ue_p, .hook_msg = hook_msg, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
   nr_pdcp_data_req_srb(ue_p->rrc_ue_id,
                        srb_id,
                        rrc_gNB_mui++,
@@ -1271,7 +1282,7 @@ static void rrc_gNB_generate_RRCReestablishment(rrc_gNB_ue_context_t *ue_context
                                   .gNB_DU_ue_id = ue_data.secondary_ue,
                                   .srb_id = DL_SCH_LCID_DCCH,
                                   .old_gNB_DU_ue_id = &old_gNB_DU_ue_id};
-  deliver_dl_rrc_message_data_t data = {.rrc = rrc, .ue = ue_p, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
+  deliver_dl_rrc_message_data_t data = {.rrc = rrc, .ue = ue_p, .hook_msg = NR_UE_HOOK_MSG_RRC_REESTABLISHMENT, .dl_rrc = &dl_rrc, .assoc_id = ue_data.du_assoc_id};
   uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
   int repeat_size = 0;
   const bool send_primary = nr_gnb_fuzz_hook_prepare_dl_srb_send(ue_p,
@@ -2832,7 +2843,7 @@ static void rrc_CU_process_ue_context_release_request(MessageDef *msg_p, sctp_as
         .cause_value = 10, // 10 = F1AP_CauseRadioNetwork_normal_release
         .srb_id = &srbid, // C-ifRRCContainer => is added below
     };
-    deliver_ue_ctxt_release_data_t data = {.rrc = rrc, .release_cmd = &ue_context_release_cmd, .assoc_id = assoc_id};
+    deliver_ue_ctxt_release_data_t data = {.rrc = rrc, .ue = NULL, .hook_msg = NR_UE_HOOK_MSG_RRC_RELEASE, .release_cmd = &ue_context_release_cmd, .assoc_id = assoc_id};
     nr_pdcp_data_req_srb(req->gNB_CU_ue_id, srbid, rrc_gNB_mui++, size, buffer, rrc_deliver_ue_ctxt_release_cmd, &data);
     return;
   }
@@ -3973,7 +3984,7 @@ void rrc_gNB_generate_RRCRelease(gNB_RRC_INST *rrc, gNB_RRC_UE_t *UE)
     .cause_value = 10, // 10 = F1AP_CauseRadioNetwork_normal_release
     .srb_id = &srbid, // C-ifRRCContainer => is added below
   };
-  deliver_ue_ctxt_release_data_t data = {.rrc = rrc, .release_cmd = &ue_context_release_cmd, .assoc_id = ue_data.du_assoc_id};
+  deliver_ue_ctxt_release_data_t data = {.rrc = rrc, .ue = UE, .hook_msg = NR_UE_HOOK_MSG_RRC_RELEASE, .release_cmd = &ue_context_release_cmd, .assoc_id = ue_data.du_assoc_id};
   uint8_t repeat_buffer[NR_RRC_BUF_SIZE] = {0};
   int repeat_size = 0;
   const bool send_primary = nr_gnb_fuzz_hook_prepare_dl_srb_send(UE,
