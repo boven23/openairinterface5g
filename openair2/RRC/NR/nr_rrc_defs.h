@@ -199,9 +199,12 @@ typedef enum nr_ue_fuzz_hook_action_e {
   NR_UE_HOOK_ACTION_MUTATE_TXN,
   NR_UE_HOOK_ACTION_MUTATE_FIELD,
   NR_UE_HOOK_ACTION_CORRUPT_INTEGRITY,
+  NR_UE_HOOK_ACTION_TRIGGER_REESTABLISHMENT,
+  NR_UE_HOOK_ACTION_TRIGGER_RELEASE,
 } nr_ue_fuzz_hook_action_t;
 
 #define NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS 4
+#define NR_UE_FUZZ_HOOK_PATH_MAX 512
 
 typedef struct nr_ue_fuzz_hook_integer_encode_patch_s {
   bool active;
@@ -236,6 +239,8 @@ typedef struct nr_ue_fuzz_hook_state_s {
   int txn_offset;
   int delay_ms;
   int replay_delay_ms;
+  bool release_trigger_pending;
+  unsigned int release_trigger_delay_ms;
   unsigned long hook_fire_count;
   nr_ue_fuzz_hook_msg_t last_hook_msg;
   nr_ue_fuzz_hook_action_t last_hook_action;
@@ -255,8 +260,8 @@ typedef struct nr_ue_fuzz_hook_state_s {
   nr_ue_fuzz_hook_integer_encode_patch_t integer_encode_patches[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS];
   long control_mtime;
   long control_mtime_nsec;
-  char control_path[128];
-  char state_path[128];
+  char control_path[NR_UE_FUZZ_HOOK_PATH_MAX];
+  char state_path[NR_UE_FUZZ_HOOK_PATH_MAX];
   nr_ue_fuzz_hook_field_mutation_t field_mutation;
 } nr_ue_fuzz_hook_state_t;
 

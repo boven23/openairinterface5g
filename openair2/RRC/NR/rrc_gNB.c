@@ -320,6 +320,31 @@ static void rrc_deliver_dl_rrc_message(void *deliver_pdu_data, ue_id_t ue_id, in
 
 #include "nr_gnb_fuzz_hook.inc.c"
 
+static void nr_gnb_fuzz_hook_maybe_trigger_release_after_dl(const gNB_RRC_INST *rrc,
+                                                            const gNB_RRC_UE_t *ue_p,
+                                                            nr_ue_fuzz_hook_msg_t hook_msg)
+{
+  if (!rrc || !ue_p || hook_msg == NR_UE_HOOK_MSG_RRC_RELEASE)
+    return;
+
+  gNB_RRC_UE_t *ue = (gNB_RRC_UE_t *)ue_p;
+  if (!nr_gnb_fuzz_hook_release_trigger_pending(ue))
+    return;
+
+  const unsigned int delay_ms = nr_gnb_fuzz_hook_release_trigger_delay_ms(ue);
+  LOG_W(NR_RRC,
+        "[gNB][HOOK] UE %u waiting %u ms before triggered RRCRelease\n",
+        ue->rrc_ue_id,
+        delay_ms);
+  if (delay_ms > 0)
+    usleep((useconds_t)delay_ms * 1000);
+  if (!nr_gnb_fuzz_hook_consume_release_trigger(ue))
+    return;
+
+  LOG_W(NR_RRC, "[gNB][HOOK] UE %u send triggered RRCRelease\n", ue->rrc_ue_id);
+  rrc_gNB_generate_RRCRelease((gNB_RRC_INST *)rrc, ue);
+}
+
 static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
                                                   const gNB_RRC_UE_t *ue_p,
                                                   uint8_t srb_id,
@@ -367,6 +392,7 @@ static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
 #else
   UNUSED(message_id);
 #endif
+  nr_gnb_fuzz_hook_maybe_trigger_release_after_dl(rrc, ue_p, hook_msg);
 }
 
 static void nr_rrc_transfer_dl_ccch_message(const gNB_RRC_INST *rrc,

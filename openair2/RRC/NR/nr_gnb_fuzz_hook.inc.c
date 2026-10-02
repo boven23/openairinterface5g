@@ -3,6 +3,9 @@
 
 #include <pthread.h>
 
+#include "NR_RRCReconfiguration-IEs.h"
+#include "NR_RRCReconfiguration-v1530-IEs.h"
+
 #define NR_GNB_RRC_SIGNAL_FLOW_LOG "nr_gnb_rrc_signal_flow.log"
 #define NR_GNB_RRC_ADAPTER_FLOW_LOG "nr_gnb_rrc_adapter_flow.log"
 
@@ -64,6 +67,10 @@ static const char *nr_ue_fuzz_hook_action_name(nr_ue_fuzz_hook_action_t action)
       return "mutate_field";
     case NR_UE_HOOK_ACTION_CORRUPT_INTEGRITY:
       return "corrupt_integrity";
+    case NR_UE_HOOK_ACTION_TRIGGER_REESTABLISHMENT:
+      return "trigger_reestablishment";
+    case NR_UE_HOOK_ACTION_TRIGGER_RELEASE:
+      return "trigger_release";
     case NR_UE_HOOK_ACTION_NONE:
     default:
       return "none";
@@ -118,6 +125,10 @@ static nr_ue_fuzz_hook_action_t nr_ue_fuzz_hook_action_from_name(const char *nam
     return NR_UE_HOOK_ACTION_MUTATE_FIELD;
   if (!strcasecmp(name, "corrupt_integrity") || !strcasecmp(name, "corrupt_pdcp"))
     return NR_UE_HOOK_ACTION_CORRUPT_INTEGRITY;
+  if (!strcasecmp(name, "trigger_reestablishment") || !strcasecmp(name, "malformed_cell_group"))
+    return NR_UE_HOOK_ACTION_TRIGGER_REESTABLISHMENT;
+  if (!strcasecmp(name, "trigger_release") || !strcasecmp(name, "trigger_rrc_release"))
+    return NR_UE_HOOK_ACTION_TRIGGER_RELEASE;
   return NR_UE_HOOK_ACTION_NONE;
 }
 
@@ -332,8 +343,27 @@ static void nr_gnb_fuzz_hook_ensure_paths(gNB_RRC_UE_t *ue)
   const size_t root_len = strlen(root);
   const char *separator = root_len > 0 && root[root_len - 1] == '/' ? "" : "/";
   const long hook_id = nr_gnb_fuzz_hook_external_id(ue);
-  snprintf(expected_control_path, sizeof(expected_control_path), "%s%soai_nr_gnb_hook_%ld.ctl", root, separator, hook_id);
-  snprintf(expected_state_path, sizeof(expected_state_path), "%s%soai_nr_gnb_hook_%ld.state", root, separator, hook_id);
+  const int control_len =
+      snprintf(expected_control_path, sizeof(expected_control_path), "%s%soai_nr_gnb_hook_%ld.ctl", root, separator, hook_id);
+  const int state_len =
+      snprintf(expected_state_path, sizeof(expected_state_path), "%s%soai_nr_gnb_hook_%ld.state", root, separator, hook_id);
+  if (control_len < 0 || state_len < 0 || (size_t)control_len >= sizeof(expected_control_path)
+      || (size_t)state_len >= sizeof(expected_state_path)) {
+    static int path_error_reported = 0;
+    if (!path_error_reported) {
+      LOG_W(NR_RRC,
+            "[gNB][HOOK] UE %u hook path is too long for root %s; control_len=%d state_len=%d capacity=%zu\n",
+            ue ? ue->rrc_ue_id : 0,
+            root,
+            control_len,
+            state_len,
+            sizeof(expected_control_path));
+      path_error_reported = 1;
+    }
+    hook->control_path[0] = '\0';
+    hook->state_path[0] = '\0';
+    return;
+  }
   if (!strcmp(hook->control_path, expected_control_path) && !strcmp(hook->state_path, expected_state_path))
     return;
   snprintf(hook->control_path, sizeof(hook->control_path), "%s", expected_control_path);
@@ -365,6 +395,8 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *ue)
   fprintf(fp, "txn_offset=%d\n", hook->txn_offset);
   fprintf(fp, "delay_ms=%d\n", hook->delay_ms);
   fprintf(fp, "replay_delay_ms=%d\n", hook->replay_delay_ms);
+  fprintf(fp, "release_trigger_pending=%d\n", hook->release_trigger_pending ? 1 : 0);
+  fprintf(fp, "release_trigger_delay_ms=%u\n", hook->release_trigger_delay_ms);
   fprintf(fp, "hook_fire_count=%lu\n", hook->hook_fire_count);
   fprintf(fp, "procedure_trigger_count=%lu\n", hook->procedure_trigger_count);
   fprintf(fp, "last_hook_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_hook_msg));
@@ -837,6 +869,96 @@ static void nr_gnb_fuzz_hook_prepare_txn(nr_ue_fuzz_hook_state_t *hook)
   nr_ue_fuzz_hook_copy_text(mutation->transform_name, sizeof(mutation->transform_name), "domain_value_selection");
 }
 
+static bool nr_gnb_fuzz_hook_trigger_reestablishment(NR_UE_RRC_INST_t *ue, NR_RRCReconfiguration_t *rrcReconf)
+{
+  if (!ue || !rrcReconf)
+    return false;
+  if (rrcReconf->criticalExtensions.present != NR_RRCReconfiguration__criticalExtensions_PR_rrcReconfiguration
+      || !rrcReconf->criticalExtensions.choice.rrcReconfiguration)
+    return false;
+
+  NR_RRCReconfiguration_IEs_t *ies = rrcReconf->criticalExtensions.choice.rrcReconfiguration;
+  if (!ies->secondaryCellGroup) {
+    ies->secondaryCellGroup = calloc(1, sizeof(*ies->secondaryCellGroup));
+    AssertFatal(ies->secondaryCellGroup != NULL, "could not allocate malformed secondaryCellGroup\n");
+  }
+  if (!ies->secondaryCellGroup) {
+    nr_ue_fuzz_hook_copy_text(ue->fuzz_hook.field_mutation_result,
+                              sizeof(ue->fuzz_hook.field_mutation_result),
+                              "missing_secondaryCellGroup");
+    nr_ue_fuzz_hook_write_state(ue);
+    LOG_W(NR_RRC,
+          "[gNB][HOOK] UE %u cannot trigger reestablishment: failed to prepare secondaryCellGroup\n",
+          ue->rrc_ue_id);
+    return false;
+  }
+
+  OCTET_STRING_t *scg = ies->secondaryCellGroup;
+  scg->size = 0;
+  nr_ue_fuzz_hook_copy_text(ue->fuzz_hook.field_mutation_result,
+                            sizeof(ue->fuzz_hook.field_mutation_result),
+                            "secondaryCellGroup_empty");
+  nr_ue_fuzz_hook_record_fire(ue,
+                              NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
+                              NR_UE_HOOK_ACTION_TRIGGER_REESTABLISHMENT,
+                              -1);
+  LOG_W(NR_RRC,
+        "[gNB][HOOK] UE %u added empty RRCReconfiguration secondaryCellGroup to trigger reestablishment\n",
+        ue->rrc_ue_id);
+  if (ue->fuzz_hook.arm_once)
+    nr_ue_fuzz_hook_disarm_persistent(ue);
+  nr_ue_fuzz_hook_write_state(ue);
+  return true;
+}
+
+static bool nr_gnb_fuzz_hook_trigger_release(NR_UE_RRC_INST_t *ue)
+{
+  if (!ue)
+    return false;
+
+  nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
+  hook->release_trigger_pending = true;
+  hook->release_trigger_delay_ms = hook->delay_ms > 0 ? (unsigned int)hook->delay_ms : 2000;
+  hook->procedure_trigger_count++;
+  nr_ue_fuzz_hook_copy_text(hook->field_mutation_result,
+                            sizeof(hook->field_mutation_result),
+                            "release_trigger_pending");
+  nr_ue_fuzz_hook_record_fire(ue,
+                              NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
+                              NR_UE_HOOK_ACTION_TRIGGER_RELEASE,
+                              -1);
+  LOG_W(NR_RRC,
+        "[gNB][HOOK] UE %u scheduled RRCRelease trigger after %u ms\n",
+        ue->rrc_ue_id,
+        hook->release_trigger_delay_ms);
+  if (hook->arm_once)
+    nr_ue_fuzz_hook_disarm_persistent(ue);
+  nr_ue_fuzz_hook_write_state(ue);
+  return true;
+}
+
+static bool nr_gnb_fuzz_hook_release_trigger_pending(const NR_UE_RRC_INST_t *ue)
+{
+  return ue && ue->fuzz_hook.release_trigger_pending;
+}
+
+static unsigned int nr_gnb_fuzz_hook_release_trigger_delay_ms(const NR_UE_RRC_INST_t *ue)
+{
+  if (!ue || !ue->fuzz_hook.release_trigger_pending)
+    return 0;
+  return ue->fuzz_hook.release_trigger_delay_ms > 0 ? ue->fuzz_hook.release_trigger_delay_ms : 2000;
+}
+
+static bool nr_gnb_fuzz_hook_consume_release_trigger(NR_UE_RRC_INST_t *ue)
+{
+  if (!ue || !ue->fuzz_hook.release_trigger_pending)
+    return false;
+  ue->fuzz_hook.release_trigger_pending = false;
+  ue->fuzz_hook.release_trigger_delay_ms = 0;
+  nr_ue_fuzz_hook_write_state(ue);
+  return true;
+}
+
 static bool nr_gnb_fuzz_hook_apply_mutations(NR_UE_RRC_INST_t *ue, nr_ue_fuzz_hook_msg_t msg, void *payload)
 {
   if (!ue || !payload)
@@ -845,6 +967,16 @@ static bool nr_gnb_fuzz_hook_apply_mutations(NR_UE_RRC_INST_t *ue, nr_ue_fuzz_ho
   nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
   if (!hook->enabled || msg != hook->target_msg)
     return false;
+  if (hook->action == NR_UE_HOOK_ACTION_TRIGGER_REESTABLISHMENT) {
+    if (msg != NR_UE_HOOK_MSG_RRC_RECONFIGURATION)
+      return false;
+    return nr_gnb_fuzz_hook_trigger_reestablishment(ue, (NR_RRCReconfiguration_t *)payload);
+  }
+  if (hook->action == NR_UE_HOOK_ACTION_TRIGGER_RELEASE) {
+    if (msg != NR_UE_HOOK_MSG_RRC_RECONFIGURATION)
+      return false;
+    return nr_gnb_fuzz_hook_trigger_release(ue);
+  }
   nr_gnb_fuzz_hook_prepare_txn(hook);
   if (hook->action != NR_UE_HOOK_ACTION_MUTATE_FIELD && hook->action != NR_UE_HOOK_ACTION_MUTATE_TXN)
     return false;
