@@ -397,6 +397,10 @@ static void nr_ue_fuzz_hook_write_state(NR_UE_RRC_INST_t *ue)
   fprintf(fp, "replay_delay_ms=%d\n", hook->replay_delay_ms);
   fprintf(fp, "release_trigger_pending=%d\n", hook->release_trigger_pending ? 1 : 0);
   fprintf(fp, "release_trigger_delay_ms=%u\n", hook->release_trigger_delay_ms);
+  fprintf(fp, "reestablishment_trigger_pending=%d\n", hook->reestablishment_trigger_pending ? 1 : 0);
+  fprintf(fp, "reestablishment_trigger_thread_active=%d\n", hook->reestablishment_trigger_thread_active ? 1 : 0);
+  fprintf(fp, "reestablishment_trigger_force_once=%d\n", hook->reestablishment_trigger_force_once ? 1 : 0);
+  fprintf(fp, "reestablishment_trigger_delay_ms=%u\n", hook->reestablishment_trigger_delay_ms);
   fprintf(fp, "hook_fire_count=%lu\n", hook->hook_fire_count);
   fprintf(fp, "procedure_trigger_count=%lu\n", hook->procedure_trigger_count);
   fprintf(fp, "last_hook_msg=%s\n", nr_ue_fuzz_hook_msg_name(hook->last_hook_msg));
@@ -869,7 +873,9 @@ static void nr_gnb_fuzz_hook_prepare_txn(nr_ue_fuzz_hook_state_t *hook)
   nr_ue_fuzz_hook_copy_text(mutation->transform_name, sizeof(mutation->transform_name), "domain_value_selection");
 }
 
-static bool nr_gnb_fuzz_hook_trigger_reestablishment(NR_UE_RRC_INST_t *ue, NR_RRCReconfiguration_t *rrcReconf)
+static bool nr_gnb_fuzz_hook_make_malformed_reestablishment_trigger(NR_UE_RRC_INST_t *ue,
+                                                                    NR_RRCReconfiguration_t *rrcReconf,
+                                                                    const char *result)
 {
   if (!ue || !rrcReconf)
     return false;
@@ -897,7 +903,7 @@ static bool nr_gnb_fuzz_hook_trigger_reestablishment(NR_UE_RRC_INST_t *ue, NR_RR
   scg->size = 0;
   nr_ue_fuzz_hook_copy_text(ue->fuzz_hook.field_mutation_result,
                             sizeof(ue->fuzz_hook.field_mutation_result),
-                            "secondaryCellGroup_empty");
+                            result ? result : "secondaryCellGroup_empty");
   nr_ue_fuzz_hook_record_fire(ue,
                               NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
                               NR_UE_HOOK_ACTION_TRIGGER_REESTABLISHMENT,
@@ -905,10 +911,44 @@ static bool nr_gnb_fuzz_hook_trigger_reestablishment(NR_UE_RRC_INST_t *ue, NR_RR
   LOG_W(NR_RRC,
         "[gNB][HOOK] UE %u added empty RRCReconfiguration secondaryCellGroup to trigger reestablishment\n",
         ue->rrc_ue_id);
-  if (ue->fuzz_hook.arm_once)
-    nr_ue_fuzz_hook_disarm_persistent(ue);
   nr_ue_fuzz_hook_write_state(ue);
   return true;
+}
+
+static bool nr_gnb_fuzz_hook_trigger_reestablishment(NR_UE_RRC_INST_t *ue, NR_RRCReconfiguration_t *rrcReconf)
+{
+  if (!ue || !rrcReconf)
+    return false;
+
+  nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
+  if (nr_gnb_fuzz_hook_has_pending_pdu_session_setup(ue)) {
+    hook->reestablishment_trigger_pending = true;
+    hook->reestablishment_trigger_force_once = false;
+    hook->reestablishment_trigger_delay_ms = hook->delay_ms > 0 ? (unsigned int)hook->delay_ms : 8000;
+    hook->procedure_trigger_count++;
+    nr_ue_fuzz_hook_copy_text(hook->field_mutation_result,
+                              sizeof(hook->field_mutation_result),
+                              "reestablishment_trigger_pending");
+    nr_ue_fuzz_hook_record_fire(ue,
+                                NR_UE_HOOK_MSG_RRC_RECONFIGURATION,
+                                NR_UE_HOOK_ACTION_TRIGGER_REESTABLISHMENT,
+                                -1);
+    LOG_W(NR_RRC,
+          "[gNB][HOOK] UE %u scheduled RRCReconfiguration trigger for reestablishment after %u ms\n",
+          ue->rrc_ue_id,
+          hook->reestablishment_trigger_delay_ms);
+    if (hook->arm_once)
+      nr_ue_fuzz_hook_disarm_persistent(ue);
+    nr_ue_fuzz_hook_write_state(ue);
+    return true;
+  }
+
+  const bool changed =
+      nr_gnb_fuzz_hook_make_malformed_reestablishment_trigger(ue, rrcReconf, "secondaryCellGroup_empty");
+  if (changed && hook->arm_once)
+    nr_ue_fuzz_hook_disarm_persistent(ue);
+  nr_ue_fuzz_hook_write_state(ue);
+  return changed;
 }
 
 static bool nr_gnb_fuzz_hook_trigger_release(NR_UE_RRC_INST_t *ue)
@@ -942,11 +982,23 @@ static bool nr_gnb_fuzz_hook_release_trigger_pending(const NR_UE_RRC_INST_t *ue)
   return ue && ue->fuzz_hook.release_trigger_pending;
 }
 
+static bool nr_gnb_fuzz_hook_reestablishment_trigger_pending(const NR_UE_RRC_INST_t *ue)
+{
+  return ue && ue->fuzz_hook.reestablishment_trigger_pending;
+}
+
 static unsigned int nr_gnb_fuzz_hook_release_trigger_delay_ms(const NR_UE_RRC_INST_t *ue)
 {
   if (!ue || !ue->fuzz_hook.release_trigger_pending)
     return 0;
   return ue->fuzz_hook.release_trigger_delay_ms > 0 ? ue->fuzz_hook.release_trigger_delay_ms : 2000;
+}
+
+static unsigned int nr_gnb_fuzz_hook_reestablishment_trigger_delay_ms(const NR_UE_RRC_INST_t *ue)
+{
+  if (!ue || !ue->fuzz_hook.reestablishment_trigger_pending)
+    return 0;
+  return ue->fuzz_hook.reestablishment_trigger_delay_ms > 0 ? ue->fuzz_hook.reestablishment_trigger_delay_ms : 8000;
 }
 
 static bool nr_gnb_fuzz_hook_consume_release_trigger(NR_UE_RRC_INST_t *ue)
@@ -959,12 +1011,47 @@ static bool nr_gnb_fuzz_hook_consume_release_trigger(NR_UE_RRC_INST_t *ue)
   return true;
 }
 
+static bool nr_gnb_fuzz_hook_consume_reestablishment_trigger(NR_UE_RRC_INST_t *ue)
+{
+  if (!ue || !ue->fuzz_hook.reestablishment_trigger_pending)
+    return false;
+  ue->fuzz_hook.reestablishment_trigger_pending = false;
+  ue->fuzz_hook.reestablishment_trigger_thread_active = false;
+  ue->fuzz_hook.reestablishment_trigger_delay_ms = 0;
+  ue->fuzz_hook.reestablishment_trigger_force_once = true;
+  nr_ue_fuzz_hook_copy_text(ue->fuzz_hook.field_mutation_result,
+                            sizeof(ue->fuzz_hook.field_mutation_result),
+                            "reestablishment_trigger_force_once");
+  nr_ue_fuzz_hook_write_state(ue);
+  return true;
+}
+
+static void nr_gnb_fuzz_hook_cancel_reestablishment_trigger(NR_UE_RRC_INST_t *ue, const char *reason)
+{
+  if (!ue)
+    return;
+  ue->fuzz_hook.reestablishment_trigger_pending = false;
+  ue->fuzz_hook.reestablishment_trigger_thread_active = false;
+  ue->fuzz_hook.reestablishment_trigger_force_once = false;
+  ue->fuzz_hook.reestablishment_trigger_delay_ms = 0;
+  nr_ue_fuzz_hook_copy_text(ue->fuzz_hook.field_mutation_result,
+                            sizeof(ue->fuzz_hook.field_mutation_result),
+                            reason ? reason : "reestablishment_trigger_cancelled");
+  nr_ue_fuzz_hook_write_state(ue);
+}
+
 static bool nr_gnb_fuzz_hook_apply_mutations(NR_UE_RRC_INST_t *ue, nr_ue_fuzz_hook_msg_t msg, void *payload)
 {
   if (!ue || !payload)
     return false;
   nr_ue_fuzz_hook_clear_integer_encode_patches(ue);
   nr_ue_fuzz_hook_state_t *hook = &ue->fuzz_hook;
+  if (msg == NR_UE_HOOK_MSG_RRC_RECONFIGURATION && hook->reestablishment_trigger_force_once) {
+    hook->reestablishment_trigger_force_once = false;
+    return nr_gnb_fuzz_hook_make_malformed_reestablishment_trigger(ue,
+                                                                   (NR_RRCReconfiguration_t *)payload,
+                                                                   "secondaryCellGroup_empty_deferred");
+  }
   if (!hook->enabled || msg != hook->target_msg)
     return false;
   if (hook->action == NR_UE_HOOK_ACTION_TRIGGER_REESTABLISHMENT) {

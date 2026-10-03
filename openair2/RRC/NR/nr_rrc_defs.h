@@ -241,6 +241,10 @@ typedef struct nr_ue_fuzz_hook_state_s {
   int replay_delay_ms;
   bool release_trigger_pending;
   unsigned int release_trigger_delay_ms;
+  bool reestablishment_trigger_pending;
+  bool reestablishment_trigger_thread_active;
+  bool reestablishment_trigger_force_once;
+  unsigned int reestablishment_trigger_delay_ms;
   unsigned long hook_fire_count;
   nr_ue_fuzz_hook_msg_t last_hook_msg;
   nr_ue_fuzz_hook_action_t last_hook_action;

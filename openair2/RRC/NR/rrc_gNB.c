@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <ctype.h>
 #include <errno.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -205,6 +206,18 @@ static bool nr_gnb_fuzz_hook_corrupt_dl_pdcp_pdu(gNB_RRC_UE_t *ue,
                                                  int srb_id,
                                                  uint8_t *buffer,
                                                  int size);
+static void rrc_gNB_generate_dedicatedRRCReconfiguration(gNB_RRC_INST *rrc, gNB_RRC_UE_t *ue_p, bool is_reestablishment);
+
+static bool nr_gnb_fuzz_hook_has_pending_pdu_session_setup(const gNB_RRC_UE_t *ue_p)
+{
+  if (!ue_p)
+    return false;
+  FOR_EACH_SEQ_ARR (rrc_pdu_session_param_t *, item, &ue_p->pduSessions) {
+    if (item->status == PDU_SESSION_STATUS_NEW)
+      return true;
+  }
+  return false;
+}
 
 typedef struct {
   gNB_RRC_INST *rrc;
@@ -320,6 +333,88 @@ static void rrc_deliver_dl_rrc_message(void *deliver_pdu_data, ue_id_t ue_id, in
 
 #include "nr_gnb_fuzz_hook.inc.c"
 
+typedef struct nr_gnb_fuzz_hook_delayed_reestablishment_trigger_s {
+  gNB_RRC_INST *rrc;
+  gNB_RRC_UE_t *ue;
+  unsigned int delay_ms;
+} nr_gnb_fuzz_hook_delayed_reestablishment_trigger_t;
+
+static void *nr_gnb_fuzz_hook_delayed_reestablishment_trigger_thread(void *arg)
+{
+  nr_gnb_fuzz_hook_delayed_reestablishment_trigger_t *ctx = arg;
+  if (!ctx)
+    return NULL;
+
+  if (ctx->delay_ms > 0)
+    usleep((useconds_t)ctx->delay_ms * 1000);
+
+  gNB_RRC_UE_t *ue = ctx->ue;
+  if (!ctx->rrc || !ue) {
+    free(ctx);
+    return NULL;
+  }
+  if (!nr_gnb_fuzz_hook_reestablishment_trigger_pending(ue)) {
+    ue->fuzz_hook.reestablishment_trigger_thread_active = false;
+    nr_ue_fuzz_hook_write_state(ue);
+    free(ctx);
+    return NULL;
+  }
+
+  if (nr_gnb_fuzz_hook_has_pending_pdu_session_setup(ue)) {
+    LOG_W(NR_RRC,
+          "[gNB][HOOK] UE %u skip delayed reestablishment trigger: PDU session setup is still pending\n",
+          ue->rrc_ue_id);
+    nr_gnb_fuzz_hook_cancel_reestablishment_trigger(ue, "reestablishment_trigger_pdu_session_still_new");
+    free(ctx);
+    return NULL;
+  }
+
+  if (nr_gnb_fuzz_hook_consume_reestablishment_trigger(ue)) {
+    LOG_W(NR_RRC,
+          "[gNB][HOOK] UE %u send delayed malformed RRCReconfiguration to trigger RRCReestablishment\n",
+          ue->rrc_ue_id);
+    rrc_gNB_generate_dedicatedRRCReconfiguration(ctx->rrc, ue, false);
+  }
+
+  free(ctx);
+  return NULL;
+}
+
+static void nr_gnb_fuzz_hook_maybe_trigger_reestablishment_after_dl(const gNB_RRC_INST *rrc,
+                                                                    const gNB_RRC_UE_t *ue_p,
+                                                                    nr_ue_fuzz_hook_msg_t hook_msg)
+{
+  if (!rrc || !ue_p || hook_msg == NR_UE_HOOK_MSG_RRC_REESTABLISHMENT)
+    return;
+
+  gNB_RRC_UE_t *ue = (gNB_RRC_UE_t *)ue_p;
+  if (!nr_gnb_fuzz_hook_reestablishment_trigger_pending(ue))
+    return;
+  if (ue->fuzz_hook.reestablishment_trigger_thread_active)
+    return;
+
+  nr_gnb_fuzz_hook_delayed_reestablishment_trigger_t *ctx = calloc(1, sizeof(*ctx));
+  if (!ctx) {
+    nr_gnb_fuzz_hook_cancel_reestablishment_trigger(ue, "reestablishment_trigger_thread_alloc_failed");
+    return;
+  }
+
+  ctx->rrc = (gNB_RRC_INST *)rrc;
+  ctx->ue = ue;
+  ctx->delay_ms = nr_gnb_fuzz_hook_reestablishment_trigger_delay_ms(ue);
+  ue->fuzz_hook.reestablishment_trigger_thread_active = true;
+  nr_ue_fuzz_hook_write_state(ue);
+
+  pthread_t thread;
+  if (pthread_create(&thread, NULL, nr_gnb_fuzz_hook_delayed_reestablishment_trigger_thread, ctx) != 0) {
+    LOG_W(NR_RRC, "[gNB][HOOK] UE %u failed to start delayed reestablishment trigger thread\n", ue->rrc_ue_id);
+    nr_gnb_fuzz_hook_cancel_reestablishment_trigger(ue, "reestablishment_trigger_thread_failed");
+    free(ctx);
+    return;
+  }
+  pthread_detach(thread);
+}
+
 static void nr_gnb_fuzz_hook_maybe_trigger_release_after_dl(const gNB_RRC_INST *rrc,
                                                             const gNB_RRC_UE_t *ue_p,
                                                             nr_ue_fuzz_hook_msg_t hook_msg)
@@ -392,6 +487,7 @@ static void nr_rrc_transfer_protected_rrc_message(const gNB_RRC_INST *rrc,
 #else
   UNUSED(message_id);
 #endif
+  nr_gnb_fuzz_hook_maybe_trigger_reestablishment_after_dl(rrc, ue_p, hook_msg);
   nr_gnb_fuzz_hook_maybe_trigger_release_after_dl(rrc, ue_p, hook_msg);
 }
 
