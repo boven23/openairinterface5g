@@ -1124,6 +1124,27 @@ static bool nr_gnb_fuzz_hook_apply_mutations(NR_UE_RRC_INST_t *ue, nr_ue_fuzz_ho
                               adapter->operator_family,
                               mutation->selected_mode,
                               "apply_failed");
+      nr_ue_fuzz_hook_record_fire(ue, msg, hook->action, -1);
+      const unsigned int applied_count = hook->field_mutation_applied_count;
+      const unsigned int failed_index = hook->field_mutation_failed_index;
+      const unsigned int original_mutation_count = original_field_mutation_count;
+      nr_ue_fuzz_hook_field_mutation_t original_mutations[NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS] = {0};
+      if (original_mutation_count > 0) {
+        for (unsigned int j = 0; j < original_mutation_count && j < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++j)
+          original_mutations[j] = *mutations[j];
+      }
+      if (hook->arm_once)
+        nr_ue_fuzz_hook_disarm_persistent(ue);
+      hook->field_mutation_applied_count = applied_count;
+      hook->field_mutation_failed_index = failed_index;
+      hook->field_mutation_count = original_mutation_count;
+      if (original_mutation_count > 0) {
+        for (unsigned int j = 0; j < original_mutation_count && j < NR_UE_FUZZ_HOOK_MAX_FIELD_MUTATIONS; ++j)
+          hook->field_mutations[j] = original_mutations[j];
+      } else {
+        hook->field_mutation = *mutation;
+      }
+      nr_ue_fuzz_hook_copy_text(hook->field_mutation_result, sizeof(hook->field_mutation_result), "apply_failed");
       nr_ue_fuzz_hook_write_state(ue);
       return false;
     }
